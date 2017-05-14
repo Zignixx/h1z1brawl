@@ -11,7 +11,7 @@
 /build
 
 # build production css files
-src/**/*.css
+/client/src/**/*.css
 
 # misc
 .DS_Store

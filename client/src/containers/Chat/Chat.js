@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
 import FontAwesome from 'react-fontawesome'
 
-import Message from '../../components/Message'
-import { api } from '../../../config'
+import { Message } from '../../components'
+import { api } from '../../../../config'
 
 import './Chat.css'
 
@@ -32,7 +32,7 @@ class Chat extends Component {
     this.handleClick = this.handleClick.bind(this)
 
     this.state = {
-      open: false
+      open: true
     }
   }
 
@@ -91,7 +91,7 @@ class Chat extends Component {
               <p>hi</p>
             ) : (
               <div className="Chat__Input-Anon">
-                <a href={`http://${api.host}:${api.port}/api/auth/steam`}>Login to Chat</a>
+                <a href={`${api.host}api/auth/steam`}>Login to Chat</a>
               </div>
             ) }
           </div>

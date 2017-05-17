@@ -1,24 +1,24 @@
 import './static/index.css'
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap/dist/css/bootstrap-theme.css'
 
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { BrowserRouter } from 'react-router-dom'
+import { ConnectedRouter } from 'react-router-redux'
+import createHistory from 'history/createBrowserHistory'
 import { Provider } from 'react-redux'
 
 import configureStore from './store/configureStore'
-import App from './containers/App'
+import { App } from './containers'
 
 const initialState = window.__INITIAL_STATE__
 const app = document.getElementById('root')
-const store = configureStore(initialState)
+const history = createHistory()
+const store = configureStore(initialState, history)
 
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter>
+    <ConnectedRouter history={history}>
       <App />
-    </BrowserRouter>
+    </ConnectedRouter>
   </Provider>,
   app
 )

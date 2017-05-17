@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
 import FontAwesome from 'react-fontawesome'
 import { Row, Col } from 'react-bootstrap'
+import config from '../../../../config'
 
 import './Landing.css'
 import logo from '../../static/logo.png'
-import Stat from '../../components/Stat'
+import { Stat } from '../../components'
 
 class Landing extends Component {
 
@@ -21,6 +21,10 @@ class Landing extends Component {
     }
   }
 
+  componentWillMount() {
+    //TODO dispatch action to get stats
+  }
+
   handleStatClick(days) {
     this.setState({
       statInterval: days
@@ -31,7 +35,7 @@ class Landing extends Component {
 
   render() {
 
-    const { jackpotStats, coinflipStats, currentUsers } = this.props
+    const { jackpotStats, coinflipStats } = this.props
     const { statInterval, jackpotLoading, coinflipLoading } = this.state
 
     return (
@@ -41,14 +45,11 @@ class Landing extends Component {
         <hr />
         <div className="Landing__Stats">
           <Row className="show-grid">
-            <Col sm={6} md={4}>
+            <Col sm={6} md={6}>
               <Stat title="WON ON JACKPOT" data={jackpotStats.won[statInterval]} loading={jackpotLoading} />
             </Col>
-            <Col sm={6} md={4}>
+            <Col sm={6} md={6}>
               <Stat title="WON ON COINFLIP" data={coinflipStats.won[statInterval]} loading={coinflipLoading} />
-            </Col>
-            <Col sm={6} md={4}>
-              <Stat title="PLAYING NOW" data={`${currentUsers}+`} />
             </Col>
           </Row>
           <div className="Landing__Stats-Selector">
@@ -58,7 +59,7 @@ class Landing extends Component {
           </div>
         </div>
         <hr />
-        <a className="Landng__EnterButton" href="auth/steam">
+        <a className="Landng__EnterButton" href={`${config.api.host}api/auth/steam`}>
           <FontAwesome name='steam' />
           <p>Enter Now</p>
         </a>
@@ -78,11 +79,8 @@ const mapStateToProps = (state) => {
   return {
     jackpotStats: state.jackpot.stats,
     coinflipStats: state.coinflip.stats,
-    currentUsers: state.app.users
   }
 }
-
-const mapDispatchToProps = (dispatch) => {}
 
 export default connect(
   mapStateToProps

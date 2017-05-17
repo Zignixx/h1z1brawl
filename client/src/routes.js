@@ -6,8 +6,8 @@ import Jackpot from './containers/Jackpot'
 import Leaderboards from './containers/Leaderboards'
 import User from './containers/User'
 import FAQ from './components/FAQ'
-import Admin from './containers/Admin'
 import Giveaway from './containers/Giveaway'
+import { Callback, Admin } from './containers'
 
 
 const Routes = () => (
@@ -21,6 +21,7 @@ const Routes = () => (
       <Route path="/leaderboards" component={Leaderboards} />
       <Route path="/giveaway" component={Giveaway} />
       <Route path="/admin" component={Admin} />
+      <Route path="/callback" component={Callback} />
     </Switch>
   </main>
 )

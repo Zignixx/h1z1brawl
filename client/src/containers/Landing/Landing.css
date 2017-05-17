@@ -27,7 +27,7 @@
     background-image: linear-gradient(to right, rgba(189, 181, 181, 0), rgba(189, 181, 181, 0.55), rgba(189, 181, 181, 0)); }
 
 .Landing__Stats {
-  width: 50%;
+  width: 40%;
   margin: 0 auto; }
   .Landing__Stats .Landing__Stats-Selector {
     font-size: 10px;

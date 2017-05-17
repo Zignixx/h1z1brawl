@@ -3,6 +3,7 @@ import { LinkContainer } from 'react-router-bootstrap'
 import { Navbar, NavItem, NavDropdown, MenuItem, Nav, Dropdown } from 'react-bootstrap'
 import FontAwesome from 'react-fontawesome'
 
+import config from '../../../../config'
 import logo from '../../static/logo.png'
 import './Header.css'
 
@@ -58,19 +59,25 @@ class Header extends Component {
                 ) }
               </Dropdown.Toggle>
               <Dropdown.Menu>
-                <MenuItem>
-                  <FontAwesome name="cog" />
-                  Settings
-                </MenuItem>
-                <MenuItem>
-                  <FontAwesome name="history" />
-                  History
-                </MenuItem>
-                <MenuItem>
-                  <FontAwesome name="briefcase" />
-                  Inventory
-                </MenuItem>
-                <MenuItem>
+                <LinkContainer activeClassName="" to="/settings">
+                  <MenuItem>
+                    <FontAwesome name="cog" />
+                    Settings
+                  </MenuItem>
+                </LinkContainer>
+                <LinkContainer activeClassName="" to="/history">
+                  <MenuItem>
+                    <FontAwesome name="history" />
+                    History
+                  </MenuItem>
+                  </LinkContainer>
+                <LinkContainer activeClassName="" to="/inventory">
+                  <MenuItem>
+                    <FontAwesome name="briefcase" />
+                    Inventory
+                  </MenuItem>
+                </LinkContainer>
+                <MenuItem href={`${config.api.host}api/auth/logout`}>
                   <FontAwesome name="sign-out" />
                   Logout
                 </MenuItem>

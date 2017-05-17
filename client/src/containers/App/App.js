@@ -1,23 +1,35 @@
 import React, { Component } from 'react'
+import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
+import { NotificationContainer } from 'react-notifications'
 
-import Header from '../../components/Header'
-import Chat from '../Chat'
-import Landing from '../Landing'
+import { loadAuth } from '../../actions/auth'
+import { Header } from '../../components'
+import { Chat, Landing } from '../index'
 import Routes from '../../routes'
 
 import './App.css'
+import 'react-notifications/lib/notifications.css';
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap/dist/css/bootstrap-theme.css'
 import background from '../../static/bg.jpg'
 
 class App extends Component {
+
+  componentWillMount() {
+    if (!this.props.loaded) {
+      this.props.loadAuth()
+    }
+  }
+
   render() {
-    const { loggedIn, user } = this.props
+    const { user } = this.props
     return (
       <div className="App">
         <Header user={user} actions />
         <Chat />
-        {loggedIn &&
+        {!user &&
           <Landing />
         }
         <Routes />
@@ -25,6 +37,7 @@ class App extends Component {
           <img src={background} alt="background" />
           <div className="App__Background-Wrapper"></div>
         </div>
+        <NotificationContainer />
       </div>
     )
   }
@@ -33,11 +46,17 @@ class App extends Component {
 const mapStateToProps = (state) => {
   return {
     user: state.auth.user,
-    loggedIn: state.auth.loggedIn,
     loaded: state.auth.loaded
   }
 }
 
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({
+    loadAuth
+  }, dispatch)
+}
+
 export default withRouter(connect(
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(App))

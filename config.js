@@ -8,11 +8,13 @@ const auth = {
 }
 
 const api = {
-  host: process.env.NODE_ENV !== "production" ? 'http://localhost:3001/' : process.env.API_URL
+  host: process.env.NODE_ENV !== "production" ? 'http://localhost:3001/' : process.env.API_URL,
+  url: process.env.NODE_ENV !== "production" ? 'http://localhost:3001/' : '/',
 }
 
 const app = {
-  host: process.env.NODE_ENV !== "production" ? 'http://localhost:3000/' : process.env.APP_URL
+  host: process.env.NODE_ENV !== "production" ? 'http://localhost:3000/' : process.env.APP_URL,
+  url: process.env.NODE_ENV !== "production" ? 'http://localhost:3001/' : '/'
 }
 
 const database = {

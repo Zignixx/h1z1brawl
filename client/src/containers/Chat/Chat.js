@@ -129,7 +129,7 @@ class Chat extends Component {
               </div>
             ) : (
               <div className="Chat__Input-Anon">
-                <a href={`${api.host}api/auth/steam`}>Login to Chat</a>
+                <a href={`${api.url}api/auth/steam`}>Login to Chat</a>
               </div>
             ) }
           </div>

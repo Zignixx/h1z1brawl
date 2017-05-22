@@ -46,7 +46,6 @@ class Landing extends Component {
   }
 
   render() {
-    console.log(config.api.host)
     const { jackpotStats, coinflipStats, users } = this.props
     const { statInterval, jackpotLoading, coinflipLoading, usersLoading } = this.state
 
@@ -74,7 +73,7 @@ class Landing extends Component {
           </div>
         </div>
         <hr />
-        <a className="Landng__EnterButton" href={`${config.api.host}api/auth/steam`}>
+        <a className="Landng__EnterButton" href={`${config.api.url}api/auth/steam`}>
           <FontAwesome name='steam' />
           <p>Enter Now</p>
         </a>

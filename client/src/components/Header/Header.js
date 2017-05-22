@@ -77,7 +77,7 @@ class Header extends Component {
                     Inventory
                   </MenuItem>
                 </LinkContainer>
-                <MenuItem href={`${config.api.host}api/auth/logout`}>
+                <MenuItem href={`${config.api.url}api/auth/logout`}>
                   <FontAwesome name="sign-out" />
                   Logout
                 </MenuItem>

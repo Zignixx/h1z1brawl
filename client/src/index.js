@@ -11,8 +11,8 @@ import config from '../../config'
 import { App } from './containers'
 import { default as SocketClient } from './util/socketClient'
 
-const publicSocket = new SocketClient({ host: config.api.host })
-const secureSocket = new SocketClient({ host: config.api.host, path: config.socket.secure.path, reconnect: false, delayConnect: true })
+const publicSocket = new SocketClient({ host: config.api.url })
+const secureSocket = new SocketClient({ host: config.api.url, path: config.socket.secure.path, reconnect: false, delayConnect: true })
 
 const initialState = window.__INITIAL_STATE__
 const app = document.getElementById('root')

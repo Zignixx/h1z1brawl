@@ -46,6 +46,7 @@ class Landing extends Component {
   }
 
   render() {
+    console.log(config.api.host)
     const { jackpotStats, coinflipStats, users } = this.props
     const { statInterval, jackpotLoading, coinflipLoading, usersLoading } = this.state
 

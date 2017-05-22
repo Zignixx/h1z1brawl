@@ -26,6 +26,7 @@
   },
   "scripts": {
     "start": "concurrently \"npm run server\" \"npm run client\"",
+    "build-client": "babel-node build-client.js",
     "server": "babel-node server/",
     "client": "babel-node start-client.js",
     "dev": "echo \"This command has been deprecated. Use 'npm start'\" && exit 1",

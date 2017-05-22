@@ -1,9 +1,8 @@
 import { checkHttpStatus } from '../util/network'
 import jwtDecode from 'jwt-decode'
+import { secureSocket } from '../'
 
-import actions from '../constants'
-
-const { AUTH_USER_LOAD_REQUEST, AUTH_USER_LOAD_SUCCESS, AUTH_USER_LOAD_FAILURE, AUTH_USER_LOGOUT } = actions
+import { AUTH_USER_LOAD_REQUEST, AUTH_USER_LOAD_SUCCESS, AUTH_USER_LOAD_FAILURE, AUTH_USER_LOGOUT } from '../constants'
 
 export function loadAuth() {
   return (dispatch) => {
@@ -20,7 +19,6 @@ export function loadAuth() {
       .then(response => response.json())
       .then(response => {
         try {
-          console.log(response)
           // eslint-disable-next-line
           let attempt = jwtDecode(response.token)
           dispatch(authSuccess(response.token, response))
@@ -52,6 +50,9 @@ function authRequest() {
 
 function authSuccess(token, user) {
   localStorage.setItem('token', token)
+  secureSocket.token = localStorage.getItem('token')
+  secureSocket.connect()
+
   return {
     type: AUTH_USER_LOAD_SUCCESS,
     payload: {
@@ -63,6 +64,8 @@ function authSuccess(token, user) {
 
 function logoutSuccess() {
   localStorage.removeItem('token')
+  secureSocket.disconnect()
+
   return {
     type: AUTH_USER_LOGOUT
   }
@@ -82,6 +85,7 @@ export function logout() {
 
 function authFailure(error) {
   localStorage.removeItem('token')
+
   return {
     type: AUTH_USER_LOAD_FAILURE,
     payload: {

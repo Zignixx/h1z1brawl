@@ -4,12 +4,14 @@ import { combineReducers } from 'redux'
 import auth from './auth'
 import coinflip from './coinflip'
 import jackpot from './jackpot'
-import app from './app'
+import users from './users'
+import chat from './chat'
 
 export default combineReducers({
   router: routerReducer,
   auth,
   jackpot,
+  users,
   coinflip,
-  app
+  chat
 })

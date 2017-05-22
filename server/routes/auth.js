@@ -8,7 +8,7 @@ router.get('/auth/steam', passport.authenticate('steam'))
 
 router.get('/auth/steam/return', passport.authenticate('steam', { failureRedirect: '/' }),
   (req, res) => {
-    res.redirect(`${config.app.host}callback`)
+    res.redirect(`${config.app.host}`)
   }
 )
 

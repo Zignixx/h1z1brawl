@@ -89,8 +89,72 @@
   background-color: rgba(46, 45, 45, 0.95);
   bottom: 0; left: 0; right: 0;
   margin: 0 auto;
-  height: 100px;
+  height: 110px;
   border-top: 1px solid rgba(31, 31, 31, 0.95);
+
+  textarea {
+    position: absolute;
+    border-radius: 4px;
+    border: 1px solid rgba(255,255,255,.15);
+    resize: none;
+    background-color: rgba(37, 36, 36, 0.95);
+    height: 60px;
+    width: 96%;
+    top: 7px;
+    margin: 0 2%;
+    color: rgba(255,255,255,.7);
+    font-size: 12px;
+
+    &:focus {
+      background-color: rgba(37, 36, 36, 1);
+      outline: none !important;
+      border-color: rgba(255,255,255,.3);
+      box-shadow: 0 0 2px #719ECE;
+    }
+  }
+
+  .Chat__Input-Buttons {
+    position: absolute;
+    bottom: 7px;
+    right: 8px;
+
+    a {
+      cursor: pointer;
+      margin-right: 7px;
+      color: rgba(255,255,255,.7);
+      transition: all 0.2s;
+
+      &:hover {
+        color: rgba(255,255,255,.9);
+      }
+    }
+
+    button {
+      border-radius: 3px;
+      color: #ffffff;
+      background: #d9585b;
+      font-size: 10px;
+      padding: 6px 5px 7px;
+      font-weight: bold;
+      text-decoration: none;
+      cursor: pointer;
+      text-shadow: none !important;
+      border: none !important;
+      box-shadow: none !important;
+      transition: all 0.2s;
+
+      &:hover {
+        border-radius: 4px;
+        background: #da686a;
+      }
+
+      &:focus {
+        border: none !important;
+        text-shadow: none !important;
+        box-shadow: none !important;
+      }
+    }
+  }
 
   .Chat__Input-Anon {
     color: #eee;

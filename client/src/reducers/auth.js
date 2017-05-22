@@ -1,13 +1,10 @@
-import actions from '../constants'
-
-const { AUTH_USER_LOAD_REQUEST, AUTH_USER_LOAD_SUCCESS, AUTH_USER_LOAD_FAILURE, AUTH_USER_LOGOUT } = actions
+import { AUTH_USER_LOAD_REQUEST, AUTH_USER_LOAD_SUCCESS, AUTH_USER_LOAD_FAILURE, AUTH_USER_LOGOUT } from '../constants'
 
 const initialState = {
   loaded: false,
   token: null,
   user: null,
-  loading: false,
-  error: null
+  loading: false
 }
 
 export default function reducer(state = initialState, {type, payload}) {
@@ -19,7 +16,6 @@ export default function reducer(state = initialState, {type, payload}) {
         loading: false,
         user: null,
         token: null,
-        error: `Authentication Error: ${payload.status} ${payload.statusText}`
       }
     case AUTH_USER_LOAD_SUCCESS:
       return {

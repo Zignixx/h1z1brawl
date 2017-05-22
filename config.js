@@ -8,20 +8,32 @@ const auth = {
 }
 
 const api = {
-  host: process.env.NODE_ENV !== "production" ? 'http://localhost:3001/' : 'http://h1z1brawl.com/'
+  host: process.env.NODE_ENV !== "production" ? 'http://localhost:3001/' : (process.env.API_URL || 'http://h1z1brawl.com/')
 }
 
 const app = {
-  host: process.env.NODE_ENV !== "production" ? 'http://localhost:3000/' : 'http://h1z1brawl.com/'
+  host: process.env.NODE_ENV !== "production" ? 'http://localhost:3000/' : (process.env.APP_URL || 'http://h1z1brawl.com/')
 }
 
 const database = {
   uri: process.env.MONGODB_URI || 'mongodb://localhost'
 }
 
+const socket = {
+  public: {
+    param: 'socket-public',
+    path: ''
+  },
+  secure: {
+    param: 'socket-secure',
+    path: '/secure'
+  }
+}
+
 module.exports = { //not transpiled
   auth: auth,
   api: api,
   app: app,
+  socket: socket,
   database: database
 }

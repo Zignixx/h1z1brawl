@@ -5,3 +5,12 @@ export const constants = {
   DEVELOPER: 3,
   BOT: 4
 }
+
+export const socket = {
+  server: {
+
+  },
+  client: {
+    
+  }
+}

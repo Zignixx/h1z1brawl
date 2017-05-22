@@ -1,13 +1,11 @@
-function createConstants(...constants) {
-  return constants.reduce((acc, constant) => {
-    acc[constant] = constant
-    return acc
-  }, {})
-}
-
-export default createConstants(
-  'AUTH_USER_LOAD_REQUEST',
-  'AUTH_USER_LOAD_SUCCESS',
-  'AUTH_USER_LOAD_FAILURE',
-  'AUTH_USER_LOGOUT'
-)
+export const AUTH_USER_LOAD_REQUEST   = Symbol('AUTH_USER_LOAD_REQUEST')
+export const AUTH_USER_LOAD_SUCCESS   = Symbol('AUTH_USER_LOAD_SUCCESS')
+export const AUTH_USER_LOAD_FAILURE   = Symbol('AUTH_USER_LOAD_FAILURE')
+export const AUTH_USER_LOGOUT         = Symbol('AUTH_USER_LOGOUT')
+export const USERS_CONNECTED_REQUEST  = Symbol('USERS_CONNECTED_REQUEST')
+export const USERS_CONNECTED_FAILURE  = Symbol('USERS_CONNECTED_FAILURE')
+export const USERS_CONNECTED_SUCCESS  = Symbol('USERS_CONNECTED_SUCCESS')
+export const SEND_CHAT_REQUEST        = Symbol('SEND_CHAT_REQUEST')
+export const SEND_CHAT_FAILURE        = Symbol('SEND_CHAT_FAILURE')
+export const SEND_CHAT_SUCCESS        = Symbol('SEND_CHAT_SUCCESS')
+export const RECEIVE_CHAT             = Symbol('RECEIVE_CHAT')

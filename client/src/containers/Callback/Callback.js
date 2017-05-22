@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { replace } from 'react-router-redux'
 import { loadAuth } from '../../actions/auth'
-import { alert } from '../../actions/alert'
 import { NotificationManager } from 'react-notifications'
 
 import './Callback.css'
@@ -21,11 +20,11 @@ class Callback extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.error) {
-      NotificationManager.error('Authorixzation', `Error while logging in: ${nextProps.error}`)
+      NotificationManager.error(`Error while logging in: ${nextProps.error}`)
       this.props.replace('/')
     } else if (nextProps.loaded) {
       this.props.replace('/')
-      NotificationManager.success('Authorization', 'You have been logged in')
+      NotificationManager.success('You have been logged in')
     }
   }
 
@@ -50,8 +49,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
     replace,
-    loadAuth,
-    alert
+    loadAuth
   }, dispatch)
 }
 

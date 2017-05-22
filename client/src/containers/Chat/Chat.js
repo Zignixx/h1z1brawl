@@ -1,28 +1,14 @@
 import React, { Component } from 'react'
+import { bindActionCreators } from 'redux'
 import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
+import { NotificationManager } from 'react-notifications'
 import FontAwesome from 'react-fontawesome'
 
 import { Message } from '../../components'
+import { sendChat, receiveChat } from '../../actions/chat'
 import { api } from '../../../../config'
-
 import './Chat.css'
-
-const fakeImage = 'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/a4/a4d240b1f27f74e60cbe41f1421702f33c46d0fa.jpg'
-const fakeMessage = [
-  {id: 1, user: {name: 'kathryn wolf', image: fakeImage, level: 5}, message: 'hello my name is mason'},
-  {id: 11, user: {name: 'kathryn wolf', image: fakeImage, level: 5}, message: 'hello my name is mason'},
-  {id: 13, user: {name: 'kathryn wolf', image: fakeImage, level: 5}, message: 'hello my name is mason'},
-  {id: 12, user: {name: 'kathryn wolf', image: fakeImage, level: 5}, message: 'hello my name is mason'},
-  {id: 14, user: {name: 'kathryn wolf', image: fakeImage, level: 5}, message: 'hello my name is mason'},
-  {id: 15, user: {name: 'kathryn wolf', image: fakeImage, level: 5}, message: 'hello my name is mason'},
-  {id: 16, user: {name: 'kathryn wolf', image: fakeImage, level: 5}, message: 'hello my name is mason'},
-  {id: 17, user: {name: 'kathryn wolf', image: fakeImage, level: 5}, message: 'hello my name is mason'},
-  {id: 18, user: {name: 'kathryn wolf', image: fakeImage, level: 5}, message: 'hello my name is mason'},
-  {id: 19, user: {name: 'kathryn wolf', image: fakeImage, level: 5}, message: 'hello my name is mason'},
-  {id: 21, user: {name: 'kathryn wolf', image: fakeImage, level: 5}, message: 'hello my name is mason'},
-  {id: 4, user: {name: 'kathryn wolf', image: fakeImage, level: 5}, message: 'hello my name is mason'}
-]
 
 class Chat extends Component {
 
@@ -30,16 +16,39 @@ class Chat extends Component {
     super(props)
 
     this.handleClick = this.handleClick.bind(this)
+    this.submitChat = this.submitChat.bind(this)
+    this.clearChat = this.clearChat.bind(this)
+    this.handleKeyPress = this.handleKeyPress.bind(this)
 
     this.state = {
       open: true
     }
   }
 
+  componentWillMount() {
+    console.log('component is mounting')
+    this.props.secureSocket.on('RECEIVE_CHAT', (data) => {
+      console.log('got a sokctm essage')
+      this.props.receiveChat(data)
+    })
+  }
+
+  componentWillUnmount() {
+    this.props.secureSocket.off('RECEIVE_CHAT')
+  }
+
   handleClick(e) {
+    e.preventDefault()
     this.setState({
       open: !this.state.open
     })
+  }
+
+  handleKeyPress(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      this.submitChat()
+    }
   }
 
   scrollToBottom() {
@@ -56,14 +65,37 @@ class Chat extends Component {
   }
 
   renderMessage() {
-    return fakeMessage.map((message) => (
-      <Message key={message.id} user={message.user} message={message.message} />
-    ))
+    return this.props.chat.messages.map((message, key) => {
+      return <Message key={key} user={message.user} message={message.message} />
+    })
+  }
+
+  submitChat() {
+    const message = this.refs.messageText.value
+    if (!message || message.length === 0) {
+      NotificationManager.error('Enter a message before submitting', 'Chat')
+      return;
+    }
+
+    if (this.props.chat.sending) {
+      NotificationManager.error('You are already sending a message', 'Chat')
+    } else {
+      this.props.sendChat(message)
+      this.clearChat()
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log('chat nextProps', nextProps)
+  }
+
+  clearChat() {
+    this.refs.messageText.value = ""
   }
 
   render() {
     const { open } = this.state
-    const { user, users } = this.props
+    const { user, count } = this.props
     const iconClass = open ? 'compress' : 'expand'
     const chatClass = open ? 'open' : ''
 
@@ -79,7 +111,7 @@ class Chat extends Component {
           <div className="Chat__Header">
             <span className="Chat__Header-Wrapper">
               <FontAwesome name="users" className="Chat__Header-Icon" />
-              Online - <span className="Chat__Header-Online">{ users }</span>
+              Online - <span className="Chat__Header-Online">{ count }</span>
             </span>
           </div>
           <div className="Chat__Box">
@@ -88,7 +120,13 @@ class Chat extends Component {
           </div>
           <div className="Chat__Input">
             { user ? (
-              <p>hi</p>
+              <div>
+                <textarea onKeyPress={this.handleKeyPress} maxLength="200" placeholder="Send a message..." ref="messageText"></textarea>
+                <div className="Chat__Input-Buttons">
+                  <a><i className="fa fa-smile-o" aria-hidden="true"></i></a>
+                  <button type="submit" onClick={this.submitChat}>SEND</button>
+                </div>
+              </div>
             ) : (
               <div className="Chat__Input-Anon">
                 <a href={`${api.host}api/auth/steam`}>Login to Chat</a>
@@ -105,10 +143,19 @@ class Chat extends Component {
 const mapStateToProps = (state) => {
   return {
     user: state.auth.user,
-    users: state.app.users
+    count: state.users.count,
+    chat: state.chat
   }
 }
 
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({
+    sendChat,
+    receiveChat
+  }, dispatch)
+}
+
 export default connect(
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(Chat)

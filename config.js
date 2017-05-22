@@ -1,6 +1,6 @@
 const auth = {
   steam: {
-    apiKey: process.env.API_KEY || '5EB306084E5CB78D76E3DDFBF03346A7'
+    apiKey: process.env.STEAM_API_KEY || '5EB306084E5CB78D76E3DDFBF03346A7'
   },
   jwt: {
     secret: process.env.JWT_SECRET || 'derp derp derp'

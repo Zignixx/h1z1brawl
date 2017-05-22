@@ -11,6 +11,8 @@ const api = {
   host: process.env.NODE_ENV !== "production" ? 'http://localhost:3001/' : (process.env.API_URL || 'http://h1z1brawl.com/')
 }
 
+console.log(process.env.API_URL, process.env.APP_URL)
+
 const app = {
   host: process.env.NODE_ENV !== "production" ? 'http://localhost:3000/' : (process.env.APP_URL || 'http://h1z1brawl.com/')
 }

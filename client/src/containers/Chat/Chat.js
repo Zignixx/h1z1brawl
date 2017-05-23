@@ -2,12 +2,14 @@ import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
+import { LinkContainer } from 'react-router-bootstrap'
 import { NotificationManager } from 'react-notifications'
 import FontAwesome from 'react-fontawesome'
-
+import { Popup } from 'semantic-ui-react'
 import { Message } from '../../components'
 import { sendChat, receiveChat, loadChat } from '../../actions/chat'
 import { api } from '../../../../config'
+import giveaway from '../../static/giveaway.png'
 import './Chat.css'
 
 class Chat extends Component {
@@ -21,7 +23,7 @@ class Chat extends Component {
     this.handleKeyPress = this.handleKeyPress.bind(this)
 
     this.state = {
-      open: true
+      open: false
     }
   }
 
@@ -91,6 +93,14 @@ class Chat extends Component {
     this.refs.messageText.value = ""
   }
 
+  handleEmoteClick() {
+
+  }
+
+  renderEmotes() {
+
+  }
+
   render() {
     const { open } = this.state
     const { user, count } = this.props
@@ -104,7 +114,9 @@ class Chat extends Component {
         </div>
         <div className={`Chat ${chatClass}`}>
           <div className="Chat__Advertisement">
-            TODO MAKE IMAGE OF GIVEAWAY
+            <LinkContainer activeClassName="" to="/giveaway">
+              <img src={giveaway} alt="giveaway" />
+            </LinkContainer>
           </div>
           <div className="Chat__Header">
             <span className="Chat__Header-Wrapper">
@@ -121,7 +133,11 @@ class Chat extends Component {
               <div>
                 <textarea onKeyPress={this.handleKeyPress} maxLength="200" placeholder="Send a message..." ref="messageText"></textarea>
                 <div className="Chat__Input-Buttons">
-                  <a><i className="fa fa-smile-o" aria-hidden="true"></i></a>
+                  <Popup trigger={
+                    <a><i className="fa fa-smile-o" aria-hidden="true"></i></a>
+                  } on="click" hideOnScroll inverted offset={10}>
+                    hello hello hello
+                  </Popup>
                   <button type="submit" onClick={this.submitChat}>SEND</button>
                 </div>
               </div>

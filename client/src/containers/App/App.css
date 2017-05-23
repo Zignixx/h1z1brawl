@@ -1,6 +1,8 @@
-.App {
-  background: red;
-  margin-top: 65px; }
+main {
+  padding-top: 65px; }
+
+.ui.dimmer {
+  background-color: rgba(54, 54, 54, 0.49) !important; }
 
 .App__Loading {
   background-color: #202020;
@@ -13,7 +15,7 @@
   right: 0;
   margin: auto;
   color: #eee;
-  z-index: 10000;
+  z-index: 5;
   text-align: center; }
 
 .App__Loading img {
@@ -21,7 +23,14 @@
   transform: translateY(-50%);
   top: 50%; }
 
+.modal {
+  bottom: auto !important; }
+
+.App__Background {
+  z-index: -1; }
+
 .App__Background .App__Background-Wrapper {
+  z-index: -1;
   background-color: rgba(32, 32, 32, 0.8);
   height: 100%;
   width: 100%;
@@ -33,6 +42,7 @@
   margin: auto; }
 
 .App__Background img {
+  z-index: -1;
   height: 100%;
   width: 100%;
   position: fixed;

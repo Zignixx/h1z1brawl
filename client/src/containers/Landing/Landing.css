@@ -1,5 +1,5 @@
 .Landing {
-  z-index: 9999;
+  z-index: 4;
   position: absolute;
   top: 0;
   right: 0;
@@ -7,7 +7,7 @@
   min-height: 100%;
   text-align: center;
   color: #b5babb;
-  background-color: rgba(38, 38, 44, 0.8); }
+  background-color: rgba(38, 38, 44, 0.95); }
 
 .Landing img {
   height: 120px;
@@ -93,7 +93,8 @@
   position: absolute;
   top: 0;
   left: 0;
-  right: 0; }
+  right: 0;
+  line-height: 50px; }
 
 .Landng__EnterButton i {
   position: absolute;

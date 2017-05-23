@@ -1,5 +1,5 @@
 export { default as App } from './App/App'
-export { default as Callback } from './Callback/Callback'
 export { default as Chat } from './Chat/Chat'
 export { default as Landing } from './Landing/Landing'
 export { default as Admin } from './Admin/Admin'
+export { default as Coinflip } from './Coinflip/Coinflip'

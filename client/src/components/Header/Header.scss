@@ -1,4 +1,4 @@
-$navColor: rgba(50, 48, 48, 0.85);
+$navColor: rgba(22, 22, 22, 0.7);
 
 .Navbar__Logo {
   height: 65px;
@@ -44,8 +44,10 @@ $navColor: rgba(50, 48, 48, 0.85);
 }
 
 .Navbar {
+  z-index: 1 !important;
   background: $navColor;
   border-color: $navColor;
+  margin-bottom: 0px !important;
 
   .container {
     padding-left: 0px;

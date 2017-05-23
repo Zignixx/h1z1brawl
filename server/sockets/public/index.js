@@ -1,3 +1,5 @@
+import chat from './routes/chat'
+
 export default function connect(io) {
   io.on('connection', (socket) => {
 
@@ -5,9 +7,7 @@ export default function connect(io) {
       callback(Object.keys(io.sockets.sockets).length)
     })
 
-    socket.on('LOAD_CHAT', (data, callback) => {
-      callback() //TODO load chat messages
-    })
+    chat(socket, io)
 
   })
 }

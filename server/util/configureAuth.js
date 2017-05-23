@@ -24,7 +24,7 @@ const configure = (app) => {
     const id = identifier.match(/\d+$/)[0];
     const { displayName, photos } = profile, photo = photos[2].value
 
-    const promise = User.findOneAndUpdate({ _id: id }, { name: displayName, image: photo }, { upsert: true, returnNewDocument: true }).exec()
+    const promise = User.findOneAndUpdate({ _id: id }, { name: displayName, image: photo }, { upsert: true, new: true, returnNewDocument: true }).exec()
     promise.then(user => {
       const tokened = addJwt(user)
       done(null, tokened)

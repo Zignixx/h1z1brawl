@@ -12,3 +12,4 @@ export const connect = (mongoose) => {
 }
 
 export User from './models/User'
+export Message from './models/Message'

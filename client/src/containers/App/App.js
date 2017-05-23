@@ -24,12 +24,6 @@ class App extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.auth.user && !this.props.auth.user) {
-      NotificationManager.success('You have been logged in')
-    }
-  }
-
   render() {
     const { user, loading } = this.props.auth
     return (

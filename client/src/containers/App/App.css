@@ -1,5 +1,4 @@
 .App {
-  min-height: 100%;
   background: red;
   margin-top: 65px; }
 
@@ -16,10 +15,11 @@
   color: #eee;
   z-index: 10000;
   text-align: center; }
-  .App__Loading img {
-    position: absolute;
-    transform: translateY(-50%);
-    top: 50%; }
+
+.App__Loading img {
+  position: absolute;
+  transform: translateY(-50%);
+  top: 50%; }
 
 .App__Background .App__Background-Wrapper {
   background-color: rgba(32, 32, 32, 0.8);

@@ -4,6 +4,7 @@ import { Navbar, NavItem, NavDropdown, MenuItem, Nav, Dropdown } from 'react-boo
 import FontAwesome from 'react-fontawesome'
 
 import config from '../../../../config'
+import { UserToggle } from '../'
 import logo from '../../static/logo.png'
 import './Header.css'
 
@@ -51,13 +52,17 @@ class Header extends Component {
           </Nav>
           <Nav pullRight>
             <Dropdown className="Navbar__Dropdown" id="image-dropdown">
-              <Dropdown.Toggle noCaret>
-                { user ? (
+              { user ? (
+                <UserToggle bsRole="toggle">
+                  <i className="fa fa-ellipsis-v" />
                   <img src={user.image} alt="user" />
-                ) : (
+                  <span className="Navbar__Dropdown-Level">{user.level}</span>
+                </UserToggle>
+              ) : (
+                <Dropdown.Toggle>
                   <FontAwesome name="user" />
-                ) }
-              </Dropdown.Toggle>
+                </Dropdown.Toggle>
+              ) }
               <Dropdown.Menu>
                 <LinkContainer activeClassName="" to="/settings">
                   <MenuItem>

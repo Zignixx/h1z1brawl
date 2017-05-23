@@ -49,7 +49,6 @@ export default class SocketClient { //maybe make two socket instances? secureSoc
           console.error(response.error)
           return reject(response.error)
         }
-
         return resolve(response)
       })
     })

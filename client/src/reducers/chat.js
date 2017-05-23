@@ -1,10 +1,11 @@
-import update from 'immutability-helper'
-import { SEND_CHAT_REQUEST, SEND_CHAT_FAILURE, SEND_CHAT_SUCCESS, RECEIVE_CHAT } from '../constants'
+import { SEND_CHAT_REQUEST, SEND_CHAT_FAILURE, SEND_CHAT_SUCCESS, RECEIVE_CHAT, LOAD_CHAT_REQUEST, LOAD_CHAT_SUCCESS, LOAD_CHAT_FAILURE } from '../constants'
 
 const initialState = {
   messages: [],
   sending: false,
-  error: null
+  error: null,
+  loaded: false,
+  loading: false
 }
 
 export default function reducer(state = initialState, { type, payload }) {
@@ -26,12 +27,29 @@ export default function reducer(state = initialState, { type, payload }) {
         sending: false
       }
     case RECEIVE_CHAT:
-      console.log('RECEIVED CHAT')
-      return update(state, {
-        messages: {
-          $push: [payload]
-        }
-      })
+      return {
+        ...state,
+        messages: [payload, ...state.messages]
+      }
+    case LOAD_CHAT_REQUEST:
+      return {
+        ...state,
+        loading: true
+      }
+    case LOAD_CHAT_SUCCESS:
+      return {
+        ...state,
+        loaded: true,
+        loading: false,
+        messages: payload
+      }
+    case LOAD_CHAT_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        loaded: false,
+        error: payload
+      }
     default:
       return state
   }

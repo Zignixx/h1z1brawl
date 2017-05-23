@@ -14,7 +14,7 @@ const api = {
 
 const app = {
   host: process.env.NODE_ENV !== "production" ? 'http://localhost:3000/' : process.env.APP_URL,
-  url: process.env.NODE_ENV !== "production" ? 'http://localhost:3001/' : '/'
+  url: process.env.NODE_ENV !== "production" ? 'http://localhost:3000/' : '/'
 }
 
 const database = {

@@ -6,7 +6,7 @@ import { NotificationManager } from 'react-notifications'
 import FontAwesome from 'react-fontawesome'
 
 import { Message } from '../../components'
-import { sendChat, receiveChat } from '../../actions/chat'
+import { sendChat, receiveChat, loadChat } from '../../actions/chat'
 import { api } from '../../../../config'
 import './Chat.css'
 
@@ -26,11 +26,13 @@ class Chat extends Component {
   }
 
   componentWillMount() {
-    console.log('component is mounting')
     this.props.secureSocket.on('RECEIVE_CHAT', (data) => {
-      console.log('got a sokctm essage')
       this.props.receiveChat(data)
     })
+
+    if (!this.props.chat.loaded) {
+      this.props.loadChat()
+    }
   }
 
   componentWillUnmount() {
@@ -65,7 +67,7 @@ class Chat extends Component {
   }
 
   renderMessage() {
-    return this.props.chat.messages.map((message, key) => {
+    return this.props.chat.messages.slice(0).reverse().map((message, key) => {
       return <Message key={key} user={message.user} message={message.message} />
     })
   }
@@ -83,10 +85,6 @@ class Chat extends Component {
       this.props.sendChat(message)
       this.clearChat()
     }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    console.log('chat nextProps', nextProps)
   }
 
   clearChat() {
@@ -151,7 +149,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
     sendChat,
-    receiveChat
+    receiveChat,
+    loadChat
   }, dispatch)
 }
 

@@ -3,9 +3,8 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { NotificationContainer, NotificationManager } from 'react-notifications'
-import { Modal } from 'semantic-ui-react'
 import { loadAuth } from '../../actions/auth'
-import { Header } from '../../components'
+import { Header, TradeURLModal } from '../../components'
 import { Chat, Landing } from '../index'
 import Routes from '../../routes'
 
@@ -36,9 +35,11 @@ class App extends Component {
   componentWillReceiveProps(nextProps) {
     if (!this.props.auth.user && nextProps.auth.user) {
       //user has logged in
-      this.setState({
-        tradeUrlModal: !nextProps.auth.user.tradeUrl
-      })
+      setTimeout(() => {
+        this.setState({
+          tradeUrlModal: !nextProps.auth.user.tradeUrl
+        })
+      }, 1000)
     }
   }
 
@@ -62,19 +63,7 @@ class App extends Component {
               <img src={background} alt="background" />
               <div className="App__Background-Wrapper"></div>
             </div>
-            <Modal
-              open={this.state.tradeUrlModal}
-              onClose={() => this.setState({ tradeUrlModal: false })}
-              size="small"
-              dimmer={true}
-              transition="slide">
-              <Modal.Header>
-                <p>yo</p>
-              </Modal.Header>
-              <Modal.Content>
-                <p>hi</p>
-              </Modal.Content>
-            </Modal>
+            <TradeURLModal isOpen={this.state.tradeUrlModal} close={() => this.setState({tradeUrlModal: false})} />
           </div>
         ) }
         <NotificationContainer />

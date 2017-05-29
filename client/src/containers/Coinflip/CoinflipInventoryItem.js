@@ -29,6 +29,9 @@ export default class CoinflipInventoryItem extends Component {
       <div className={'Coinflip__InventoryItem ' + (this.props.disabled ? 'disabled' : '') + (this.props.selected ? 'selected' : '')} onClick={this.onItemClick}>
         <img src={this.props.image} alt="item" />
         <p>{this.props.price}</p>
+        {this.props.selected &&
+          <i className="fa fa-check" />
+        }
       </div>
     )
   }

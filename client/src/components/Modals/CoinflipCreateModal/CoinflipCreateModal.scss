@@ -1,71 +1,27 @@
 $speed: "0.25s";
 $transition: all #{$speed} cubic-bezier(0.310, -0.105, 0.430, 1.400);
 
-.Modal__TradeURL {
+.Modal__CreateCoinflip {
   height: 270px;
-  border-radius: 8px;
-  overflow: scroll;
-  transition: all 0.2s ease-in;
-
-  top: 50%;
-  left: 50%;
-  right: auto;
-  bottom: auto;
-  margin-right: -50%;
-  transform: translate(-50%, -50%);
+  width: 500px;
 }
 
-.Modal__TradeURL-Header {
-  position: relative;
-  background: rgb(42, 42, 42);
-  text-align: left;
-  border-bottom: 1px solid rgb(34, 34, 34);
-
-  a {
-    cursor: pointer;
-    position: absolute;
-    top: 50%; right: 15px;
-    transform: translateY(-50%);
-    color: #eee;
-    transition: 0.2s all ease-in;
-
-    &:hover {
-      color: #c9c8c8;
-    }
-  }
-
-  h1 {
-    padding: 0;
-    margin: 0;
-    color: rgb(177, 56, 56);
-    font-size: 15px;
-    text-transform: uppercase;
-    font-weight: bold;
-  }
-}
-
-.Modal__TradeURL-Content {
+.Modal__CreateCoinflip-Content {
   background: rgba(48, 48, 48, 1);
   height: calc(100% - 40px);
 
   a {
-    position: relative;
-    display: block;
-    margin: 0 auto;
-    width: 150px;
-    height: 40px;
-    line-height: 30px;
     background: rgb(186, 41, 41);
-    border: 0.7px solid #4f4f4f;
-    text-decoration: none !important;
-    cursor: pointer;
+    border: none;
+    box-shadow: 0px 0px 3px black;
+
+    &:hover {
+      color: #eee;
+    }
   }
 
   hr {
-    background-color: #4f4f4f;
     margin-bottom: 20px;
-    height: 1px;
-    border: none;
   }
 
   p {
@@ -85,7 +41,7 @@ $transition: all #{$speed} cubic-bezier(0.310, -0.105, 0.430, 1.400);
     }
   }
 
-  .Modal__TradeURL-Coins {
+  .Modal__CreateCoinflip-Coins {
     background: rgba(50, 50, 50, 1);
     box-shadow: 0 0 1px black;
     padding: 15px 0px;
@@ -112,12 +68,12 @@ $transition: all #{$speed} cubic-bezier(0.310, -0.105, 0.430, 1.400);
 
 }
 
-.Modal__TradeURL-Created {
+.Modal__CreateCoinflip-Created {
   width: 700px;
   background: rgba(48, 48, 48, 1);
   height: 400px;
 
-  .Modal__TradeURL-Content {
+  .Modal__CreateCoinflip-Content {
     text-align: left;
 
     h4 {
@@ -137,7 +93,7 @@ $transition: all #{$speed} cubic-bezier(0.310, -0.105, 0.430, 1.400);
     }
   }
 
-  .Modal__TradeURL-Items {
+  .Modal__CreateCoinflip-Items {
     display: inline-block;
     overflow-y: scroll;
     overflow-x: hidden;
@@ -156,7 +112,7 @@ $transition: all #{$speed} cubic-bezier(0.310, -0.105, 0.430, 1.400);
       color: #b6b6b6;
     }
 
-    .Modal__TradeURL-Error {
+    .Modal__CreateCoinflip-Error {
       line-height: normal;
       position: absolute;
       top: 50%;
@@ -173,7 +129,7 @@ $transition: all #{$speed} cubic-bezier(0.310, -0.105, 0.430, 1.400);
     }
   }
 
-  .Modal__TradeURL-Input {
+  .Modal__CreateCoinflip-Input {
     position: relative;
     display: inline-block;
     vertical-align: top;
@@ -183,7 +139,7 @@ $transition: all #{$speed} cubic-bezier(0.310, -0.105, 0.430, 1.400);
     height: 300px;
     padding-top: 10px;
 
-    .Modal__TradeURL-Options {
+    .Modal__CreateCoinflip-Options {
 
       input {
         display: inline-block;
@@ -204,7 +160,7 @@ $transition: all #{$speed} cubic-bezier(0.310, -0.105, 0.430, 1.400);
         position: relative;
         display: inline-block;
         height: 30px;
-        line-height: 27px;
+        line-height: 30px;
         font-size: 10px;
         margin: 5px;
         width: 70px;
@@ -213,7 +169,7 @@ $transition: all #{$speed} cubic-bezier(0.310, -0.105, 0.430, 1.400);
       }
     }
 
-    .Modal__TradeURL-Values {
+    .Modal__CreateCoinflip-Values {
       padding: 10px 0px;
       margin-bottom: 20px;
 
@@ -266,7 +222,7 @@ $transition: all #{$speed} cubic-bezier(0.310, -0.105, 0.430, 1.400);
     background-color: rgba(152, 152, 152, 0.9);
     width: 130px;
     height: 30px;
-    line-height: 28px;
+    line-height: 30px;
     color: #eee;
     overflow: hidden;
     cursor: pointer;

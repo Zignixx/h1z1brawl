@@ -4,9 +4,9 @@ import { bindActionCreators } from 'redux'
 import { Popup } from 'semantic-ui-react'
 import { Row, Col } from 'react-bootstrap'
 import CoinflipGameItem from './CoinflipGameItem'
-import heads from '../../static/coin-heads.png'
-import tails from '../../static/coin-tails.png'
-import { requestInventory, forceRefreshInventory, sendNotification } from '../../actions'
+import black from '../../static/coin-heads.png'
+import red from '../../static/coin-tails.png'
+import { requestInventory, forceRefreshInventory, sendNotification, createCoinflipGame } from '../../actions'
 import { CoinflipHistoryModal, CoinflipCreateModal } from '../../components'
 import './Coinflip.css'
 
@@ -14,7 +14,7 @@ class Coinflip extends Component {
 
   constructor(props) {
     super(props)
-
+    
     this.state = {
       createModal: false,
       historyModal: false
@@ -36,6 +36,7 @@ class Coinflip extends Component {
           loadInventory={this.props.requestInventory}
           forceRefreshInventory={this.props.forceRefreshInventory}
           notify={this.props.sendNotification}
+          createGame={this.props.createCoinflipGame}
         />
         <div className="Coinflip__Header">
           <Row>
@@ -89,7 +90,7 @@ class Coinflip extends Component {
             <tbody>
               <tr className="Coinflip__Game">
                 <td className="Coinflip__Side">
-                  <img src={tails} alt="tails" />
+                  <img src={red} alt="red" />
                 </td>
                 <td className="Coinflip__Players">
                   <Popup
@@ -132,7 +133,7 @@ class Coinflip extends Component {
               </tr>
               <tr className="Coinflip__Game">
                 <td className="Coinflip__Side">
-                  <img src={tails} alt="tails" />
+                  <img src={red} alt="red" />
                 </td>
                 <td className="Coinflip__Players">
                   <Popup
@@ -178,7 +179,7 @@ class Coinflip extends Component {
               </tr>
               <tr className="Coinflip__Game">
                 <td className="Coinflip__Side">
-                  <img src={tails} alt="tails" />
+                  <img src={red} alt="red" />
                 </td>
                 <td className="Coinflip__Players">
                   <Popup
@@ -237,7 +238,8 @@ const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
     requestInventory,
     forceRefreshInventory,
-    sendNotification
+    sendNotification,
+    createCoinflipGame
   }, dispatch)
 }
 

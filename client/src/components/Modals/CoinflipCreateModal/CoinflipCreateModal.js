@@ -1,12 +1,15 @@
 import React, { Component } from 'react'
 import Modal from 'react-modal'
+import config from '../../../../../config'
 import { CoinflipInventoryItem } from '../../../containers'
-
+import { NotificationManager } from 'react-notifications'
 import './CoinflipCreateModal.css'
-import heads from '../../../static/coin-heads.png'
-import tails from '../../../static/coin-tails.png'
+import black from '../../../static/coin-heads.png'
+import red from '../../../static/coin-tails.png'
 
 const IMAGE_URL = 'https://steamcommunity-a.akamaihd.net/economy/image/'
+
+const { minItems, maxItems, minAmount, itemThreshold } = config.coinflip
 
 export default class CoinflipCreateModal extends Component {
 
@@ -24,9 +27,10 @@ export default class CoinflipCreateModal extends Component {
     this.getTotalInventoryPrice = this.getTotalInventoryPrice.bind(this)
     this.getSelectedCount = this.getSelectedCount.bind(this)
     this.clearItems = this.clearItems.bind(this)
+    this.getSelectedItems = this.getSelectedItems.bind(this)
 
     this.state = {
-      selected: 'heads',
+      selected: 'black',
       created: false,
       selectedItems: []
     }
@@ -36,7 +40,7 @@ export default class CoinflipCreateModal extends Component {
     this.props.onClose()
     setTimeout(() => {
       this.setState({
-        selected: 'heads',
+        selected: 'black',
         created: false,
         selectedItems: []
       })
@@ -61,14 +65,14 @@ export default class CoinflipCreateModal extends Component {
     return (
       <div>
         <p><span>Select a Coin</span></p>
-        <div className="Modal__TradeURL-Coins">
-          <img src={heads} alt="heads" ref="heads"
-            className={this.state.selected === 'heads' ? 'selected' : ''}
-            onClick={() => this.setState({ selected: 'heads' })}
+        <div className="Modal__CreateCoinflip-Coins">
+          <img src={black} alt="black" ref="black"
+            className={this.state.selected === 'black' ? 'selected' : ''}
+            onClick={() => this.setState({ selected: 'black' })}
           />
-          <img src={tails} alt="tails" ref="tails"
-            className={this.state.selected === 'tails' ? 'selected' : ''}
-            onClick={() => this.setState({ selected: 'tails' })}
+          <img src={red} alt="red" ref="red"
+            className={this.state.selected === 'red' ? 'selected' : ''}
+            onClick={() => this.setState({ selected: 'red' })}
           />
         </div>
         <hr />
@@ -78,36 +82,44 @@ export default class CoinflipCreateModal extends Component {
   }
 
   submitGame() {
+    const betValue = this.getTotalSelectedPrice(), itemsSelected = this.getSelectedCount()
+    if (this.state.selected == null) {
+      return NotificationManager.error('Please retry your game creation')
+    } else if (betValue < minAmount) {
+      return NotificationManager.error(`Bet must be at least $${minAmount}`)
+    } else if (itemsSelected < minItems || itemsSelected > maxItems) {
+      return NotificationManager.error(`You must select between ${minItems} and ${maxItems} items`)
+    }
     this.requestClose()
-    console.log('game has been submitted')
+    this.props.createGame({ side: this.state.selected, items: this.getSelectedItems() })
   }
 
   renderItemSelection() {
     const betValue = this.getTotalSelectedPrice(), itemsSelected = this.getSelectedCount()
-    const betClass = (betValue >= 1.0) ? 'good' : 'bad'
-    const itemClass = (itemsSelected >= 1 && itemsSelected <= 15) ? 'good' : 'bad'
+    const betClass = (betValue >= minAmount) ? 'good' : 'bad'
+    const itemClass = (itemsSelected >= minItems && itemsSelected <= maxItems) ? 'good' : 'bad'
     return (
       <div>
         <h4>Add your items to the coin flip</h4>
-        <p>Min bet $1.00 - Max items 15</p>
+        <p>Min bet {minAmount} - Max items {maxItems}</p>
         <a className="noselect" onClick={this.props.forceRefreshInventory}>
           <span>Force Refresh</span>
           <div>
             <i className="fa fa-refresh" />
           </div>
         </a>
-        <div className="Modal__TradeURL-Items">
+        <div className="Modal__CreateCoinflip-Items">
           { this.renderItems() }
         </div>
-        <div className="Modal__TradeURL-Input">
+        <div className="Modal__CreateCoinflip-Input">
           <p className="InputHeader"><span>Values</span></p>
-          <div className="Modal__TradeURL-Values">
+          <div className="Modal__CreateCoinflip-Values">
             <p className="BetValue">Bet Value <span className={betClass}>{`$${betValue}`}</span></p>
-            <p className="ItemsSelected">Items Selected <span className={itemClass}>{`${itemsSelected}/15`}</span></p>
+            <p className="ItemsSelected">Items Selected <span className={itemClass}>{`${itemsSelected}/${maxItems}`}</span></p>
             <p className="InventoryValue">Inventory Value <span>{`$${this.getTotalInventoryPrice()}`}</span></p>
           </div>
           <p className="InputHeader"><span>Options</span></p>
-          <div className="Modal__TradeURL-Options">
+          <div className="Modal__CreateCoinflip-Options">
             <div>
               <a className="ClearItems" onClick={this.clearItems}>Clear</a>
               <a onClick={this.requestClose}>Close</a>
@@ -135,7 +147,7 @@ export default class CoinflipCreateModal extends Component {
        )
     } else if (error) {
       return (
-        <div className="Modal__TradeURL-Error">
+        <div className="Modal__CreateCoinflip-Error">
           <span>You do not have any tradeable H1Z1:KotK items or Steam is offline.</span>
         </div>
       )
@@ -146,7 +158,7 @@ export default class CoinflipCreateModal extends Component {
         image={`${IMAGE_URL}${item.icon_url}`}
         selected={this.isSelected(key)}
         price={item.price} key={key}
-        disabled={item.price < 0.10}
+        disabled={item.price < itemThreshold}
         unselect={() => this.unselectItem(key)}
         select={() => this.selectItem(key)}
       />
@@ -178,6 +190,14 @@ export default class CoinflipCreateModal extends Component {
     return this.state.selectedItems.length
   }
 
+  getSelectedItems() {
+    const array = []
+    for (var index in this.state.selectedItems) {
+      array.push(this.props.inventory.items[this.state.selectedItems[index]])
+    }
+    return array
+  }
+
   getTotalSelectedPrice() {
     let total = 0.00
     for (var index in this.state.selectedItems) {
@@ -201,14 +221,14 @@ export default class CoinflipCreateModal extends Component {
         onRequestClose={this.requestClose}
         closeTimeoutMS={200}
         contentLabel="Modal"
-        className={'Modal__TradeURL ' + (this.state.created ? 'Modal__TradeURL-Created' : '')}
+        className={'Modal Modal__CreateCoinflip ' + (this.state.created ? 'Modal__CreateCoinflip-Created' : '')}
         overlayClassName={'Modal__Overlay'}
       >
-        <div className="Modal__TradeURL-Header">
+        <div className="Modal__Header">
           <h1>Create a Game</h1>
           <a onClick={this.requestClose}><i className="fa fa-times" /></a>
         </div>
-        <div className={'Modal__TradeURL-Content'}>
+        <div className={'Modal__Content Modal__CreateCoinflip-Content'}>
           { this.renderModal() }
         </div>
       </Modal>

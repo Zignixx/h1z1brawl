@@ -284,8 +284,13 @@
   transition: 0.2s all; }
   .Coinflip__InventoryItem.selected {
     opacity: 0.6;
-    box-shadow: 0px 0px 3px black; }
-  .Coinflip__InventoryItem:hover {
+    box-shadow: 0px 0px 3px green; }
+  .Coinflip__InventoryItem i {
+    position: absolute !important;
+    top: 0px;
+    right: 0px;
+    color: black; }
+  .Coinflip__InventoryItem:hover:not(.selected) {
     opacity: 0.6;
     box-shadow: 0px 0px 3px black; }
   .Coinflip__InventoryItem.disabled {

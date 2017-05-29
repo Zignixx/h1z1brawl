@@ -389,10 +389,16 @@ $transition: all #{$speed} cubic-bezier(0.310, -0.105, 0.430, 1.400);
 
   &.selected {
     opacity: 0.6;
-    box-shadow: 0px 0px 3px black;
+    box-shadow: 0px 0px 3px green;
   }
 
-  &:hover {
+  i {
+    position: absolute !important;
+    top: 0px; right: 0px;
+    color: black;
+  }
+
+  &:hover:not(.selected) {
     opacity: 0.6;
     box-shadow: 0px 0px 3px black;
   }

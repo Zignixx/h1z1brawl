@@ -13,13 +13,14 @@ export default class TradeURLModal extends Component {
         onRequestClose={this.props.close}
         closeTimeoutMS={200}
         contentLabel="Modal"
-        className={'Modal__TradeURL'}
+        className={'Modal Modal__TradeURL'}
         overlayClassName={'Modal__Overlay'}
       >
-        <div className="Modal__TradeURL-Header">
+        <div className="Modal__Header">
           <h1>Set your trade URL...</h1>
+          <a onClick={this.props.close}><i className="fa fa-times" /></a>
         </div>
-        <div className="Modal__TradeURL-Content">
+        <div className="Modal__Content Modal__TradeURL-Content">
           <p>
               In order to receive your winnings from our games, you need
               to set your trading URL before your play. First, make sure your

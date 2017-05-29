@@ -8,6 +8,7 @@ import path from 'path'
 import config from '../config'
 import mongoose from 'mongoose'
 import connectMongoStore from 'connect-mongo'
+import autoIncrement from 'mongoose-auto-increment'
 
 import { default as configureAuth } from './util/configureAuth'
 import { default as updatePrices } from './util/priceUpdater'
@@ -41,6 +42,8 @@ app.use(session({
   saveUninitialized: false,
   store: new MongoStore({ mongooseConnection: mongoose.connection })
 }))
+
+autoIncrement.initialize(mongoose.connection)
 
 configureAuth(app)
 

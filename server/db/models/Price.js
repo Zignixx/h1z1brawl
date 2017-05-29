@@ -18,6 +18,7 @@ priceSchema.statics.formatPrice = function(item) {
       .then(object => {
         resolve({
           name: item.name,
+          assetid: item.assetid,
           icon_url: item.icon_url,
           price: object.price ? Number(object.price).toFixed(2) : 0.00
         })

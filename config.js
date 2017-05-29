@@ -18,7 +18,21 @@ const app = {
 }
 
 const database = {
-  uri: process.env.MONGODB_URI || 'mongodb://localhost'
+  uri: process.env.MONGODB_URI || 'mongodb://localhost',
+  redis: process.env.REDIS_URL || ''
+}
+
+const inventory = {
+  cacheTimeout: 24 * 60 * 60, //1 day
+  reloadCooldown: 2 * 60, //2 minutes
+  endpoints: {
+    default: 'inventory',
+    forceReload: 'inventory/force'
+  }
+}
+
+const prices = {
+  updateInterval: 20 * 60 * 1000 //20 minutes
 }
 
 const socket = {
@@ -34,8 +48,10 @@ const socket = {
 
 module.exports = { //not transpiled
   auth: auth,
+  prices: prices,
   api: api,
   app: app,
   socket: socket,
+  inventory: inventory,
   database: database
 }

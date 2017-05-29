@@ -17,7 +17,7 @@ const createFinalStore = (history, sockets) => {
 export default function configureStore(initialState, history, sockets) {
   const store = createFinalStore(history, sockets)(reducers, initialState)
   persistStore(store, {
-    blacklist: ['auth']
+    blacklist: ['auth', 'user']
   }) //allow state to be saved across refreshes
   return store
 };

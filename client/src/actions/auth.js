@@ -2,7 +2,45 @@ import { checkHttpStatus } from '../util/network'
 import jwtDecode from 'jwt-decode'
 import { secureSocket } from '../'
 
-import { AUTH_USER_LOAD_REQUEST, AUTH_USER_LOAD_SUCCESS, AUTH_USER_LOAD_FAILURE, AUTH_USER_LOGOUT } from '../constants'
+import { AUTH_USER_LOAD_REQUEST, AUTH_USER_LOAD_SUCCESS, AUTH_USER_LOAD_FAILURE, AUTH_USER_LOGOUT, AUTH_USER_RELOAD } from '../constants'
+
+export function reloadAuth() {
+  return (dispatch) => {
+    dispatch(authReload())
+    return fetch('/api/auth/reload', {
+      method: 'get',
+      credentials: 'include',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+      })
+      .then(checkHttpStatus)
+      .then(response => response.json())
+      .then(response => {
+        try {
+          // eslint-disable-next-line
+          let attempt = jwtDecode(response.token)
+          dispatch(authSuccess(response.token, response))
+        } catch (e) {
+          dispatch(authFailure({
+            response: {
+              status: 401,
+              statusText: 'Invalid token'
+            }
+          }))
+        }
+      })
+      .catch(error => {
+        dispatch(authFailure({
+          response: {
+            status: 401,
+            statusText: error
+          }
+        }))
+      })
+  }
+}
 
 export function loadAuth() {
   return (dispatch) => {
@@ -45,6 +83,12 @@ export function loadAuth() {
 function authRequest() {
   return {
     type: AUTH_USER_LOAD_REQUEST
+  }
+}
+
+function authReload() {
+  return {
+    type: AUTH_USER_RELOAD
   }
 }
 

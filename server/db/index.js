@@ -1,7 +1,15 @@
+import { Promise as bluebird } from 'bluebird'
 import config from '../../config'
+import redis from 'redis'
+import { RedisJSONify as jsonify } from '../util/redisJsonify'
+
+bluebird.promisifyAll(redis.RedisClient.prototype)
+
+const client = redis.createClient(config.database.redis)
 
 export const connect = (mongoose) => {
   mongoose.Promise = global.Promise //native es6 library
+
   mongoose.connect(config.database.uri, (err) => {
     if (err) {
       console.log('Error while connecting to MongoDB: ', err)
@@ -9,7 +17,14 @@ export const connect = (mongoose) => {
     }
     console.log('Connected to MongoDB')
   })
+
+  client.on('connect', () => {
+    console.log('Connected to Redis')
+  })
 }
 
+export { client }
+
 export User from './models/User'
+export Price from './models/Price'
 export Message from './models/Message'

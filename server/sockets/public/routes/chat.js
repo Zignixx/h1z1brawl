@@ -6,13 +6,7 @@ export default function configure(socket, io) {
   socket.on('LOAD_CHAT', (data, callback) => {
     Message.loadRecentMessages(LOAD_LIMIT)
       .then(Message.formatMessages)
-      .then(messages => {
-        callback(messages)
-      })
-      .catch(err => {
-        callback({
-          error: err
-        })
-      })
+      .then(callback)
+      .catch(err => callback({ error }))
   })
 }

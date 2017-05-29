@@ -1,19 +1,26 @@
-import { AUTH_USER_LOAD_REQUEST, AUTH_USER_LOAD_SUCCESS, AUTH_USER_LOAD_FAILURE, AUTH_USER_LOGOUT } from '../constants'
+import { AUTH_USER_LOAD_REQUEST, AUTH_USER_LOAD_SUCCESS, AUTH_USER_LOAD_FAILURE, AUTH_USER_LOGOUT, AUTH_USER_RELOAD } from '../constants'
 
 const initialState = {
   loaded: false,
   token: null,
   user: null,
-  loading: false
+  loading: false,
+  reloading: false
 }
 
 export default function reducer(state = initialState, {type, payload}) {
   switch(type) {
+    case AUTH_USER_RELOAD:
+      return {
+        ...state,
+        reloading: true
+      }
     case AUTH_USER_LOAD_FAILURE:
       return {
         ...state,
         loaded: false,
         loading: false,
+        reloading: false,
         user: null,
         token: null,
       }
@@ -22,6 +29,7 @@ export default function reducer(state = initialState, {type, payload}) {
         ...state,
         loaded: true,
         loading: false,
+        reloading: false,
         user: payload.user,
         token: payload.token
       }

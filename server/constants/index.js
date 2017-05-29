@@ -1,4 +1,4 @@
-export const constants = {
+export const ranks = {
   NORMAL: 0,
   MOD: 1,
   ADMIN: 2,
@@ -11,6 +11,6 @@ export const socket = {
 
   },
   client: {
-    
+
   }
 }

@@ -6,6 +6,7 @@ import coinflip from './coinflip'
 import jackpot from './jackpot'
 import users from './users'
 import chat from './chat'
+import user from './user'
 
 export default combineReducers({
   router: routerReducer,
@@ -13,5 +14,6 @@ export default combineReducers({
   jackpot,
   users,
   coinflip,
-  chat
+  chat,
+  user
 })

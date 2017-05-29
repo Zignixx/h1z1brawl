@@ -1,4 +1,5 @@
 import { Router } from 'express'
+import { User } from '../db'
 import passport from 'passport'
 import config from '../../config'
 
@@ -11,6 +12,22 @@ router.get('/auth/steam/return', passport.authenticate('steam', { failureRedirec
     res.redirect(config.app.url)
   }
 )
+
+router.get('/auth/reload', (req, res) => {
+  if (!req.user) {
+    return res.end(200)
+  }
+  const token = (' ' + req.user.token).slice(1)
+  User.findById(req.user._id).exec()
+    .then(weird => {
+      const user = weird.toObject()
+      user.token = token
+      req.login(user, (err) => {
+        if (err) return res.end(200)
+        res.end(JSON.stringify(req.user))
+      })
+    })
+})
 
 router.get('/auth/loadAuth', (req, res) => {
   res.end(JSON.stringify(req.user))

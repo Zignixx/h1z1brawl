@@ -3,10 +3,11 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { NotificationContainer, NotificationManager } from 'react-notifications'
-import { loadAuth } from '../../actions/auth'
+import { saveTradeURL as tradeURLAction, loadAuth, reloadAuth } from '../../actions'
 import { Header, TradeURLModal } from '../../components'
 import { Chat, Landing } from '../index'
 import Routes from '../../routes'
+import { isTradeURL } from '../../util/url'
 
 import './App.css'
 import 'react-notifications/lib/notifications.css';
@@ -21,6 +22,8 @@ class App extends Component {
   constructor(props) {
     super(props)
 
+    this.saveTradeURL = this.saveTradeURL.bind(this)
+
     this.state = {
       tradeUrlModal: false
     }
@@ -34,13 +37,29 @@ class App extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (!this.props.auth.user && nextProps.auth.user) {
-      //user has logged in
       setTimeout(() => {
         this.setState({
           tradeUrlModal: !nextProps.auth.user.tradeUrl
         })
       }, 1000)
     }
+
+    if (nextProps.userState.forceRefresh && !this.props.auth.reloading) {
+      this.props.reloadAuth()
+      NotificationManager.success('Trade URL saved successfully')
+      this.setState({
+        tradeUrlModal: false
+      })
+    }
+
+  }
+
+  saveTradeURL({ inputRef: { value } }) {
+    if (!value || !isTradeURL(value)) {
+      NotificationManager.error('Enter a valid trade URL')
+      return;
+    }
+    this.props.tradeURLAction(value)
   }
 
   render() {
@@ -53,17 +72,17 @@ class App extends Component {
           </div>
         ) : (
           <div>
-            <Header user={user} actions />
-            <Chat secureSocket={this.props.secureSocket} />
             {!user &&
               <Landing />
             }
+            <Header user={user} actions />
+            <Chat secureSocket={this.props.secureSocket} />
             <Routes />
             <div className="App__Background noselect">
               <img src={background} alt="background" />
               <div className="App__Background-Wrapper"></div>
             </div>
-            <TradeURLModal isOpen={this.state.tradeUrlModal} close={() => this.setState({tradeUrlModal: false})} />
+            <TradeURLModal userState={this.props.userState} onClick={this.saveTradeURL} isOpen={this.state.tradeUrlModal} close={() => this.setState({tradeUrlModal: false})} />
           </div>
         ) }
         <NotificationContainer />
@@ -74,13 +93,17 @@ class App extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    auth: state.auth
+    auth: state.auth,
+    userState: state.user,
+    notify: state.notify
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
-    loadAuth
+    loadAuth,
+    tradeURLAction,
+    reloadAuth
   }, dispatch)
 }
 

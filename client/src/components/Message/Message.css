@@ -21,18 +21,16 @@
   margin-bottom: 5px;
   overflow: hidden;
   font-size: 12px; }
-
-.Message__Header .Message__Header--Level {
-  margin-left: 3px;
-  padding: 1px 3px;
-  border-radius: 3px;
-  background-color: rgba(65, 65, 65, 0.9);
-  font-weight: bold;
-  font-size: 9px;
-  color: rgba(255, 255, 255, 0.61); }
-
-.Message__Header img {
-  height: 15px;
-  border-radius: 50%;
-  margin-left: 6px;
-  margin-right: 4px; }
+  .Message__Header .Message__Header--Level {
+    margin-left: 3px;
+    padding: 1px 3px;
+    border-radius: 3px;
+    background-color: rgba(65, 65, 65, 0.9);
+    font-weight: bold;
+    font-size: 9px;
+    color: rgba(255, 255, 255, 0.61); }
+  .Message__Header img {
+    height: 15px;
+    border-radius: 50%;
+    margin-left: 6px;
+    margin-right: 4px; }

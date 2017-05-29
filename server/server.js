@@ -10,6 +10,7 @@ import mongoose from 'mongoose'
 import connectMongoStore from 'connect-mongo'
 
 import { default as configureAuth } from './util/configureAuth'
+import { default as updatePrices } from './util/priceUpdater'
 import { default as authRoute } from './routes/auth'
 import { connect as connectMongo } from './db'
 import { default as connectSecureIo } from './sockets/secure'
@@ -58,3 +59,5 @@ if (process.env.NODE_ENV === 'production') {
 server.listen(app.get('port'), () => {
   console.log(`Find the server at: http://localhost:${app.get('port')}/`); // eslint-disable-line no-console
 });
+
+updatePrices(config.prices.updateInterval) //update prices for the database! woot

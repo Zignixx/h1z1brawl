@@ -46,7 +46,6 @@ export default class SocketClient { //maybe make two socket instances? secureSoc
       return this.socket.emit(event, data, (response) => {
         // Response is the optional callback that you can use with socket.io in every request. See 1 above.
         if (response && response.error) {
-          console.error(response.error)
           return reject(response.error)
         }
         return resolve(response)

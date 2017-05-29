@@ -1,17 +1,42 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import { Popup } from 'semantic-ui-react'
 import { Row, Col } from 'react-bootstrap'
-import CoinflipItem from './CoinflipItem'
+import CoinflipGameItem from './CoinflipGameItem'
 import heads from '../../static/coin-heads.png'
 import tails from '../../static/coin-tails.png'
+import { requestInventory, forceRefreshInventory, sendNotification } from '../../actions'
+import { CoinflipHistoryModal, CoinflipCreateModal } from '../../components'
 import './Coinflip.css'
 
 class Coinflip extends Component {
+
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      createModal: false,
+      historyModal: false
+    }
+  }
 
   render() {
     const image = 'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/e2/e2bf4ecf3eca35e844a4794b7454dc2b75bb9a44_full.jpg'
     return (
       <div className="Coinflip">
+        <CoinflipHistoryModal
+          isOpen={this.state.historyModal}
+          onClose={() => this.setState({ historyModal: false })}
+        />
+        <CoinflipCreateModal
+          isOpen={this.state.createModal}
+          onClose={() => this.setState({ createModal: false })}
+          inventory={this.props.inventory}
+          loadInventory={this.props.requestInventory}
+          forceRefreshInventory={this.props.forceRefreshInventory}
+          notify={this.props.sendNotification}
+        />
         <div className="Coinflip__Header">
           <Row>
             <Col md={3} sm={4} className="Coinflip__Header-Stat">
@@ -33,13 +58,13 @@ class Coinflip extends Component {
             </h1>
             </Col>
             <Col md={3} sm={12} className="Coinflip__Header-Buttons">
-              <a className="noselect create">
+              <a className="noselect create" onClick={() => this.setState({ createModal: true })}>
                 <span>Create</span>
                 <div>
                   <i className="fa fa-plus-square-o"></i>
                 </div>
               </a>
-              <a className="noselect history">
+              <a className="noselect history" onClick={() => this.setState({ historyModal: true })}>
                 <span>History</span>
                 <div>
                   <i className="fa fa-history"></i>
@@ -78,10 +103,10 @@ class Coinflip extends Component {
                     trigger={<img src={image} alt="user1" />} />
                 </td>
                 <td className="Coinflip__Items">
-                  <CoinflipItem name={'Heavy Assault Military Backpack'} image={'https://steamcommunity-a.opskins.media/economy/image/iGm5OjgdO5r8OoJ7TJjS39tTyGCTzzQwmWl1QPRXu8oaf69-NOHLAbqw_23aLe8AcRQ8-3uyKA7_CGvsJYds9U65FMF7i6AbXTJ8PDm57EliZdK7KLPuuh3czSv-yXAQjDkuxf673vhVj5Cw8JupOXr1VwETXYyVTLJ8gg/256fx256f'} price={13.22} />
-                  <CoinflipItem name={'Heavy Assault Military Backpack'} image={'https://steamcommunity-a.opskins.media/economy/image/iGm5OjgdO5r8OoJ7TJjS39tTyGCTzzQwmWl1QPRXu8oaf69-NOHLAbqw_23aLe8AcRQ8-3uyKA7_CGvsJYds9U65FMF7i6AbXTJ8PDm57EliZdK7KLPuuh3czSv-yXAQjDkuxf673vhVj5Cw8JupOXr1VwETXYyVTLJ8gg/256fx256f'} price={13.22} />
-                  <CoinflipItem name={'Heavy Assault Military Backpack'} image={'https://steamcommunity-a.opskins.media/economy/image/iGm5OjgdO5r8OoJ7TJjS39tTyGCTzzQwmWl1QPRXu8oaf69-NOHLAbqw_23aLe8AcRQ8-3uyKA7_CGvsJYds9U65FMF7i6AbXTJ8PDm57EliZdK7KLPuuh3czSv-yXAQjDkuxf673vhVj5Cw8JupOXr1VwETXYyVTLJ8gg/256fx256f'} price={13.22} />
-                  <CoinflipItem name={'Skin: Police Shirt'} price={66.92} image={'https://steamcommunity-a.opskins.media/economy/image/iGm5OjgdO5r8OoJ7TJjS39tTyGCTzzQwmWl1QPRXu8oaf69-NOHLAbqw_23aLe8AcRQ8-3uyKA7_CGvsJYds9U65FMF7i6AZVjpoDBihwW9kf9SqAI3Rqyf_wWbl-FXZw-xMsg/256fx256f'} />
+                  <CoinflipGameItem name={'Heavy Assault Military Backpack'} image={'https://steamcommunity-a.opskins.media/economy/image/iGm5OjgdO5r8OoJ7TJjS39tTyGCTzzQwmWl1QPRXu8oaf69-NOHLAbqw_23aLe8AcRQ8-3uyKA7_CGvsJYds9U65FMF7i6AbXTJ8PDm57EliZdK7KLPuuh3czSv-yXAQjDkuxf673vhVj5Cw8JupOXr1VwETXYyVTLJ8gg/256fx256f'} price={13.22} />
+                  <CoinflipGameItem name={'Heavy Assault Military Backpack'} image={'https://steamcommunity-a.opskins.media/economy/image/iGm5OjgdO5r8OoJ7TJjS39tTyGCTzzQwmWl1QPRXu8oaf69-NOHLAbqw_23aLe8AcRQ8-3uyKA7_CGvsJYds9U65FMF7i6AbXTJ8PDm57EliZdK7KLPuuh3czSv-yXAQjDkuxf673vhVj5Cw8JupOXr1VwETXYyVTLJ8gg/256fx256f'} price={13.22} />
+                  <CoinflipGameItem name={'Heavy Assault Military Backpack'} image={'https://steamcommunity-a.opskins.media/economy/image/iGm5OjgdO5r8OoJ7TJjS39tTyGCTzzQwmWl1QPRXu8oaf69-NOHLAbqw_23aLe8AcRQ8-3uyKA7_CGvsJYds9U65FMF7i6AbXTJ8PDm57EliZdK7KLPuuh3czSv-yXAQjDkuxf673vhVj5Cw8JupOXr1VwETXYyVTLJ8gg/256fx256f'} price={13.22} />
+                  <CoinflipGameItem name={'Skin: Police Shirt'} price={66.92} image={'https://steamcommunity-a.opskins.media/economy/image/iGm5OjgdO5r8OoJ7TJjS39tTyGCTzzQwmWl1QPRXu8oaf69-NOHLAbqw_23aLe8AcRQ8-3uyKA7_CGvsJYds9U65FMF7i6AZVjpoDBihwW9kf9SqAI3Rqyf_wWbl-FXZw-xMsg/256fx256f'} />
                 </td>
                 <td className="Coinflip__Value">
                   <span>$59.43</span>
@@ -121,12 +146,12 @@ class Coinflip extends Component {
                     trigger={<img src={image} alt="user1" />} />
                 </td>
                 <td className="Coinflip__Items">
-                  <CoinflipItem name={'Heavy Assault Military Backpack'} image={'https://steamcommunity-a.opskins.media/economy/image/iGm5OjgdO5r8OoJ7TJjS39tTyGCTzzQwmWl1QPRXu8oaf69-NOHLAbqw_23aLe8AcRQ8-3uyKA7_CGvsJYds9U65FMF7i6AbXTJ8PDm57EliZdK7KLPuuh3czSv-yXAQjDkuxf673vhVj5Cw8JupOXr1VwETXYyVTLJ8gg/256fx256f'} price={13.22} />
-                  <CoinflipItem name={'Heavy Assault Military Backpack'} image={'https://steamcommunity-a.opskins.media/economy/image/iGm5OjgdO5r8OoJ7TJjS39tTyGCTzzQwmWl1QPRXu8oaf69-NOHLAbqw_23aLe8AcRQ8-3uyKA7_CGvsJYds9U65FMF7i6AbXTJ8PDm57EliZdK7KLPuuh3czSv-yXAQjDkuxf673vhVj5Cw8JupOXr1VwETXYyVTLJ8gg/256fx256f'} price={13.22} />
-                  <CoinflipItem name={'Heavy Assault Military Backpack'} image={'https://steamcommunity-a.opskins.media/economy/image/iGm5OjgdO5r8OoJ7TJjS39tTyGCTzzQwmWl1QPRXu8oaf69-NOHLAbqw_23aLe8AcRQ8-3uyKA7_CGvsJYds9U65FMF7i6AbXTJ8PDm57EliZdK7KLPuuh3czSv-yXAQjDkuxf673vhVj5Cw8JupOXr1VwETXYyVTLJ8gg/256fx256f'} price={13.22} />
-                  <CoinflipItem name={'Skin: Police Shirt'} price={66.92} image={'https://steamcommunity-a.opskins.media/economy/image/iGm5OjgdO5r8OoJ7TJjS39tTyGCTzzQwmWl1QPRXu8oaf69-NOHLAbqw_23aLe8AcRQ8-3uyKA7_CGvsJYds9U65FMF7i6AZVjpoDBihwW9kf9SqAI3Rqyf_wWbl-FXZw-xMsg/256fx256f'} />
-                  <CoinflipItem name={'Skin: Police Shirt'} price={66.92} image={'https://steamcommunity-a.opskins.media/economy/image/iGm5OjgdO5r8OoJ7TJjS39tTyGCTzzQwmWl1QPRXu8oaf69-NOHLAbqw_23aLe8AcRQ8-3uyKA7_CGvsJYds9U65FMF7i6AZVjpoDBihwW9kf9SqAI3Rqyf_wWbl-FXZw-xMsg/256fx256f'} />
-                  <CoinflipItem name={'Skin: Police Shirt'} price={66.92} image={'https://steamcommunity-a.opskins.media/economy/image/iGm5OjgdO5r8OoJ7TJjS39tTyGCTzzQwmWl1QPRXu8oaf69-NOHLAbqw_23aLe8AcRQ8-3uyKA7_CGvsJYds9U65FMF7i6AZVjpoDBihwW9kf9SqAI3Rqyf_wWbl-FXZw-xMsg/256fx256f'} />
+                  <CoinflipGameItem name={'Heavy Assault Military Backpack'} image={'https://steamcommunity-a.opskins.media/economy/image/iGm5OjgdO5r8OoJ7TJjS39tTyGCTzzQwmWl1QPRXu8oaf69-NOHLAbqw_23aLe8AcRQ8-3uyKA7_CGvsJYds9U65FMF7i6AbXTJ8PDm57EliZdK7KLPuuh3czSv-yXAQjDkuxf673vhVj5Cw8JupOXr1VwETXYyVTLJ8gg/256fx256f'} price={13.22} />
+                  <CoinflipGameItem name={'Heavy Assault Military Backpack'} image={'https://steamcommunity-a.opskins.media/economy/image/iGm5OjgdO5r8OoJ7TJjS39tTyGCTzzQwmWl1QPRXu8oaf69-NOHLAbqw_23aLe8AcRQ8-3uyKA7_CGvsJYds9U65FMF7i6AbXTJ8PDm57EliZdK7KLPuuh3czSv-yXAQjDkuxf673vhVj5Cw8JupOXr1VwETXYyVTLJ8gg/256fx256f'} price={13.22} />
+                  <CoinflipGameItem name={'Heavy Assault Military Backpack'} image={'https://steamcommunity-a.opskins.media/economy/image/iGm5OjgdO5r8OoJ7TJjS39tTyGCTzzQwmWl1QPRXu8oaf69-NOHLAbqw_23aLe8AcRQ8-3uyKA7_CGvsJYds9U65FMF7i6AbXTJ8PDm57EliZdK7KLPuuh3czSv-yXAQjDkuxf673vhVj5Cw8JupOXr1VwETXYyVTLJ8gg/256fx256f'} price={13.22} />
+                  <CoinflipGameItem name={'Skin: Police Shirt'} price={66.92} image={'https://steamcommunity-a.opskins.media/economy/image/iGm5OjgdO5r8OoJ7TJjS39tTyGCTzzQwmWl1QPRXu8oaf69-NOHLAbqw_23aLe8AcRQ8-3uyKA7_CGvsJYds9U65FMF7i6AZVjpoDBihwW9kf9SqAI3Rqyf_wWbl-FXZw-xMsg/256fx256f'} />
+                  <CoinflipGameItem name={'Skin: Police Shirt'} price={66.92} image={'https://steamcommunity-a.opskins.media/economy/image/iGm5OjgdO5r8OoJ7TJjS39tTyGCTzzQwmWl1QPRXu8oaf69-NOHLAbqw_23aLe8AcRQ8-3uyKA7_CGvsJYds9U65FMF7i6AZVjpoDBihwW9kf9SqAI3Rqyf_wWbl-FXZw-xMsg/256fx256f'} />
+                  <CoinflipGameItem name={'Skin: Police Shirt'} price={66.92} image={'https://steamcommunity-a.opskins.media/economy/image/iGm5OjgdO5r8OoJ7TJjS39tTyGCTzzQwmWl1QPRXu8oaf69-NOHLAbqw_23aLe8AcRQ8-3uyKA7_CGvsJYds9U65FMF7i6AZVjpoDBihwW9kf9SqAI3Rqyf_wWbl-FXZw-xMsg/256fx256f'} />
                   <span>+4 more items...</span>
                 </td>
                 <td className="Coinflip__Value">
@@ -167,9 +192,9 @@ class Coinflip extends Component {
                     trigger={<img src={image} alt="user1" />} />
                 </td>
                 <td className="Coinflip__Items">
-                  <CoinflipItem name={'Skin: Police Shirt'} price={66.92} image={'https://steamcommunity-a.opskins.media/economy/image/iGm5OjgdO5r8OoJ7TJjS39tTyGCTzzQwmWl1QPRXu8oaf69-NOHLAbqw_23aLe8AcRQ8-3uyKA7_CGvsJYds9U65FMF7i6AZVjpoDBihwW9kf9SqAI3Rqyf_wWbl-FXZw-xMsg/256fx256f'} />
-                  <CoinflipItem name={'Skin: Police Shirt'} price={66.92} image={'https://steamcommunity-a.opskins.media/economy/image/iGm5OjgdO5r8OoJ7TJjS39tTyGCTzzQwmWl1QPRXu8oaf69-NOHLAbqw_23aLe8AcRQ8-3uyKA7_CGvsJYds9U65FMF7i6AZVjpoDBihwW9kf9SqAI3Rqyf_wWbl-FXZw-xMsg/256fx256f'} />
-                  <CoinflipItem name={'Skin: Police Shirt'} price={66.92} image={'https://steamcommunity-a.opskins.media/economy/image/iGm5OjgdO5r8OoJ7TJjS39tTyGCTzzQwmWl1QPRXu8oaf69-NOHLAbqw_23aLe8AcRQ8-3uyKA7_CGvsJYds9U65FMF7i6AZVjpoDBihwW9kf9SqAI3Rqyf_wWbl-FXZw-xMsg/256fx256f'} />
+                  <CoinflipGameItem name={'Skin: Police Shirt'} price={66.92} image={'https://steamcommunity-a.opskins.media/economy/image/iGm5OjgdO5r8OoJ7TJjS39tTyGCTzzQwmWl1QPRXu8oaf69-NOHLAbqw_23aLe8AcRQ8-3uyKA7_CGvsJYds9U65FMF7i6AZVjpoDBihwW9kf9SqAI3Rqyf_wWbl-FXZw-xMsg/256fx256f'} />
+                  <CoinflipGameItem name={'Skin: Police Shirt'} price={66.92} image={'https://steamcommunity-a.opskins.media/economy/image/iGm5OjgdO5r8OoJ7TJjS39tTyGCTzzQwmWl1QPRXu8oaf69-NOHLAbqw_23aLe8AcRQ8-3uyKA7_CGvsJYds9U65FMF7i6AZVjpoDBihwW9kf9SqAI3Rqyf_wWbl-FXZw-xMsg/256fx256f'} />
+                  <CoinflipGameItem name={'Skin: Police Shirt'} price={66.92} image={'https://steamcommunity-a.opskins.media/economy/image/iGm5OjgdO5r8OoJ7TJjS39tTyGCTzzQwmWl1QPRXu8oaf69-NOHLAbqw_23aLe8AcRQ8-3uyKA7_CGvsJYds9U65FMF7i6AZVjpoDBihwW9kf9SqAI3Rqyf_wWbl-FXZw-xMsg/256fx256f'} />
                 </td>
                 <td className="Coinflip__Value">
                   <span>$59.43</span>
@@ -202,4 +227,21 @@ class Coinflip extends Component {
 
 }
 
-export default Coinflip
+const mapStateToProps = (state) => {
+  return {
+    inventory: state.user.inventory
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({
+    requestInventory,
+    forceRefreshInventory,
+    sendNotification
+  }, dispatch)
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Coinflip)

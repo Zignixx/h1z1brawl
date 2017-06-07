@@ -1,20 +1,20 @@
 import config from '../../config'
 
-const { minItems, maxItems, minAmount, itemThreshold}
+const { minItems, maxItems, minAmount, itemThreshold } = config.coinflip
 
 export function checkCoinflipGame(data) {
   if (!data || !data.side) {
     throw new Error('A side must be selected')
-  } else if (!data.items || !(typeof data.items === 'array')) {
+  } else if (!data.items || !(Array.isArray(data.items))) {
     throw new Error('Items must be an array')
   } else if (!checkItems(data.items)) {
     throw new Error('Incorrect items sent')
   } else if (data.items.length < minItems || data.items.length > maxItems) {
     throw new Error('Incorrect number of items')
-  } else if (!checkPrice(items)) {
+  } else if (!checkPrice(data.items)) {
     throw new Error('Coinflip amount is too low')
   }
-  return true
+  return data
 }
 
 function isItem(item) {

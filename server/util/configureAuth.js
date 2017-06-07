@@ -11,7 +11,7 @@ const configure = (app) => {
 
   const addJwt = (user) => {
     const token = jwt.sign({ id: user._id }, config.auth.jwt.secret, {
-      expiresIn: 60000
+      expiresIn: "2 days"
     })
     return Object.assign({}, user.toJSON(), {token})
   }

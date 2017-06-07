@@ -30,6 +30,9 @@
     "request-promise-native": "^1.0.4",
     "socket.io": "^2.0.1",
     "socketio-jwt": "^4.5.0",
+    "steam-totp": "^1.4.0",
+    "steam-tradeoffer-manager": "^2.7.3",
+    "steam-user": "^3.21.0",
     "steamcommunity": "^3.30.7"
   },
   "scripts": {

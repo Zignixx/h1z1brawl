@@ -8,6 +8,12 @@ $transition: all #{$speed} cubic-bezier(0.310, -0.105, 0.430, 1.400);
   margin: 15px auto;
 }
 
+.Coinflip--Loading {
+  text-align: center;
+  padding: 50px 0px;
+  color: #d4d2d2;
+}
+
 .Coinflip__Body {
   margin-top: 10px;
   border-radius: 10px;
@@ -145,8 +151,10 @@ $transition: all #{$speed} cubic-bezier(0.310, -0.105, 0.430, 1.400);
 
       .fa {
         font-size: 15px;
-        vertical-align: middle;
         transition: $transition, height #{$speed} ease;
+        position: absolute;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
       }
     }
 
@@ -354,6 +362,16 @@ $transition: all #{$speed} cubic-bezier(0.310, -0.105, 0.430, 1.400);
 
   img {
     height: 35px;
+    width: 35px;
+    border-radius: 3px;
+  }
+
+  .None {
+    display: inline-block;
+    height: 35px;
+    width: 35px;
+    border: 1px solid rgba(14, 14, 14, 1);
+    vertical-align: middle;
     border-radius: 3px;
   }
 

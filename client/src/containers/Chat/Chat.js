@@ -7,7 +7,7 @@ import { NotificationManager } from 'react-notifications'
 import FontAwesome from 'react-fontawesome'
 import { Popup } from 'semantic-ui-react'
 import { Message } from '../../components'
-import { sendChat, receiveChat, loadChat, sendNotification } from '../../actions/'
+import { sendChat, receiveChat, loadChat } from '../../actions/'
 import { api } from '../../../../config'
 import giveaway from '../../static/giveaway.png'
 import './Chat.css'
@@ -77,18 +77,12 @@ class Chat extends Component {
   submitChat() {
     const message = this.refs.messageText.value
     if (!message || message.length === 0) {
-      this.props.sendNotification({
-        message: 'Enter a message before submitting',
-        type: 'error'
-      })
+      NotificationManager.error('Enter a message before submitting')
       return;
     }
 
     if (this.props.chat.sending) {
-      this.props.sendNotification({
-        message: 'You are already sending a message',
-        type: 'error'
-      })
+      NotificationManager.error('You are already sending a message')
     } else {
       this.props.sendChat(message)
       this.clearChat()
@@ -164,8 +158,7 @@ const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
     sendChat,
     receiveChat,
-    loadChat,
-    sendNotification
+    loadChat
   }, dispatch)
 }
 

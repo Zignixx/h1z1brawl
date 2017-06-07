@@ -107,8 +107,12 @@ $transition: all #{$speed} cubic-bezier(0.310, -0.105, 0.430, 1.400);
     border-radius: 5px;
     background: rgba(64, 64, 64, 0.51);
 
-    i {
-      position: relative;
+    .ItemLoading {
+      position: absolute;
+      top: calc(50% - 20px);
+      transform: translateY(-50%);
+      left: -25px; right: 0;
+      margin: 0 auto;
       color: #b6b6b6;
     }
 

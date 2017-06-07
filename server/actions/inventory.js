@@ -21,9 +21,9 @@ export function loadInventory(userId) {
             client.set(endpoint, JSON.stringify(inventory), 'EX', config.inventory.cacheTimeout);
             resolve(inventory)
           })
-          .catch(err => reject(err))
+          .catch(reject)
       })
-      .catch(err => reject(err))
+      .catch(reject)
   })
 }
 
@@ -32,30 +32,32 @@ export function queryInventory(userId) {
     community.getUserInventoryContentsAsync(userId, APP_ID, 1, true)
       .then(Price.formatPrices)
       .then(resolve)
-      .catch(err => reject(err))
+      .catch(reject)
   })
 }
 
 export function forceRefreshInventory(userId) {
-  const endpoint = `${userId}/${config.inventory.endpoints.forceReload}`
+  const forceEndpoint = `${userId}/${config.inventory.endpoints.forceReload}`
+  const userEndpoint = `${userId}/${config.inventory.endpoints.default}`
   return new Promise((resolve, reject) => {
-    client.getAsync(endpoint)
+    client.getAsync(forceEndpoint)
       .then(data => {
         if (!data) {
-          client.set(endpoint, 'XDRawr', 'EX', config.inventory.reloadCooldown)
+          client.set(forceEndpoint, 'XDRawr', 'EX', config.inventory.reloadCooldown)
           return queryInventory(userId)
             .then(inventory => {
+              client.set(userEndpoint, JSON.stringify(inventory), 'EX', config.inventory.cacheTimeout);
               resolve(inventory)
             })
-            .catch(err => reject(err))
+            .catch(reject)
         }
-        client.ttlAsync(endpoint).then(ttl => {
+        client.ttlAsync(forceEndpoint).then(ttl => {
           return reject({
             ttl: `You must wait ${formatSeconds(ttl)} before reloading your inventory`
           })
         })
       })
-      .catch(err => reject(err))
+      .catch(reject)
   })
 }
 

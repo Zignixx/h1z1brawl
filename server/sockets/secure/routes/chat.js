@@ -16,7 +16,7 @@ export default function configure(socket, io) {
         io.emit('RECEIVE_CHAT', message)
         callback()
       })
-      .catch(err => callback({ error }))
+      .catch(err => callback({ error: err.message }))
   })
 
 }

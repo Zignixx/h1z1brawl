@@ -1,4 +1,5 @@
 import mongoose, { Schema } from 'mongoose'
+import { CoinflipOffer } from '../'
 
 var userSchema = new Schema({
   _id: {type: String, required: true},
@@ -12,6 +13,14 @@ var userSchema = new Schema({
   totalWithdrawn: {type: Number, required: true, default: 0.00},
   dateJoined: {type: Date, default: Date.now, required: true},
 });
+
+userSchema.methods.hasTradeURL = function() {
+  if (this.tradeUrl) {
+    return true
+  } else {
+    throw new Error('You must set your trade URL')
+  }
+}
 
 const User = mongoose.model('User', userSchema)
 

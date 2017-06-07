@@ -7,6 +7,6 @@ export default function configure(socket, io) {
     Message.loadRecentMessages(LOAD_LIMIT)
       .then(Message.formatMessages)
       .then(callback)
-      .catch(err => callback({ error }))
+      .catch(err => callback({ error: err.message }))
   })
 }

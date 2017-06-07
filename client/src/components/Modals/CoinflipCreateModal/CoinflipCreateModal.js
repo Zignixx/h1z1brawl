@@ -101,7 +101,7 @@ export default class CoinflipCreateModal extends Component {
     return (
       <div>
         <h4>Add your items to the coin flip</h4>
-        <p>Min bet {minAmount} - Max items {maxItems}</p>
+        <p>Min bet ${minAmount} - Max items {maxItems}</p>
         <a className="noselect" onClick={this.props.forceRefreshInventory}>
           <span>Force Refresh</span>
           <div>
@@ -122,7 +122,7 @@ export default class CoinflipCreateModal extends Component {
           <div className="Modal__CreateCoinflip-Options">
             <div>
               <a className="ClearItems" onClick={this.clearItems}>Clear</a>
-              <a onClick={this.requestClose}>Close</a>
+              <a onClick={this.requestClose}>Cancel</a>
             </div>
             <input type="checkbox" ref="autoCancel" />
             <p>Auto cancel after 30 minutes</p>
@@ -143,7 +143,7 @@ export default class CoinflipCreateModal extends Component {
     const { items, error, loading } = this.props.inventory
     if (loading) {
        return (
-         <i className="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+         <i className="fa fa-spinner fa-pulse fa-3x fa-fw ItemLoading"></i>
        )
     } else if (error) {
       return (

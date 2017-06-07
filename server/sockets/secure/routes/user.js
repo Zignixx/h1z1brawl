@@ -12,7 +12,7 @@ export default function configure(socket, io) {
   socket.on('REQUEST_INVENTORY', (data, callback) => {
     loadInventory(socket.decoded_token.id)
       .then(callback)
-      .catch(error => callback({ error }))
+      .catch(error => callback({ error: error.message }))
   })
 
   socket.on('SAVE_TRADE_URL', (data, callback) => {
@@ -22,7 +22,7 @@ export default function configure(socket, io) {
         return user.save()
       })
       .then(callback)
-      .catch(error => callback({ error }))
+      .catch(error => callback({ error: error.message }))
   })
 
 }

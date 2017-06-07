@@ -77,7 +77,7 @@ class App extends Component {
             }
             <Header user={user} actions />
             <Chat secureSocket={this.props.secureSocket} />
-            <Routes />
+            <Routes secureSocket={this.props.secureSocket} publicSocket={this.props.publicSocket} />
             <div className="App__Background noselect">
               <img src={background} alt="background" />
               <div className="App__Background-Wrapper"></div>

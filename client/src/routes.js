@@ -9,12 +9,12 @@ import Giveaway from './containers/Giveaway'
 import { Admin, Coinflip } from './containers'
 
 
-const Routes = () => (
+const Routes = ({ secureSocket, publicSocket }) => (
   <main>
     <Switch>
-      <Route exact path="/" component={Coinflip} />
+      <Route exact path="/" render={props => <Coinflip secureSocket={secureSocket} publicSocket={publicSocket} {...props} />} />
       <Route path="/jackpot" component={Jackpot} />
-      <Route path="/coinflip" component={Coinflip} />
+      <Route path="/coinflip" render={props => <Coinflip secureSocket={secureSocket} publicSocket={publicSocket} {...props} />} />
       {/*<Route path="/user/:id?" component={User} />*/}
       <Route path="/faq" component={FAQ} />
       <Route path="/leaderboards" component={Leaderboards} />

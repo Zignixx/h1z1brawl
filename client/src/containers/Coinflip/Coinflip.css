@@ -3,6 +3,11 @@
   max-width: 1000px;
   margin: 15px auto; }
 
+.Coinflip--Loading {
+  text-align: center;
+  padding: 50px 0px;
+  color: #d4d2d2; }
+
 .Coinflip__Body {
   margin-top: 10px;
   border-radius: 10px;
@@ -104,8 +109,11 @@
       transition: all 0.25s cubic-bezier(0.31, -0.105, 0.43, 1.4); }
       .Coinflip__Header a div .fa {
         font-size: 15px;
-        vertical-align: middle;
-        transition: all 0.25s cubic-bezier(0.31, -0.105, 0.43, 1.4), height 0.25s ease; }
+        transition: all 0.25s cubic-bezier(0.31, -0.105, 0.43, 1.4), height 0.25s ease;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%); }
     .Coinflip__Header a:hover span {
       left: -72%;
       opacity: 0; }
@@ -257,6 +265,14 @@
   text-align: center; }
   .Coinflip__Players img {
     height: 35px;
+    width: 35px;
+    border-radius: 3px; }
+  .Coinflip__Players .None {
+    display: inline-block;
+    height: 35px;
+    width: 35px;
+    border: 1px solid #0e0e0e;
+    vertical-align: middle;
     border-radius: 3px; }
   .Coinflip__Players span {
     margin: 0 4px; }

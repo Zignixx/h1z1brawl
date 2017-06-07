@@ -77,8 +77,13 @@
     border: 1px solid black;
     border-radius: 5px;
     background: rgba(64, 64, 64, 0.51); }
-    .Modal__CreateCoinflip-Created .Modal__CreateCoinflip-Items i {
-      position: relative;
+    .Modal__CreateCoinflip-Created .Modal__CreateCoinflip-Items .ItemLoading {
+      position: absolute;
+      top: calc(50% - 20px);
+      transform: translateY(-50%);
+      left: -25px;
+      right: 0;
+      margin: 0 auto;
       color: #b6b6b6; }
     .Modal__CreateCoinflip-Created .Modal__CreateCoinflip-Items .Modal__CreateCoinflip-Error {
       line-height: normal;

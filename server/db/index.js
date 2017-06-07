@@ -1,7 +1,6 @@
 import { Promise as bluebird } from 'bluebird'
 import config from '../../config'
 import redis from 'redis'
-import { RedisJSONify as jsonify } from '../util/redisJsonify'
 
 bluebird.promisifyAll(redis.RedisClient.prototype)
 
@@ -28,3 +27,5 @@ export { client }
 export User from './models/User'
 export Price from './models/Price'
 export Message from './models/Message'
+export Coinflip from './models/Coinflip'
+export CoinflipOffer from './models/CoinflipOffer'

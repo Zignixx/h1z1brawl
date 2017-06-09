@@ -14,12 +14,21 @@
   }
 }
 
+
+.Modal__Overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.35);
+  text-align: center;
+  overflow-y: scroll;
+}
+
 .Modal {
   box-shadow: 0px 0px 10px black;
   position: absolute;
-  top: 50%; left: 0; right: 0;
-  transform: translateY(-50%);
+  top: 100px; left: 0; right: 0;
   margin: 0 auto;
+  margin-bottom: 50px;
   height: 270px;
   width: 500px;
   overflow: hidden;
@@ -60,7 +69,8 @@
 
 .Modal__Content {
   background: rgba(48, 48, 48, 1);
-  height: calc(100% - 40px);
+  min-height: 300px;
+  height: auto;
 
   hr {
     width: 80%;
@@ -100,13 +110,6 @@
       color: #eee;
     }
   }
-}
-
-.Modal__Overlay {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0, 0, 0, 0.35);
-  text-align: center;
 }
 
 .Modal__TradeURL-Input {

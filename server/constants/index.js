@@ -14,3 +14,9 @@ export const socket = {
 
   }
 }
+
+export const coinflipOffer = {
+  NEW_GAME: 0,
+  JOIN_GAME: 1,
+  WINNINGS: 2
+}

@@ -10,6 +10,37 @@ export function getCoinflipRange(game) {
   return [Number(total * (1 - RANGE_DELIM)).toFixed(2), Number(total * (1 + RANGE_DELIM)).toFixed(2)]
 }
 
+export function didCreatorWin(game) {
+  if (!game || !game.winningPercentage || !game.creator || !game.joiner) {
+    return true
+  }
+
+  const gameTotal = getCoinflipTotal(game)
+  const creatorPercent = (getUserTotal(game.creator) / gameTotal) * 100
+  const didStartBlack = (game.startingSide === 'black')
+
+  if (game.winningPercentage <= creatorPercent && didStartBlack) {
+    return true
+  } else if (game.winningPercentage >= creatorPercent && !didStartBlack) {
+    return true
+  }
+  return false
+}
+
+export function getUserTotal(user) {
+  if (!user || !user.items) {
+    return 0.00
+  }
+  let total = 0.00
+  for (const index in user.items) {
+    const item = user.items[index]
+    if (item && item.price) {
+      total += parseFloat(item.price)
+    }
+  }
+  return total
+}
+
 export function getCoinflipTotal(game) {
   if (!game || !game.creator || !game.joiner || !game.creator.items) {
     return 0.00

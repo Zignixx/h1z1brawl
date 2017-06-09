@@ -1,11 +1,17 @@
 import React, { Component } from 'react'
 import CoinflipGameItem from './CoinflipGameItem'
 import { Popup } from 'semantic-ui-react'
+import { CountDownTimer } from '../../components'
+import { didCreatorWin } from '../../util/coinflip'
 import black from '../../static/coin-heads.png'
 import red from '../../static/coin-tails.png'
 import noUser from '../../static/no-user.jpg'
 
 const IMAGE_URL = 'https://steamcommunity-a.akamaihd.net/economy/image/'
+
+const WAITING_COUNTDOWN = 120
+
+const COMPLETION_COUNTDOWN = 10
 
 export default class CoinflipGame extends Component {
 
@@ -16,6 +22,14 @@ export default class CoinflipGame extends Component {
    *
    *
    */
+
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      animateGame: true
+    }
+  }
 
   renderItems() {
     const sorted = this.sortedItems()
@@ -76,6 +90,40 @@ export default class CoinflipGame extends Component {
     return black
   }
 
+  getImages() {
+    const { game } = this.props
+    if (didCreatorWin(game)) {
+      return [game.creator.image, game.joiner.image, (game.startingSide === 'black' ? black : red)]
+    } else {
+      return [game.joiner.image, game.creator.image, (game.startingSide === 'black' ? red : black)]
+    }
+  }
+
+  getStatus() {
+    const { game } = this.props
+    if (this.state.animateGame == false) {
+      const [winner, loser, side] = this.getImages()
+      return (<div>
+                  <img src={winner} className="Winner" alt="winner" />
+                  <img src={side} className="Side" alt="side" />
+                </div>)
+    }
+    if (game.completed) {
+      return <CountDownTimer
+                 seconds={COMPLETION_COUNTDOWN}
+                 color="rgb(95, 144, 112)"
+                 onComplete={() => this.setState({ animateGame: false })}
+               />
+    } else if (game.joiner.id) {
+      return <CountDownTimer
+                seconds={WAITING_COUNTDOWN}
+                color="rgba(154, 51, 51, 0.86)"
+              />
+    } else {
+      return (<span>Open</span>)
+    }
+  }
+
   getPlayers() {
     const { creator, joiner } = this.props.game
 
@@ -116,15 +164,17 @@ export default class CoinflipGame extends Component {
           <p><span>{`${lowMargin} - ${highMargin}`}</span></p>
         </td>
         <td className="Coinflip__Status">
-          <span>Open</span>
+          { this.getStatus() }
         </td>
         <td className="Coinflip__Actions">
-          <a className="noselect create" onClick={this.props.onJoin}>
-            <span>Join</span>
-            <div>
-              <i className="fa fa-sign-in"></i>
-            </div>
-          </a>
+          {!this.props.game.joiner.id &&
+            <a className="noselect create" onClick={this.props.onJoin}>
+              <span>Join</span>
+              <div>
+                <i className="fa fa-sign-in"></i>
+              </div>
+            </a>
+          }
           <a className="noselect watch" onClick={this.props.onWatch}>
             <span>Watch</span>
             <div>

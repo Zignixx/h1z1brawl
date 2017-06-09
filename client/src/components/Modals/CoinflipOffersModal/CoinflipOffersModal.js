@@ -33,7 +33,7 @@ export default class CoinflipOffersModal extends Component {
               <th><span>Your Items</span></th>
               <th><span>Bot Items</span></th>
               <th><span>Status</span></th>
-              <th><span>Resend</span></th>
+              <th><span>Link</span></th>
               <th><span>Cancel</span></th>
             </tr>
           </thead>
@@ -47,7 +47,7 @@ export default class CoinflipOffersModal extends Component {
 
   renderOffers() {
     return this.props.offers.offers.map((offer, index) => (
-      <CoinflipOfferRow offer={offer} key={index} cancelOffer={this.props.cancelOffer} resendOffer={this.props.resendOffer} />
+      <CoinflipOfferRow isResending={this.props.isResending} offer={offer} key={index} cancelOffer={this.props.cancelOffer} resendOffer={this.props.resendOffer} />
     ))
   }
 
@@ -68,7 +68,7 @@ export default class CoinflipOffersModal extends Component {
         <div className="Modal__CoinflipOffers-Content Modal__Content">
           <div className="Note">
             <p>Users has 48 hours to accept any winnings sent to them</p>
-            <p>Each trade offer will last for 2 minutes but can be resent here</p>
+            <p>Each trade offer will last for 2 minutes but can be resent using support</p>
             <a className="RequestOffers" onClick={this.props.requestOffers}>
               <span>Refresh</span>
               <div>

@@ -32,6 +32,24 @@ class BotManager {
     return false
   }
 
+  getBot(botId) {
+    for (const bot of Object.values(this.bots)) {
+      if (bot.getSteamID64() == botId) {
+        return bot
+      }
+    }
+    return null
+  }
+
+  isBotAvailable(botId) {
+    for (const bot of Object.values(this.bots)) {
+      if (bot.getSteamID64() == botId && bot.enabled) {
+        return true
+      }
+    }
+    return false
+  }
+
   getNextBot() {
     return new Promise((resolve, reject) => {
       if (this.bots.length == 0 || !this.checkBotsAvailability()) {

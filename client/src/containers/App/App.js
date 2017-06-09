@@ -33,6 +33,14 @@ class App extends Component {
     if (!this.props.auth.loaded) {
       this.props.loadAuth()
     }
+
+    this.props.publicSocket.on('NOTIFY', this.notify)
+    this.props.secureSocket.on('NOTIFY', this.notify)
+  }
+
+  componentWillUnmount() {
+    this.props.publicSocket.off('NOTIFY')
+    this.props.secureSocket.off('NOTIFY')
   }
 
   componentWillReceiveProps(nextProps) {
@@ -60,6 +68,23 @@ class App extends Component {
       return;
     }
     this.props.tradeURLAction(value)
+  }
+
+  notify({ type, message, header }) {
+    switch(type) {
+      case 'error':
+        NotificationManager.error(message, header)
+        break
+      case 'info':
+        NotificationManager.info(message, header)
+        break
+      case 'warning':
+        NotificationManager.warning(message, header)
+        break
+      case 'success':
+        NotificationManager.success(message, header)
+        break
+    }
   }
 
   render() {

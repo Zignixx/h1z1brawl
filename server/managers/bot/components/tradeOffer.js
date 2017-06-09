@@ -99,6 +99,19 @@ Bot.prototype.sentOfferChanged = function(offer, oldState) { //TODO check how Cr
   }
 }
 
+Bot.prototype.cancelTrade = function(tradeId) {
+  return new Promise((resolve, reject) => {
+    this.manager.getOfferAsync(tradeId).then(offer => {
+      if (offer) {
+        offer.cancel()
+        resolve()
+      } else {
+        reject(new Error('Unable to find specified trade ID'))
+      }
+    }).catch(reject)
+  })
+}
+
 Bot.prototype.getTradeOfferData = function({ message }) {
   const data = {
     type: null,

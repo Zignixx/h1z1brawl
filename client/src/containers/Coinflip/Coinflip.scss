@@ -60,7 +60,7 @@ $transition: all #{$speed} cubic-bezier(0.310, -0.105, 0.430, 1.400);
     color: rgb(187, 72, 72);
     font-weight: bold;
 
-    span {
+    span.sub {
       font-size: 11px;
       padding: 3px;
       border-radius: 2px;
@@ -197,8 +197,10 @@ $transition: all #{$speed} cubic-bezier(0.310, -0.105, 0.430, 1.400);
 }
 
 .Coinflip__Status {
-  width: 80px;
+  width: 40px;
+  padding: 0px 15px;
   text-align: center;
+  position: relative;
 
   span {
     text-transform: uppercase;
@@ -208,6 +210,20 @@ $transition: all #{$speed} cubic-bezier(0.310, -0.105, 0.430, 1.400);
     padding: 3px 5px;
     border-radius: 3px;
     font-weight: bold;
+  }
+
+  .Winner {
+    height: 30px;
+    width: 30px;
+    border-radius: 3px;
+  }
+
+  .Side {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    height: 15px;
+    width: 15px;
   }
 }
 

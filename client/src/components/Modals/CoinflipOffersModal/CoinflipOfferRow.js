@@ -57,28 +57,14 @@ export default class CoinflipOfferRow extends Component {
     )
   }
 
-  canResendOffer() {
-    return this.props.offer.completed != true && this.props.offer.botItems > 0
-  }
-
   canCancelOffer() {
     return this.props.offer.completed != true && this.props.offer.failed != true
   }
 
-  getResendButton() {
+  getLinkButton() {
     return (
-      <a
-        className={`${this.canResendOffer() ? '' : 'disabled'}`}
-        onClick={() => {
-          if (this.canResendOffer()) {
-            this.props.resendOffer(this.props.offer)
-          }
-        }}
-      >
-        <span>Resend</span>
-        <div>
-          <i className="fa fa-repeat"></i>
-        </div>
+      <a href={`https://steamcommunity.com/tradeoffer/${this.props.offer.tradeId}`} target="_blank">
+        <i className="fa fa-external-link" />
       </a>
     )
   }
@@ -118,7 +104,7 @@ export default class CoinflipOfferRow extends Component {
         <td className="Items">{this.getUserItems()}</td>
         <td className="Items">{this.getBotItems()}</td>
         <td className="Status">{this.getStatus()}</td>
-        <td className="Resend">{this.getResendButton()}</td>
+        <td className="Link">{this.getLinkButton()}</td>
         <td className="Cancel">{this.getCancelButton()}</td>
       </tr>
     )

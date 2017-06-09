@@ -30,28 +30,32 @@ Bot.prototype.sendCoinflipRequest = function(tradeOffer) {
       }
 
       /* attach appid and contextid to all the items */
-      const items = this.formatItems(tradeOffer.userItems)
-
-      /* check if the user and bot inventory actually have the items */
-      /*if (!this.hasItems(bot, tradeOffer.botItems)) {
-        throw new Error('Bot inventory does not contain items -- contact an Admin immediately')
-      } else if (!this.hasItems(user, tradeOffer.userItems)) {
-        throw new Error('Your inventory does not have the required items')
-      } TODO check if both inventories have the required items */
+      const userItems = this.formatItems(tradeOffer.userItems)
+      const botItems = this.formatItems(tradeOffer.botItems)
 
       steamOffer.setMessage(`Trade offer sent from H1Z1Brawl coinflip. Your trade ID: ${tradeOffer._id}`)
-      steamOffer.addTheirItems(items)
+      steamOffer.addTheirItems(userItems)
+      steamOffer.addMyItems(botItems)
 
       /* return a promise to send the trade offer through steam */
       return sendAsync()
     }).then(status => {
-      if (status === 'pending') {
-        throw new Error('Trade went to escrow')
+      if (status === 'pending' && tradeOffer.botItems.length === 0) {
+        steamOffer.cancel()
+        return reject(new Error('Trade went to escrow'))
       }
-      
+
       /* make sure to track the coinflipOfferId for later usage */
       steamOffer.coinflipOfferId = tradeOffer._id
       resolve(steamOffer) /* resolve the trade offer back to the user */
+
+      if (tradeOffer.botItems.length > 0) {
+        this.community.acceptConfirmationForObject(this.identitySecret, steamOffer.id, (err) => {
+          if (err) {
+            console.log(`Error accepting confirmation coinflip: ${err.message}`)
+          }
+        })
+      }
     }).catch(reject)
   })
 }

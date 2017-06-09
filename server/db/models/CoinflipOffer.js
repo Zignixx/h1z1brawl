@@ -6,6 +6,8 @@ var coinflipOfferSchema = new Schema({
   botId: { type: String, required: true },
   tradeUrl: { type: String, required: true },
   gameId: { type: String, required: true },
+  tradeId: { type: String },
+  type: {type: Number, required: true, default: 0 },
   userItems: [{
     assetid: String,
     icon_url: String,
@@ -35,10 +37,19 @@ coinflipOfferSchema.methods.setFailed = function(reason) {
   return this.save()
 }
 
+coinflipOfferSchema.methods.setTradeId = function(id) {
+  this.tradeId = id
+  this.save()
+}
+
 coinflipOfferSchema.statics.findUserOffers = function(id, limit) {
   return new Promise((resolve, reject) => {
     this.find({ userId: id }).limit(limit).sort({ created: -1 }).exec().then(resolve).catch(reject)
   })
+}
+
+coinflipOfferSchema.statics.findByGame = function({ _id }) {
+  return this.findOne({ gameId: _id }).exec()
 }
 
 coinflipOfferSchema.statics.userHasOpenRequest = function(user) {

@@ -49,6 +49,35 @@ coinflipSchema.methods.setOpen = function() {
   return this.save()
 }
 
+coinflipSchema.methods.setJoiner = function(user) {
+  this.joiner = {
+    id: user._id,
+    name: user.name,
+    image: user.image,
+    items: []
+  }
+  return this.save()
+}
+
+coinflipSchema.methods.removeJoiner = function() {
+  this.joiner = {
+    items: []
+  }
+  return this.save()
+}
+
+coinflipSchema.methods.setCompleted = function() {
+  this.completed = true
+  return this.save()
+}
+
+coinflipSchema.methods.toCleanObject = function() {
+  const object = this.toObject()
+  delete object.winningPercentage
+  delete object.secret
+  return object
+}
+
 coinflipSchema.statics.findByCoinflipOffer = function({ gameId }) {
   if (!gameId) {
     return null

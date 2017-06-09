@@ -19,6 +19,10 @@ Bot.prototype.createClient = function() {
   this.client.on('error', this.error.bind(this))
 }
 
+Bot.prototype.getSteamID64 = function() {
+  return this.client.steamID.getSteamID64()
+}
+
 Bot.prototype.error = function(err) {
   this.log(`error in steam-user: ${err}`)
 }

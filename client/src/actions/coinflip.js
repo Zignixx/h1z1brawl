@@ -16,8 +16,51 @@ import {
   COINFLIP_CANCEL_OFFER_FAILURE,
   COINFLIP_LOAD_GAMES,
   COINFLIP_LOAD_GAMES_SUCCESS,
-  COINFLIP_LOAD_GAMES_FAILURE
+  COINFLIP_LOAD_GAMES_FAILURE,
+  COINFLIP_JOIN_GAME,
+  COINFLIP_JOIN_GAME_SUCCESS,
+  COINFLIP_JOIN_GAME_FAILURE,
+  COINFLIP_UPDATE_GAME,
+  COINFLIP_REMOVE_GAME
 } from '../constants'
+
+export function updateCoinflipGame(game) {
+  return (dispatch) => {
+    dispatch(updateGame(game))
+    if (game.completed) {
+      setTimeout(() => {
+        dispatch(removeGame(game)) /* remove the coinflip game from client side if it's completed (after 1 minute) */
+      }, 1 * 60 * 1000)
+    }
+  }
+}
+
+function updateGame(game) {
+  return {
+    type: COINFLIP_UPDATE_GAME,
+    payload: game
+  }
+}
+
+function removeGame(game) {
+  return {
+    type: COINFLIP_REMOVE_GAME,
+    payload: game
+  }
+}
+
+export function joinCoinflipGame(data) {
+  return {
+    type: config.socket.secure.param,
+    types: [COINFLIP_JOIN_GAME, COINFLIP_JOIN_GAME_SUCCESS, COINFLIP_JOIN_GAME_FAILURE],
+    promise: (socket) => socket.emit('COINFLIP_JOIN_GAME', data).then(data => {
+      NotificationManager.info('Coinflip game joined. Waiting for trade offer...')
+    }).catch(error => {
+      NotificationManager.error(`Error joining game: ${error}`)
+      throw error
+    })
+  }
+}
 
 export function loadCoinflipGames() {
   return {

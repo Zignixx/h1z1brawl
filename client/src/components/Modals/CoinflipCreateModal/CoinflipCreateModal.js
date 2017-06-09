@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Modal from 'react-modal'
 import config from '../../../../../config'
+import { Popup } from 'semantic-ui-react'
 import { CoinflipInventoryItem } from '../../../containers'
 import { NotificationManager } from 'react-notifications'
 import './CoinflipCreateModal.css'
@@ -62,17 +63,29 @@ export default class CoinflipCreateModal extends Component {
   }
 
   renderCoinSelection() {
+    const blackImg = (<img src={black} alt="black" ref="black"
+                        className={this.state.selected === 'black' ? 'selected' : ''}
+                        onClick={() => this.setState({ selected: 'black' })}
+                      />)
+    const redImg = (<img src={red} alt="red" ref="red"
+                      className={this.state.selected === 'red' ? 'selected' : ''}
+                      onClick={() => this.setState({ selected: 'red' })}
+                    />)
     return (
       <div>
         <p><span>Select a Coin</span></p>
         <div className="Modal__CreateCoinflip-Coins">
-          <img src={black} alt="black" ref="black"
-            className={this.state.selected === 'black' ? 'selected' : ''}
-            onClick={() => this.setState({ selected: 'black' })}
+          <Popup
+            trigger={blackImg}
+            content="0% - 49%"
+            offset={-6}
+            inverted
           />
-          <img src={red} alt="red" ref="red"
-            className={this.state.selected === 'red' ? 'selected' : ''}
-            onClick={() => this.setState({ selected: 'red' })}
+          <Popup
+            trigger={redImg}
+            content="50% - 100%"
+            offset={-6}
+            inverted
           />
         </div>
         <hr />

@@ -34,9 +34,11 @@ export default class CoinflipJoinModal extends Component {
       return NotificationManager.error(`You must select between ${minItems} and ${maxItems} items`)
     } else if (betValue > priceHigh) {
       return NotificationManager.error(`Bet must be less than $${priceHigh}`)
+    } else if (this.props.game.joiner.id) {
+      return NotificationManager.error('Game is not open')
     }
     this.props.onClose()
-    //TODO this.props.createGame({ side: this.state.selected, items: this.getSelectedItems() })
+    this.props.joinGame({ game: this.props.game, items: this.getSelectedItems() })
   }
 
   renderItems() {

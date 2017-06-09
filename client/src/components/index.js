@@ -7,3 +7,5 @@ export { default as CoinflipCreateModal } from './Modals/CoinflipCreateModal/Coi
 export { default as CoinflipOffersModal } from './Modals/CoinflipOffersModal/CoinflipOffersModal'
 export { default as TradeOfferModal } from './Modals/TradeOfferModal/TradeOfferModal'
 export { default as CoinflipJoinModal } from './Modals/CoinflipJoinModal/CoinflipJoinModal'
+export { default as CoinflipWatchModal } from './Modals/CoinflipWatchModal/CoinflipWatchModal'
+export { default as CountDownTimer } from './CountDownTimer/CountDownTimer'

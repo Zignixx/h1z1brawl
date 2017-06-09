@@ -1,5 +1,5 @@
 import { User, CoinflipOffer } from '../../../db'
-import { checkCoinflipGame } from '../../../actions'
+import { checkCoinflipGame, checkCoinflipJoinData } from '../../../actions'
 import { coinflip, bot as botManager } from '../../../managers'
 
 const OFFERS_LIMIT = 20
@@ -21,6 +21,21 @@ export default function configure(socket, io) {
     }).catch(error => callback({ error: error.message }))
   })
 
+  socket.on('COINFLIP_JOIN_GAME', (data, callback) => {
+    User.findById(socket.decoded_token.id).exec().then(user => {
+      user.hasTradeURL()
+      checkCoinflipJoinData(data)
+      coinflip.isGameOpen(data).then(data => {
+        CoinflipOffer.userHasOpenRequest(user).then(user => {
+          callback()
+          return coinflip.createJoinOffer({ user, data })
+        }).then(offer => {
+          socket.emit('COINFLIP_OFFER', offer)
+        }).catch(error => callback({ error: error.message }))
+      }).catch(error => callback({ error: error.message }))
+    }).catch(error => callback({ error: error.message }))
+  })
+
   socket.on('COINFLIP_REQUEST_OFFERS', (data, callback) => {
     CoinflipOffer.findUserOffers(socket.decoded_token.id).then(callback).catch(error => callback({ error: error.message }))
   })
@@ -30,12 +45,14 @@ export default function configure(socket, io) {
       callback()
       CoinflipOffer.findUserOffers(socket.decoded_token.id).then(offers => {
         socket.emit('COINFLIP_RECEIVE_OFFERS', offers)
-      })
+      }).catch(error => callback({ error: error.message }))
     }).catch(error => callback({ error: error.message }))
   })
 
-  socket.on('COINFLIP_RESEND_OFFER', (tradeOffer, callback) => {
-    console.log('resend offer', tradeOffer)
-  })
+  /*socket.on('COINFLIP_RESEND_OFFER', (tradeOffer, callback) => {
+    coinflip.resendCoinflipRequest(tradeOffer).then(offer => {
+      socket.emit('COINFLIP_OFFER', offer)
+    }).catch(error => callback({ error: error.message }))
+  })*/
 
 }

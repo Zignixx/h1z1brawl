@@ -8,7 +8,15 @@ import {
   COINFLIP_REQUEST_OFFERS_FAILURE,
   COINFLIP_LOAD_GAMES,
   COINFLIP_LOAD_GAMES_SUCCESS,
-  COINFLIP_LOAD_GAMES_FAILURE
+  COINFLIP_LOAD_GAMES_FAILURE,
+  COINFLIP_JOIN_GAME,
+  COINFLIP_JOIN_GAME_SUCCESS,
+  COINFLIP_JOIN_GAME_FAILURE,
+  COINFLIP_RESEND_OFFER,
+  COINFLIP_RESEND_OFFER_SUCCESS,
+  COINFLIP_RESEND_OFFER_FAILURE,
+  COINFLIP_UPDATE_GAME,
+  COINFLIP_REMOVE_GAME
 } from '../constants'
 
 const initialState = {
@@ -16,6 +24,7 @@ const initialState = {
   loaded: false,
   creatingGame: false,
   games: [],
+  resending: false,
   offers: {
     loaded: false,
     loading: false,
@@ -25,11 +34,52 @@ const initialState = {
     loaded: false,
     loading: false,
     won: {}
-  }
+  },
+  joiningGame: false
 }
 
 export default function reducer(state = initialState, {type, payload}) {
   switch (type) {
+    case COINFLIP_UPDATE_GAME:
+      return {
+        ...state,
+        games: state.games.map((game) => (game._id === payload._id) ? payload : game)
+      }
+    case COINFLIP_REMOVE_GAME:
+      return {
+        ...state,
+        games: state.games.filter((game) => game._id !== payload._id)
+      }
+    case COINFLIP_RESEND_OFFER:
+      return {
+        ...state,
+        resending: true
+      }
+    case COINFLIP_RESEND_OFFER_SUCCESS:
+      return {
+        ...state,
+        resending: false
+      }
+    case COINFLIP_RESEND_OFFER_FAILURE:
+      return {
+        ...state,
+        resending: false
+      }
+    case COINFLIP_JOIN_GAME:
+      return {
+        ...state,
+        joiningGame: true
+      }
+    case COINFLIP_JOIN_GAME_SUCCESS:
+      return {
+        ...state,
+        joiningGame: false
+      }
+    case COINFLIP_JOIN_GAME_FAILURE:
+      return {
+        ...state,
+        joiningGame: false
+      }
     case COINFLIP_LOAD_GAMES:
       return {
         ...state,
@@ -96,11 +146,6 @@ export default function reducer(state = initialState, {type, payload}) {
           loading: false
         }
       }
-    /*case COINFLIP_UPDATE_GAME:
-      return {
-        ...state,
-        //TODO set the payload equal to the existing game in the game's array
-      }*/
     default:
       return state
   }

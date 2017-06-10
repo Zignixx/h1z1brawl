@@ -2,7 +2,7 @@ import { Coinflip, CoinflipOffer, User } from '../db'
 import { bot as botManager } from './'
 import { generateSecret } from '../util/random'
 import { coinflipOffer as coinflipOfferType } from '../constants'
-import { getCoinflipTotal, getJoinerTotal, getCreatorTotal } from '../util/coinflip'
+import { getCoinflipTotal, getJoinerTotal, getCreatorTotal, getTotalWinnings } from '../util/coinflip'
 import { findSocketById } from '../util/socket'
 
 class CoinflipManager {
@@ -25,9 +25,9 @@ class CoinflipManager {
   isGameOpen(data, user) {
     return new Promise((resolve, reject) => {
       Coinflip.findById(data.game._id).exec().then(game => {
-        if (game.creator.id === user._id) {
+        /*if (game.creator.id === user._id) {
           return reject(new Error('You cannot join your own game'))
-        }
+        }*/
         if (game.open && !game.joiner.id) {
           return resolve(data)
         }
@@ -133,10 +133,23 @@ class CoinflipManager {
         }).save().then(tradeOffer => { /* use mongoose async to save a newly created trade offer */
           bot.sendCoinflipRequest(tradeOffer).then(offer => { /* return a promise to send a trade offer request to the user */
             tradeOffer.setTradeId(offer.id)
+            setTimeout(() => {
+              this.checkCoinflipRequest(tradeOffer)
+            }, 2 * 60 * 1000)
             resolve(offer)
           }).catch(reject)
         }).catch(reject)
       }).catch(reject)
+    })
+  }
+
+  checkCoinflipRequest(coinflipOffer) {
+    CoinflipOffer.findById(coinflipOffer._id).exec().then(offer => {
+      if (!offer.completed && !offer.failed) {
+        this.cancelCoinflipOffer(offer).catch(error => {
+          console.log(`Error canceling coinflip offer: ${error.message}`)
+        })
+      }
     })
   }
 
@@ -184,13 +197,14 @@ class CoinflipManager {
     const socket = findSocketById(this.secureIo, winner.id)
 
     User.findById(winner.id).exec().then(user => {
+      const winnings = getTotalWinnings(game, user)
       new CoinflipOffer({
         _id: generateSecret(),
         userId: user._id,
         tradeUrl: user.tradeUrl,
         gameId: game._id, /* coinflip gameId to attach the trade offer to a game */
         botId: botId,
-        botItems: [...game.joiner.items, ...game.creator.items],
+        botItems: winnings,
         type: coinflipOfferType.WINNINGS
       }).save().then(newOffer => {
         if (!botManager.isBotAvailable(botId)) {
@@ -210,6 +224,9 @@ class CoinflipManager {
             }, 16 * 1000) // wait till client side animation takes place
           }
           newOffer.setTradeId(offer.id)
+          setTimeout(() => {
+            this.checkCoinflipRequest(newOffer)
+          }, 15 * 60 * 1000)
         }).catch(error => {
           console.log(`Error while handling coinflip request: ${error.message}`)
         })

@@ -18,6 +18,45 @@ export function getJoinerTotal(game) {
   return total
 }
 
+function getAllItems(game) {
+  if (game.creator.items && game.joiner.items) {
+    return [...game.creator.items, ...game.joiner.items]
+  }
+  return []
+}
+
+function sortItemsDesc(items) {
+  return items.sort((a, b) => b.price - a.price)
+}
+
+export function getTotalWinnings(game, winner) {
+  const commission = hasBrawlInName(winner) ? 0.03 : 0.08
+  const total = getCoinflipTotal(game)
+  const tax = Number(total * commission).toFixed(2)
+
+  const sortedItems = sortItemsDesc(getAllItems(game))
+  let totalTaxed = 0.00
+  const itemsForTax = []
+
+  for (const index in sortedItems) {
+    const item = sortedItems[index]
+    if (item.price <= (tax - totalTaxed)) {
+      itemsForTax.push(item)
+      totalTaxed += parseFloat(item.price)
+    }
+  }
+
+  return sortedItems.filter((test) => {
+    for (const index in itemsForTax) {
+      const item = itemsForTax[index]
+      if (item.assetid === test.assetid) {
+        return false
+      }
+    }
+    return true
+  })
+}
+
 export function getUserTotal(user) {
   if (!user || !user.items) {
     return 0.00
@@ -46,4 +85,11 @@ export function getCreatorTotal(game) {
     }
   }
   return total
+}
+
+function hasBrawlInName(user) {
+  if (!user || !user.name) {
+    return false
+  }
+  return user.name.toLowerCase().indexOf('h1z1brawl.com') !== -1
 }

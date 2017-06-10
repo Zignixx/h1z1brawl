@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 
+import './Jackpot.css'
+
 class Jackpot extends Component {
 
   render() {

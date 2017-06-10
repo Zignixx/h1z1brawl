@@ -47,7 +47,7 @@ export default class CoinflipGame extends Component {
       return (
         <div className="Ignore">
           {items}
-          <span>+{sorted.length - 7} more items...</span>
+          <span>+{sorted.length - 6} more items...</span>
         </div>
       )
     }

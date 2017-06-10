@@ -180,7 +180,16 @@ export default class CoinflipCreateModal extends Component {
   }
 
   sortItems(items) {
-    return items.sort((a, b) => b.price - a.price)
+    items.forEach(function(item, index) {
+      item.origOrder = index;
+    })
+    return items.sort((a, b) => {
+      const diff = parseFloat(b.price) - parseFloat(a.price)
+      if (diff === 0) {
+        return a.origOrder - b.origOrder
+      }
+      return diff
+    })
   }
 
   isSelected(key) {

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 
-import { Admin, Coinflip, Jackpot, Leaderboards } from './containers'
+import { Admin, Coinflip, Jackpot, History } from './containers'
 import { FAQ, Giveaway } from './components'
 
 
@@ -13,7 +13,7 @@ const Routes = ({ secureSocket, publicSocket }) => (
       <Route path="/coinflip" render={props => <Coinflip secureSocket={secureSocket} publicSocket={publicSocket} {...props} />} />
       {/*<Route path="/user/:id?" component={User} />*/}
       <Route path="/faq" component={FAQ} />
-      <Route path="/leaderboards" component={Leaderboards} />
+      <Route path="/history" component={History} />
       <Route path="/giveaway" component={Giveaway} />
       {/*<Route path="/admin" component={Admin} />*/}
     </Switch>

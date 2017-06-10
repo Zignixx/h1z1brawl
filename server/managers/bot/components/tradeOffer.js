@@ -29,14 +29,13 @@ Bot.prototype.createManager = function() {
   this.manager = new TradeOfferManager({
     steam: this.client,
     domain: this.domain,
-    cancelTime: this.cancelTime,
-    pollInterval: this.pollTime,
     community: this.community,
     language: 'en'
   })
 
   this.manager.on('newOffer', this.newOffer.bind(this))
   this.manager.on('sentOfferChanged', this.sentOfferChanged.bind(this))
+  this.community.on('sessionExpired', this.webLogin.bind(this))
 }
 
 Bot.prototype.setSteamCookies = function(cookies) {

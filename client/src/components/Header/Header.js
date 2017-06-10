@@ -28,8 +28,8 @@ class Header extends Component {
             <LinkContainer activeClassName="" to="/coinflip">
               <NavItem>Coinflip</NavItem>
             </LinkContainer>
-            <LinkContainer activeClassName="" to="/leaderboards">
-              <NavItem>Leaderboards</NavItem>
+            <LinkContainer activeClassName="" to="/history">
+              <NavItem>History</NavItem>
             </LinkContainer>
             <NavDropdown title="Other" id="nav-dropdown">
               <LinkContainer activeClassName="" to="/giveaway">

@@ -41,6 +41,11 @@ Bot.prototype.logOut = function() {
   this.client.logOff()
 }
 
+Bot.prototype.webLogin = function() {
+  this.log(`relogging in web session due to expiring`)
+  this.client.webLogOn()
+}
+
 Bot.prototype.webSession = function(sessionId, cookies) {
   this.setSteamCookies(cookies)
 }

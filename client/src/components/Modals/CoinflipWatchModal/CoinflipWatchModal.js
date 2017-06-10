@@ -54,6 +54,14 @@ export default class CoinflipWatchModal extends Component {
     )
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.game && this.props.game) {
+      if (nextProps.game._id !== this.props.game._id) {
+        this.setState({ animateFlip: false, animationDone: false })
+      }
+    }
+  }
+
   flipCoin(winningSide) {
     setTimeout(() => {
       this.setState({ animateFlip: false, animationDone: true })

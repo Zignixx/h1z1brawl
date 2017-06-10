@@ -236,7 +236,7 @@
 
 .Coinflip__Items {
   padding-left: 20px; }
-  .Coinflip__Items div {
+  .Coinflip__Items div:not(.Ignore) {
     vertical-align: middle;
     margin-right: 7px;
     display: inline-block;

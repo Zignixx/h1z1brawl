@@ -107,7 +107,7 @@ class Coinflip extends Component {
   sortedGames() {
     return this.props.coinflip.games.sort((a, b) => {
       const aTotal = this.getTotalGameValue(a), bTotal = this.getTotalGameValue(b)
-      return aTotal - bTotal
+      return bTotal - aTotal
     })
   }
 

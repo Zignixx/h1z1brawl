@@ -332,7 +332,7 @@ $transition: all #{$speed} cubic-bezier(0.310, -0.105, 0.430, 1.400);
 .Coinflip__Items {
   padding-left: 20px;
 
-  div {
+  div:not(.Ignore) {
     vertical-align: middle;
     margin-right: 7px;
     display: inline-block;

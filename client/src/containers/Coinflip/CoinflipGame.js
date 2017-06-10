@@ -30,15 +30,25 @@ export default class CoinflipGame extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.game && this.props.game) {
+      if (nextProps.game._id !== this.props.game._id) {
+        this.setState({ animateGame: true })
+      }
+    }
+  }
+
   renderItems() {
     const sorted = this.sortedItems()
-    if (sorted.length > 6) {
-      const items = sorted.slice(0, 5).map((item, key) => (
+    if (sorted.length > 7) {
+      const items = sorted.slice(0, 6).map((item, key) => (
         <CoinflipGameItem key={key} name={item.name} image={`${IMAGE_URL}${item.icon_url}`} price={item.price} />
       ))
       return (
-        {items},
-        <span>+{sorted.length - 6} more items...</span>
+        <div className="Ignore">
+          {items}
+          <span>+{sorted.length - 7} more items...</span>
+        </div>
       )
     }
     return sorted.map((item, key) => (

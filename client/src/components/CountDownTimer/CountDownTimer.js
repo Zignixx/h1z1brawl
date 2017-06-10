@@ -31,7 +31,7 @@ export default class CountDownTimer extends Component {
       this.setState({ percent: 0, seconds: 0 })
       clearInterval(this.interval)
       if (this.props.onComplete) {
-        this.props.onComplete()
+        setTimeout(this.props.onComplete, 1000) /* wait for the animation to finish */
       }
     } else {
       this.setState({ percent: (seconds / this.props.seconds), seconds })

@@ -25,7 +25,7 @@ export default function configure(socket, io) {
     User.findById(socket.decoded_token.id).exec().then(user => {
       user.hasTradeURL()
       checkCoinflipJoinData(data)
-      coinflip.isGameOpen(data).then(data => {
+      coinflip.isGameOpen(data, user).then(data => {
         CoinflipOffer.userHasOpenRequest(user).then(user => {
           callback()
           return coinflip.createJoinOffer({ user, data })

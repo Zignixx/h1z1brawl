@@ -118,7 +118,7 @@ export default class CoinflipWatchModal extends Component {
     }
     const total = getCoinflipTotal(game)
     const creatorTotal = getUserTotal(game.creator)
-    return (creatorTotal / total) * 100
+    return Number((creatorTotal / total) * 100).toFixed(3)
   }
 
   getJoinerPercent(game) {
@@ -127,7 +127,7 @@ export default class CoinflipWatchModal extends Component {
     }
     const total = getCoinflipTotal(game)
     const joinerTotal = getUserTotal(game.joiner)
-    return (joinerTotal / total) * 100
+    return Number((joinerTotal / total) * 100).toFixed(3)
   }
 
   renderUser(user, side, percent, resultClass) {

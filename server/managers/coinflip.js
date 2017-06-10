@@ -22,9 +22,12 @@ class CoinflipManager {
     this.publicIo = io
   }
 
-  isGameOpen(data) {
+  isGameOpen(data, user) {
     return new Promise((resolve, reject) => {
       Coinflip.findById(data.game._id).exec().then(game => {
+        if (game.creator.id === user._id) {
+          return reject(new Error('You cannot join your own game'))
+        }
         if (game.open && !game.joiner.id) {
           return resolve(data)
         }
@@ -204,7 +207,7 @@ class CoinflipManager {
           if (socket) {
             setTimeout(() => {
               socket.emit('COINFLIP_OFFER', offer)
-            }, 13 * 1000) // wait till client side animation takes place
+            }, 16 * 1000) // wait till client side animation takes place
           }
           newOffer.setTradeId(offer.id)
         }).catch(error => {

@@ -100,7 +100,7 @@ class App extends Component {
             {!user &&
               <Landing />
             }
-            <Header user={user} actions />
+            <Header user={user} onSettingsClick={() => this.setState({ tradeUrlModal: true })} />
             <Chat secureSocket={this.props.secureSocket} />
             <Routes secureSocket={this.props.secureSocket} publicSocket={this.props.publicSocket} />
             <div className="App__Background noselect">

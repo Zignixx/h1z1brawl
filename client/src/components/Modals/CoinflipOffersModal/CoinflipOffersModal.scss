@@ -11,7 +11,7 @@ $transition: all #{$speed} cubic-bezier(0.310, -0.105, 0.430, 1.400);
   color: #828283;
 
   .OffersTable {
-    max-height: 330px;
+    height: 330px;
     overflow-y: scroll;
   }
 

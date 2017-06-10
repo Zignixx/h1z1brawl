@@ -22,6 +22,7 @@ export function reloadAuth() {
           // eslint-disable-next-line
           let attempt = jwtDecode(response.token)
           dispatch(authSuccess(response.token, response))
+          setTimeout(() => window.location.reload(true), 1000)
         } catch (e) {
           dispatch(authFailure({
             response: {

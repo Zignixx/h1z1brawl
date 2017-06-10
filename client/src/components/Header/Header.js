@@ -64,22 +64,14 @@ class Header extends Component {
                 </Dropdown.Toggle>
               ) }
               <Dropdown.Menu>
-                <LinkContainer activeClassName="" to="/settings">
-                  <MenuItem>
-                    <FontAwesome name="cog" />
-                    Settings
-                  </MenuItem>
-                </LinkContainer>
+                <MenuItem onClick={this.props.onSettingsClick}>
+                  <FontAwesome name="cog" />
+                  Settings
+                </MenuItem>
                 <LinkContainer activeClassName="" to="/history">
                   <MenuItem>
                     <FontAwesome name="history" />
                     History
-                  </MenuItem>
-                  </LinkContainer>
-                <LinkContainer activeClassName="" to="/inventory">
-                  <MenuItem>
-                    <FontAwesome name="briefcase" />
-                    Inventory
                   </MenuItem>
                 </LinkContainer>
                 <MenuItem href={`${config.api.url}api/auth/logout`}>

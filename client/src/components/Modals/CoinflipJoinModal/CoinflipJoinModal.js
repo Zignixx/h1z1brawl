@@ -54,7 +54,8 @@ export default class CoinflipJoinModal extends Component {
         </div>
       )
     }
-    return items.map((item, key) => (
+    const sorted = this.sortItems(items)
+    return sorted.map((item, key) => (
       <CoinflipInventoryItem
         name={item.name}
         image={`${IMAGE_URL}${item.icon_url}`}
@@ -65,6 +66,10 @@ export default class CoinflipJoinModal extends Component {
         select={() => this.selectItem(key)}
       />
     ))
+  }
+
+  sortItems(items) {
+    return items.sort((a, b) => b.price - a.price)
   }
 
   isSelected(key) {

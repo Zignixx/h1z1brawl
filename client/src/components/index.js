@@ -9,3 +9,5 @@ export { default as TradeOfferModal } from './Modals/TradeOfferModal/TradeOfferM
 export { default as CoinflipJoinModal } from './Modals/CoinflipJoinModal/CoinflipJoinModal'
 export { default as CoinflipWatchModal } from './Modals/CoinflipWatchModal/CoinflipWatchModal'
 export { default as CountDownTimer } from './CountDownTimer/CountDownTimer'
+export { default as Giveaway } from './Giveaway/Giveaway'
+export { default as FAQ } from './FAQ/FAQ'

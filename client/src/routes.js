@@ -1,12 +1,8 @@
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 
-import Jackpot from './containers/Jackpot'
-import Leaderboards from './containers/Leaderboards'
-import User from './containers/User'
-import FAQ from './components/FAQ'
-import Giveaway from './containers/Giveaway'
-import { Admin, Coinflip } from './containers'
+import { Admin, Coinflip, Jackpot, Leaderboards } from './containers'
+import { FAQ, Giveaway } from './components'
 
 
 const Routes = ({ secureSocket, publicSocket }) => (

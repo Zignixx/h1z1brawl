@@ -6,11 +6,7 @@ Bot.prototype.createClient = function() {
   this.client = new SteamUser()
   this.client.options.promptSteamGuardCode = false
 
-  this.client.logOn({
-    accountName: this.accountName,
-    password: this.password,
-    twoFactorCode: SteamTotp.generateAuthCode(this.sharedSecret)
-  })
+  this.logIn()
 
   this.client.on('loggedOn', this.loggedOn.bind(this))
   this.client.on('disconnected', this.disconnected.bind(this))
@@ -19,10 +15,18 @@ Bot.prototype.createClient = function() {
   this.client.on('error', this.error.bind(this))
 }
 
+Bot.prototype.logIn = function() {
+  this.client.logOn({
+    accountName: this.accountName,
+    password: this.password,
+    twoFactorCode: SteamTotp.generateAuthCode(this.sharedSecret)
+  })
+}
+
 Bot.prototype.getSteamID64 = function() {
   if (this.client.steamID) { /* bot is logged in */
     return this.client.steamID.getSteamID64()
-  } 
+  }
   return null
 }
 
@@ -43,6 +47,7 @@ Bot.prototype.webSession = function(sessionId, cookies) {
 
 Bot.prototype.disconnected = function(eresult, message) {
   this.log(`disconnected from Steam (${eresult} - ${message})`)
+  this.logIn()
 }
 
 Bot.prototype.loggedOn = function() {

@@ -70,6 +70,22 @@ class Coinflip extends Component {
     this.props.publicSocket.off('COINFLIP_UPDATE_GAME')
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.checkWatching(nextProps)
+  }
+
+  checkWatching(props) {
+    if (!this.state.watching.game) {
+      return
+    }
+    for (const index in props.coinflip.games) {
+      const game = props.coinflip.games[index]
+      if (game._id === this.state.watching.game._id) {
+        this.state.watching.game = game
+      }
+    }
+  }
+
   openCreateModal() {
     if (this.props.user && this.props.user.tradeUrl) {
       return this.setState({ createModal: true })

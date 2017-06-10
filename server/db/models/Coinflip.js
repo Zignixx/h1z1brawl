@@ -49,12 +49,12 @@ coinflipSchema.methods.setOpen = function() {
   return this.save()
 }
 
-coinflipSchema.methods.setJoiner = function(user) {
+coinflipSchema.methods.setJoiner = function(user, items) {
   this.joiner = {
     id: user._id,
     name: user.name,
     image: user.image,
-    items: []
+    items
   }
   return this.save()
 }

@@ -34,7 +34,7 @@ class BotManager {
 
   getBot(botId) {
     for (const bot of Object.values(this.bots)) {
-      if (bot.getSteamID64() == botId) {
+      if (bot.getSteamID64() === botId) {
         return bot
       }
     }
@@ -43,7 +43,7 @@ class BotManager {
 
   isBotAvailable(botId) {
     for (const bot of Object.values(this.bots)) {
-      if (bot.getSteamID64() == botId && bot.enabled) {
+      if (bot.getSteamID64() === botId && bot.enabled) {
         return true
       }
     }

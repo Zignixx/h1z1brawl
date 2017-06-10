@@ -1,8 +1,8 @@
 {
-  "main.css": "static/css/main.a3162d70.css",
-  "main.css.map": "static/css/main.a3162d70.css.map",
-  "main.js": "static/js/main.6050c770.js",
-  "main.js.map": "static/js/main.6050c770.js.map",
+  "main.css": "static/css/main.2cbef5c2.css",
+  "main.css.map": "static/css/main.2cbef5c2.css.map",
+  "main.js": "static/js/main.1186ccfb.js",
+  "main.js.map": "static/js/main.1186ccfb.js.map",
   "static/media/bg.jpg": "static/media/bg.60b19984.jpg",
   "static/media/coin-heads.png": "static/media/coin-heads.a41ca47c.png",
   "static/media/coin-tails.png": "static/media/coin-tails.9d13d3c8.png",
@@ -19,5 +19,6 @@
   "static/media/icons.ttf": "static/media/icons.b06871f2.ttf",
   "static/media/icons.woff": "static/media/icons.fee66e71.woff",
   "static/media/icons.woff2": "static/media/icons.af7ae505.woff2",
-  "static/media/logo.png": "static/media/logo.39b9aa35.png"
+  "static/media/logo.png": "static/media/logo.39b9aa35.png",
+  "static/media/no-user.jpg": "static/media/no-user.5421410d.jpg"
 }

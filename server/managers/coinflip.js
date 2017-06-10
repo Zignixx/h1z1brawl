@@ -101,7 +101,7 @@ class CoinflipManager {
             userItems: items,
             type: coinflipOfferType.JOIN_GAME
           }).save().then(offer => {
-            game.setJoiner(user).then(game => {
+            game.setJoiner(user, items).then(game => {
               this.publicIo.emit('COINFLIP_UPDATE_GAME', game.toCleanObject())
             })
             setTimeout(() => {
@@ -202,7 +202,9 @@ class CoinflipManager {
         const bot = botManager.getBot(botId)
         bot.sendCoinflipRequest(newOffer).then(offer => {
           if (socket) {
-            socket.emit('COINFLIP_OFFER', offer)
+            setTimeout(() => {
+              socket.emit('COINFLIP_OFFER', offer)
+            }, 13 * 1000) // wait till client side animation takes place
           }
           newOffer.setTradeId(offer.id)
         }).catch(error => {
@@ -222,9 +224,7 @@ class CoinflipManager {
       coinflipOffer.setAccepted()
       Coinflip.findByCoinflipOffer(coinflipOffer.toObject()).then(game => game.setCompleted()).then(game => {
         this.publicIo.emit('COINFLIP_UPDATE_GAME', game.toObject()) //can send the secret and percentage now
-        setTimeout(() => {
-          this.sendGameWinnings(game.toObject(), coinflipOffer.toObject())
-        }, 5 * 1000) /* wait till client side animations take place */
+        this.sendGameWinnings(game.toObject(), coinflipOffer.toObject())
       }).catch(error => {
         console.log(`Error while handling coinflip request: ${error.message}`)
       })

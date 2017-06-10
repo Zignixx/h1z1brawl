@@ -10,7 +10,6 @@ import noUser from '../../static/no-user.jpg'
 const IMAGE_URL = 'https://steamcommunity-a.akamaihd.net/economy/image/'
 
 const WAITING_COUNTDOWN = 120
-
 const COMPLETION_COUNTDOWN = 10
 
 export default class CoinflipGame extends Component {
@@ -109,12 +108,20 @@ export default class CoinflipGame extends Component {
                 </div>)
     }
     if (game.completed) {
+      if (!game.completedStartTime) {
+        game.completedStartTime = new Date().getTime()
+      }
       return <CountDownTimer
                  seconds={COMPLETION_COUNTDOWN}
                  color="rgb(95, 144, 112)"
-                 onComplete={() => this.setState({ animateGame: false })}
+                 onComplete={() => {
+                   this.setState({ animateGame: false })
+                 }}
                />
     } else if (game.joiner.id) {
+      if (!game.waitingStartTime) {
+        game.waitingStartTime = new Date().getTime()
+      }
       return <CountDownTimer
                 seconds={WAITING_COUNTDOWN}
                 color="rgba(154, 51, 51, 0.86)"

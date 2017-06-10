@@ -2,7 +2,7 @@ import { User, CoinflipOffer } from '../../../db'
 import { checkCoinflipGame, checkCoinflipJoinData } from '../../../actions'
 import { coinflip, bot as botManager } from '../../../managers'
 
-const OFFERS_LIMIT = 20
+const OFFERS_LIMIT = 40
 
 export default function configure(socket, io) {
 
@@ -31,13 +31,13 @@ export default function configure(socket, io) {
           return coinflip.createJoinOffer({ user, data })
         }).then(offer => {
           socket.emit('COINFLIP_OFFER', offer)
-        }).catch(error => callback({ error: error.message }))
+        }).catch(error => socket.emit('COINFLIP_OFFER_ERROR', { error: error.message }))
       }).catch(error => callback({ error: error.message }))
     }).catch(error => callback({ error: error.message }))
   })
 
   socket.on('COINFLIP_REQUEST_OFFERS', (data, callback) => {
-    CoinflipOffer.findUserOffers(socket.decoded_token.id).then(callback).catch(error => callback({ error: error.message }))
+    CoinflipOffer.findUserOffers(socket.decoded_token.id, OFFERS_LIMIT).then(callback).catch(error => callback({ error: error.message }))
   })
 
   socket.on('COINFLIP_CANCEL_OFFER', (tradeOffer, callback) => {

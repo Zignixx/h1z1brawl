@@ -20,7 +20,10 @@ Bot.prototype.createClient = function() {
 }
 
 Bot.prototype.getSteamID64 = function() {
-  return this.client.steamID.getSteamID64()
+  if (this.client.steamID) { /* bot is logged in */
+    return this.client.steamID.getSteamID64()
+  } 
+  return null
 }
 
 Bot.prototype.error = function(err) {

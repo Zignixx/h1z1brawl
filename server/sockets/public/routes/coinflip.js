@@ -6,4 +6,11 @@ export default function configure(socket, io) {
     Coinflip.getOpenGames().then(callback).catch(err => callback({ error: err.message }))
   })
 
+  socket.on('COINFLIP_LOAD_STATS', (days, callback) => {
+    if (!days) {
+      return callback(0.00)
+    }
+    Coinflip.getTotalWonInDays(days).then(callback).catch(err => callback({ error: err.message }))
+  })
+
 }

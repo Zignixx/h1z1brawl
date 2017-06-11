@@ -1,6 +1,7 @@
 import mongoose, { Schema } from 'mongoose'
 import { User } from '../'
 import autoIncrement from 'mongoose-auto-increment'
+import { getCoinflipTotal } from '../../util/coinflip'
 import md5 from 'md5'
 import { generateSecret, generatePercentage } from '../../util/random'
 
@@ -27,6 +28,7 @@ var coinflipSchema = new Schema({
       name: String
     }]
   },
+  timeout: { type: Boolean, required: true, default: false },
   startingSide: { type: String, required: true },
   hash: { type: String },
   winningPercentage: { type: Number },
@@ -35,12 +37,14 @@ var coinflipSchema = new Schema({
   failed: { type: Boolean, default: false },
   winnerId: { type: String },
   completed: { type: Boolean, default: false },
+  dateJoined: { type: Date },
   dateCreated: { type: Date, default: Date.now },
   dateCompleted: { type: Date }
 })
 
 coinflipSchema.methods.setFailed = function() {
   this.failed = true
+  this.open = false
   return this.save()
 }
 
@@ -56,6 +60,7 @@ coinflipSchema.methods.setJoiner = function(user, items) {
     image: user.image,
     items
   }
+  this.dateJoined = new Date()
   return this.save()
 }
 
@@ -63,6 +68,7 @@ coinflipSchema.methods.removeJoiner = function() {
   this.joiner = {
     items: []
   }
+  this.dateJoined = null
   return this.save()
 }
 
@@ -97,9 +103,26 @@ coinflipSchema.statics.getOpenGames = function() {
   return this.find({ open: true }, { secret: 0, winningPercentage: 0 }).exec()
 }
 
+coinflipSchema.statics.getTotalWonInDays = function(days) {
+  return new Promise((resolve, reject) => {
+    const target = new Date()
+    target.setDate(target.getDate() - days)
+    this.find({
+      dateCompleted: { $lt: new Date(), $gt: target }
+    }).exec().then(games => {
+      let total = 0.00
+      for (const index in games) {
+        const game = games[index]
+        total += parseFloat(getCoinflipTotal(game))
+      }
+      resolve(total)
+    }).catch(reject)
+  })
+}
+
 coinflipSchema.pre('save', function(next) {
   if (this.isModified('completed') && this.completed) {
-    this.dateCompleted = Date.now()
+    this.dateCompleted = new Date()
     this.open = false
   }
   if (!this.hash) {

@@ -104,7 +104,7 @@ export default class CoinflipCreateModal extends Component {
       return NotificationManager.error(`You must select between ${minItems} and ${maxItems} items`)
     }
     this.requestClose()
-    this.props.createGame({ side: this.state.selected, items: this.getSelectedItems() })
+    this.props.createGame({ side: this.state.selected, items: this.getSelectedItems(), timeout: this.refs.autoCancel.checked })
   }
 
   renderItemSelection() {

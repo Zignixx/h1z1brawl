@@ -14,6 +14,27 @@ $transition: all #{$speed} cubic-bezier(0.310, -0.105, 0.430, 1.400);
   color: #d4d2d2;
 }
 
+.Coinflip__Info {
+  border-radius: 10px;
+  background-color: $background;
+  width: 100%;
+  margin-bottom: 10px;
+  text-align: center;
+
+  p {
+    color: #aaaaaa;
+    padding: 10px;
+    text-transform: uppercase;
+
+    span {
+      background: black;
+      padding: 2px;
+      margin: 0 3px;
+      border-radius: 3px;
+    }
+  }
+}
+
 .Coinflip__Body {
   margin-top: 10px;
   border-radius: 10px;

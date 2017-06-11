@@ -19,6 +19,7 @@ export default class CoinflipJoinModal extends Component {
     this.afterOpen = this.afterOpen.bind(this)
     this.clearItems = this.clearItems.bind(this)
     this.joinGame = this.joinGame.bind(this)
+    this.onClose = this.onClose.bind(this)
 
     this.state = {
       selectedItems: []
@@ -37,7 +38,7 @@ export default class CoinflipJoinModal extends Component {
     } else if (this.props.game.joiner.id) {
       return NotificationManager.error('Game is not open')
     }
-    this.props.onClose()
+    this.onClose()
     this.props.joinGame({ game: this.props.game, items: this.getSelectedItems() })
   }
 
@@ -123,15 +124,15 @@ export default class CoinflipJoinModal extends Component {
   getTotalSelectedPrice() {
     let total = 0.00
     for (var index in this.state.selectedItems) {
-      total += Number(this.props.inventory.items[this.state.selectedItems[index]].price)
+      total += parseFloat(this.props.inventory.items[this.state.selectedItems[index]].price)
     }
-    return Number(total).toFixed(2)
+    return parseFloat(total)
   }
 
   getTotalInventoryPrice() {
     let total = 0.00
     for (var index in this.props.inventory.items) {
-      total += Number(this.props.inventory.items[index].price)
+      total += parseFloat(this.props.inventory.items[index].price)
     }
     return Number(total).toFixed(2)
   }
@@ -149,6 +150,13 @@ export default class CoinflipJoinModal extends Component {
     this.props.loadInventory()
   }
 
+  onClose() {
+    this.setState({
+      selectedItems: []
+    })
+    this.props.onClose()
+  }
+
   render() {
     const [priceLow, priceHigh] = getCoinflipRange(this.props.game)
     const betValue = this.getTotalSelectedPrice(), itemsSelected = this.getSelectedCount(), percentage = this.getPercentage()
@@ -158,7 +166,7 @@ export default class CoinflipJoinModal extends Component {
     return (
       <Modal
         isOpen={this.props.isOpen}
-        onRequestClose={this.props.onClose}
+        onRequestClose={this.onClose}
         closeTimeoutMS={200}
         onAfterOpen={this.afterOpen}
         contentLabel="Modal"
@@ -167,7 +175,7 @@ export default class CoinflipJoinModal extends Component {
       >
         <div className="Modal__Header">
           <h1>Join game...</h1>
-          <a onClick={this.props.onClose}><i className="fa fa-times" /></a>
+          <a onClick={this.onClose}><i className="fa fa-times" /></a>
         </div>
         <div className={'Modal__Content Modal__CreateCoinflip-Content'}>
           <h4>Add your items to the coin flip</h4>
@@ -184,17 +192,17 @@ export default class CoinflipJoinModal extends Component {
           <div className="Modal__CreateCoinflip-Input">
             <p className="InputHeader"><span>Values</span></p>
             <div className="Modal__CreateCoinflip-Values Modal__JoinCoinflip--Values">
-              <p className="BetValue">Bet Value <span className={betClass}>{`$${betValue}`}</span></p>
+              <p className="BetValue">Bet Value <span className={betClass}>{`$${Number(betValue).toFixed(2)}`}</span></p>
               <p className="ItemsSelected">Items Selected <span className={itemClass}>{`${itemsSelected}/${maxItems}`}</span></p>
               <p className="InventoryValue">Inventory Value <span>{`$${this.getTotalInventoryPrice()}`}</span></p>
-              <p className="PriceRange">Price Range <span>{`$${priceLow} - $${priceHigh}`}</span></p>
+              <p className="PriceRange">Price Range <span>{`$${Number(priceLow).toFixed(2)} - $${Number(priceHigh).toFixed(2)}`}</span></p>
               <p className="Percentage">Percentage <span className={betClass}>{percentage}%</span></p>
             </div>
             <p className="InputHeader"><span>Options</span></p>
             <div className="Modal__CreateCoinflip-Options">
               <div>
                 <a className="ClearItems" onClick={this.clearItems}>Clear</a>
-                <a onClick={this.props.onClose}>Cancel</a>
+                <a onClick={this.onClose}>Cancel</a>
               </div>
             </div>
             <a onClick={this.joinGame} className="CreateGame">Join</a>

@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { NotificationContainer, NotificationManager } from 'react-notifications'
-import { saveTradeURL as tradeURLAction, loadAuth, reloadAuth } from '../../actions'
+import { saveTradeURL as tradeURLAction, loadAuth, reloadAuth, updateConnectedUsers } from '../../actions'
 import { Header, TradeURLModal } from '../../components'
 import { Chat, Landing } from '../index'
 import Routes from '../../routes'
@@ -36,11 +36,13 @@ class App extends Component {
 
     this.props.publicSocket.on('NOTIFY', this.notify)
     this.props.secureSocket.on('NOTIFY', this.notify)
+    this.props.publicSocket.on('USERS_CONNECTED', this.props.updateConnectedUsers)
   }
 
   componentWillUnmount() {
     this.props.publicSocket.off('NOTIFY')
     this.props.secureSocket.off('NOTIFY')
+    this.props.publicSocket.off('USERS_CONNECTED')
   }
 
   componentWillReceiveProps(nextProps) {
@@ -128,7 +130,8 @@ const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
     loadAuth,
     tradeURLAction,
-    reloadAuth
+    reloadAuth,
+    updateConnectedUsers
   }, dispatch)
 }
 

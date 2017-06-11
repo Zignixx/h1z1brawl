@@ -1,2 +1,2 @@
-export { coinflip } from './coinflip'
+export { coinflip } from './coinflip/coinflip'
 export { bot } from './bot/botManager'

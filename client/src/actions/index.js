@@ -1,7 +1,7 @@
 export { loadAuth, reloadAuth, logout } from './auth'
 export { sendChat, receiveChat, loadChat } from './chat'
 export { saveTradeURL, requestInventory, forceRefreshInventory } from './user'
-export { getConnectedUsers } from './users'
+export { getConnectedUsers, updateConnectedUsers } from './users'
 export {
   joinCoinflipGame,
   loadCoinflipGames,
@@ -12,5 +12,7 @@ export {
   requestCoinflipOffers,
   resendCoinflipOffer,
   cancelCoinflipOffer,
-  updateCoinflipGame
+  updateCoinflipGame,
+  removeCoinflipGame,
+  setCoinFlipped
 } from './coinflip'

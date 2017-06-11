@@ -14,30 +14,6 @@ const COMPLETION_COUNTDOWN = 15
 
 export default class CoinflipGame extends Component {
 
-  /* props
-   *
-   *  game - the game object to render
-   *    side
-   *
-   *
-   */
-
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      animateGame: true
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.game && this.props.game) {
-      if (nextProps.game._id !== this.props.game._id) {
-        this.setState({ animateGame: true })
-      }
-    }
-  }
-
   renderItems() {
     const sorted = this.sortedItems()
     if (sorted.length > 7) {
@@ -108,32 +84,39 @@ export default class CoinflipGame extends Component {
     }
   }
 
-  getStatus() {
+  getStatus() { //game.dateCompleted, game.dateJoined
     const { game } = this.props
-    if (this.state.animateGame == false) {
-      const [winner, loser, side] = this.getImages()
-      return (<div>
+    if (game.completed) {
+      const { dateCompleted } = game
+      const secondsSinceCompleted = parseInt((new Date().getTime() - new Date(dateCompleted).getTime()) / 1000)
+
+      if (secondsSinceCompleted > COMPLETION_COUNTDOWN) {
+        const [winner, loser, side] = this.getImages()
+        return (<div>
                   <img src={winner} className="Winner" alt="winner" />
                   <img src={side} className="Side" alt="side" />
                 </div>)
-    }
-    if (game.completed) {
-      if (!game.completedStartTime) {
-        game.completedStartTime = new Date().getTime()
       }
+
       return <CountDownTimer
-                 seconds={COMPLETION_COUNTDOWN}
+                 secondsRemaining={COMPLETION_COUNTDOWN - secondsSinceCompleted}
+                 totalSeconds={COMPLETION_COUNTDOWN}
                  color="rgb(95, 144, 112)"
                  onComplete={() => {
-                   this.setState({ animateGame: false })
+                   this.forceUpdate()
                  }}
                />
     } else if (game.joiner.id) {
-      if (!game.waitingStartTime) {
-        game.waitingStartTime = new Date().getTime()
+      const { dateJoined } = game
+      let secondsSinceJoined = parseInt((new Date().getTime() - new Date(dateJoined).getTime()) / 1000)
+
+      if (secondsSinceJoined > WAITING_COUNTDOWN) {
+        secondsSinceJoined = WAITING_COUNTDOWN //hopefully this never happens ;)
       }
+
       return <CountDownTimer
-                seconds={WAITING_COUNTDOWN}
+                secondsRemaining={WAITING_COUNTDOWN - secondsSinceJoined}
+                totalSeconds={WAITING_COUNTDOWN}
                 color="rgba(154, 51, 51, 0.86)"
               />
     } else {

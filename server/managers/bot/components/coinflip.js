@@ -4,17 +4,17 @@ import { coinflip } from '../../'
 
 Bot.prototype.handleCoinflipFailed = function(offer, reason) {
   /* all coinflip logic should be handled in the coinflip manager */
-  coinflip.declineCoinflipRequest(offer, reason)
+  coinflip.handleDeclinedTrade.call(coinflip, offer, reason)
 }
 
 Bot.prototype.handleCoinflipAccepted = function(offer) {
   /* all coinflip logic should be handled in the coinflip manager */
-  coinflip.acceptCoinflipRequest(offer)
+  coinflip.handleAcceptedTrade.call(coinflip, offer)
 }
 
-Bot.prototype.sendCoinflipRequest = function(tradeOffer) {
+Bot.prototype.sendCoinflipRequest = function(coinflipOffer) {
   return new Promise((resolve, reject) => {
-    const steamOffer = this.manager.createOffer(tradeOffer.tradeUrl) /* create a trade offer with the passed URL, will error if invalid */
+    const steamOffer = this.manager.createOffer(coinflipOffer.tradeUrl) /* create a trade offer with the passed URL, will error if invalid */
 
     /* attach promises to the TradeOffer prototype for async */
     const getUserDetailsAsync = bluebird.promisify(steamOffer.getUserDetails, { context: steamOffer, multiArgs: true })
@@ -30,32 +30,40 @@ Bot.prototype.sendCoinflipRequest = function(tradeOffer) {
       }
 
       /* attach appid and contextid to all the items */
-      const userItems = this.formatItems(tradeOffer.userItems)
-      const botItems = this.formatItems(tradeOffer.botItems)
+      const userItems = this.formatItems(coinflipOffer.userItems)
+      const botItems = this.formatItems(coinflipOffer.botItems)
 
-      steamOffer.setMessage(`Trade offer sent from H1Z1Brawl coinflip. Your trade ID: ${tradeOffer._id}`)
+      steamOffer.setMessage(`Trade offer sent from H1Z1Brawl coinflip. Your trade ID: ${coinflipOffer._id}`)
       steamOffer.addTheirItems(userItems)
       steamOffer.addMyItems(botItems)
 
       /* return a promise to send the trade offer through steam */
       return sendAsync()
     }).then(status => {
-      if (status === 'pending' && tradeOffer.botItems.length === 0) {
+      if (status === 'pending' && coinflipOffer.botItems.length === 0) {
         steamOffer.cancel()
         return reject(new Error('Trade went to escrow'))
       }
 
       /* make sure to track the coinflipOfferId for later usage */
-      steamOffer.coinflipOfferId = tradeOffer._id
+      steamOffer.coinflipOfferId = coinflipOffer._id
       resolve(steamOffer) /* resolve the trade offer back to the user */
 
-      if (tradeOffer.botItems.length > 0) {
+      if (coinflipOffer.botItems.length > 0) {
         this.community.acceptConfirmationForObject(this.identitySecret, steamOffer.id, (err) => {
           if (err) {
-            console.log(`Error accepting confirmation coinflip: ${err.message}`)
+            this.log(`error accepting confirmation on winnings: ${err.message}`)
+          } else {
+            this.log(`accepted confirmation on winnings trade ID: ${steamOffer.id}`)
           }
         })
       }
-    }).catch(reject)
+    }).catch(error => {
+      /* set the coinflip offer to failed after a failed steam offer */
+      coinflipOffer.setFailed(6).catch(error => {
+        this.log(`error setting a trade offer to failed: ${error.message}`)
+      })
+      reject(error)
+    })
   })
 }

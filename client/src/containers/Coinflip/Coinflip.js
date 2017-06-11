@@ -5,7 +5,7 @@ import { Row, Col } from 'react-bootstrap'
 import CoinflipGame from './CoinflipGame'
 import CountUp from 'react-countup'
 import { NotificationManager } from 'react-notifications'
-import { updateCoinflipGame, joinCoinflipGame, loadCoinflipGames, receiveCoinflipOffers, requestInventory, forceRefreshInventory, sendNotification, createCoinflipGame, addCoinflipGame, requestCoinflipOffers, cancelCoinflipOffer, resendCoinflipOffer } from '../../actions'
+import { setCoinFlipped, removeCoinflipGame, updateCoinflipGame, joinCoinflipGame, loadCoinflipGames, receiveCoinflipOffers, requestInventory, forceRefreshInventory, sendNotification, createCoinflipGame, addCoinflipGame, requestCoinflipOffers, cancelCoinflipOffer, resendCoinflipOffer } from '../../actions'
 import { CoinflipWatchModal, CoinflipJoinModal, CoinflipOffersModal, CoinflipCreateModal, TradeOfferModal } from '../../components'
 import './Coinflip.css'
 
@@ -18,6 +18,7 @@ class Coinflip extends Component {
     this.renderGames = this.renderGames.bind(this)
     this.cancelOffer = this.cancelOffer.bind(this)
     this.resendOffer = this.resendOffer.bind(this)
+    this.hasGameFlipped = this.hasGameFlipped.bind(this)
 
     this.state = {
       createModal: false,
@@ -56,10 +57,9 @@ class Coinflip extends Component {
     })
 
     this.props.publicSocket.on('COINFLIP_NEW_GAME', this.props.addCoinflipGame)
-
     this.props.secureSocket.on('COINFLIP_RECEIVE_OFFERS', this.props.receiveCoinflipOffers)
-
     this.props.publicSocket.on('COINFLIP_UPDATE_GAME', this.props.updateCoinflipGame)
+    this.props.publicSocket.on('COINFLIP_REMOVE_GAME', this.props.removeCoinflipGame)
   }
 
   componentWillUnmount() {
@@ -68,6 +68,7 @@ class Coinflip extends Component {
     this.props.secureSocket.off('COINFLIP_OFFER')
     this.props.secureSocket.off('COINFLIP_RECEIVE_OFFERS')
     this.props.publicSocket.off('COINFLIP_UPDATE_GAME')
+    this.props.publicSocket.off('COINFLIP_REMOVE_GAME')
   }
 
   componentWillReceiveProps(nextProps) {
@@ -81,7 +82,12 @@ class Coinflip extends Component {
     for (const index in props.coinflip.games) {
       const game = props.coinflip.games[index]
       if (game._id === this.state.watching.game._id) {
-        this.state.watching.game = game
+        this.setState({
+          watching: {
+            ...this.state.watching,
+            game: game
+          }
+        })
       }
     }
   }
@@ -190,13 +196,25 @@ class Coinflip extends Component {
     )
   }
 
+  hasGameFlipped(game) {
+    for (const index in this.props.coinflip.flippedGames) {
+      const id = this.props.coinflip.flippedGames[index]
+      if (game._id == id) {
+        return true
+      }
+    }
+    return false
+  }
+
   render() {
     return (
       <div className="Coinflip">
         <CoinflipWatchModal
           isOpen={this.state.watching.open}
-          onClose={() => this.setState({ watching: { ...this.state.watching, open: false } })}
+          onClose={() => this.setState({ watching: { game: null, open: false } })}
           game={this.state.watching.game}
+          setCoinFlipped={this.props.setCoinFlipped}
+          hasGameFlipped={this.hasGameFlipped}
         />
         <CoinflipJoinModal
           isOpen={this.state.joining.open}
@@ -229,6 +247,9 @@ class Coinflip extends Component {
           forceRefreshInventory={this.props.forceRefreshInventory}
           createGame={this.props.createCoinflipGame}
         />
+        <div className="Coinflip__Info">
+          <p>Add <span>H1Z1Brawl.com</span> in your name and enjoy <span>5%</span> less comission on all coin flips!</p>
+        </div>
         <div className="Coinflip__Header">
           <Row>
             <Col md={3} sm={4} className="Coinflip__Header-Stat">
@@ -315,7 +336,9 @@ const mapDispatchToProps = (dispatch) => {
     receiveCoinflipOffers,
     loadCoinflipGames,
     joinCoinflipGame,
-    updateCoinflipGame
+    updateCoinflipGame,
+    removeCoinflipGame,
+    setCoinFlipped
   }, dispatch)
 }
 

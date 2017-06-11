@@ -2,24 +2,25 @@ import React, { Component } from 'react'
 import { Circle } from 'react-progressbar.js'
 
 export default class CountDownTimer extends Component {
-  //props (seconds, color)
+  //props (totalSeconds, secondsRemaining, color)
   constructor(props) {
     super(props)
 
     this.tick = this.tick.bind(this)
 
     this.state = {
-      percent: 1,
-      seconds: props.seconds
+      percent: (props.secondsRemaining / props.totalSeconds),
+      seconds: props.secondsRemaining
     }
+
     this.interval = setInterval(this.tick, 1000)
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.seconds !== this.props.seconds) {
+    if (nextProps.secondsRemaining !== this.props.secondsRemaining || nextProps.totalSeconds !== this.props.totalSeconds) {
       this.setState({
-        seconds: nextProps.seconds,
-        percent: 1
+        percent: (nextProps.secondsRemaining / nextProps.totalSeconds),
+        seconds: nextProps.secondsRemaining
       })
     }
   }
@@ -34,13 +35,13 @@ export default class CountDownTimer extends Component {
         setTimeout(this.props.onComplete, 1000) /* wait for the animation to finish */
       }
     } else {
-      this.setState({ percent: (seconds / this.props.seconds), seconds })
+      this.setState({ percent: (seconds / this.props.totalSeconds), seconds })
     }
   }
 
   componentWillUnmount() {
     clearInterval(this.interval)
-    this.setState({ percent: 0, seconds: 0 })
+    this.interval = null
   }
 
   render() {

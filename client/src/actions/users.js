@@ -8,3 +8,10 @@ export function getConnectedUsers() {
     promise: (socket) => socket.emit('GET_USERS_CONNECTED', {})
   }
 }
+
+export function updateConnectedUsers(users) {
+  return {
+    type: USERS_CONNECTED_SUCCESS,
+    payload: users
+  }
+}

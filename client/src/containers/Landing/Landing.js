@@ -6,7 +6,7 @@ import { Row, Col } from 'react-bootstrap'
 import config from '../../../../config'
 
 import logo from '../../static/logo.png'
-import { getConnectedUsers } from '../../actions/users'
+import { getConnectedUsers, loadCoinflipStats } from '../../actions'
 import { Stat } from '../../components'
 import './Landing.css'
 
@@ -26,7 +26,7 @@ class Landing extends Component {
 
   componentWillMount() {
     this.props.getConnectedUsers()
-    //TODO dispatch action to get stats
+    this.props.loadCoinflipStats(3)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -38,16 +38,12 @@ class Landing extends Component {
   }
 
   handleStatClick(days) {
-    this.setState({
-      statInterval: days
-    })
-    console.log(this)
-    //TODO dispatch action to update stats
+    this.props.loadCoinflipStats(days)
   }
 
   render() {
     const { jackpotStats, coinflipStats, users } = this.props
-    const { statInterval, jackpotLoading, coinflipLoading, usersLoading } = this.state
+    const { jackpotLoading, coinflipLoading, usersLoading } = this.state
 
     return (
       <div className="Landing">
@@ -57,10 +53,10 @@ class Landing extends Component {
         <div className="Landing__Stats">
           <Row className="show-grid">
             <Col sm={6} md={4}>
-              <Stat title="WON ON JACKPOT" data={jackpotStats.won[statInterval]} loading={jackpotLoading} />
+              <Stat title="WON ON JACKPOT" data={`$${Number(jackpotStats.won).toFixed(2)}`} loading={jackpotLoading} />
             </Col>
             <Col sm={6} md={4}>
-              <Stat title="WON ON COINFLIP" data={coinflipStats.won[statInterval]} loading={coinflipLoading} />
+              <Stat title="WON ON COINFLIP" data={`$${Number(coinflipStats.won).toFixed(2)}`} loading={coinflipLoading} />
             </Col>
             <Col sm={6} md={4}>
               <Stat title="USERS" data={`${users.count}+`} loading={usersLoading} />
@@ -99,7 +95,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
-    getConnectedUsers
+    getConnectedUsers,
+    loadCoinflipStats
   }, dispatch)
 }
 

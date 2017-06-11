@@ -56,7 +56,7 @@ coinflipOfferSchema.statics.userHasOpenRequest = function(user) {
   return new Promise((resolve, reject) => {
     this.findOne({ userId: user._id, failed: false, completed: false }).exec().then(tradeOffer => {
       if (tradeOffer) {
-        return reject(new Error('You already have an open trade offer'))
+        return reject(new Error('You already have an open trade offer. Manage your offers by clicking the offers button below.'))
       }
       resolve(user)
     }).catch(reject)

@@ -19,7 +19,7 @@ class CoinflipWatchItem extends Component {
         <img src={`${IMAGE_URL}${this.props.item.icon_url}`} alt="item" />
         <div>
           <p>{this.props.item.name}</p>
-          <span>{this.props.item.price}</span>
+          <span>{Number(this.props.item.price).toFixed(2)}</span>
         </div>
       </div>
     )
@@ -28,24 +28,15 @@ class CoinflipWatchItem extends Component {
 
 export default class CoinflipWatchModal extends Component {
 
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      animateFlip: false,
-      animationDone: false
-    }
-  }
-
   renderGame() {
     const { game } = this.props
     return (
       <Row>
         <Col xs={6}>
-          { this.renderUser(game.creator, game.startingSide === 'black' ? black : red, this.getCreatorPercent(game), this.state.animationDone ? (this.didCreatorWin ? 'winner' : 'loser') : '') }
+          { this.renderUser(game.creator, game.startingSide === 'black' ? black : red, this.getCreatorPercent(game), game.hasFlipped ? (didCreatorWin(game) ? 'winner' : 'loser') : '') }
         </Col>
         <Col xs={6}>
-          { this.renderUser(game.joiner, game.startingSide === 'black' ? red : black, this.getJoinerPercent(game), this.state.animationDone ? (this.didCreatorWin ? 'loser' : 'winner') : '') }
+          { this.renderUser(game.joiner, game.startingSide === 'black' ? red : black, this.getJoinerPercent(game), game.hasFlipped ? (didCreatorWin(game) ? 'loser' : 'winner') : '') }
         </Col>
         <div className="Status">
           { this.getStatus() }
@@ -54,17 +45,12 @@ export default class CoinflipWatchModal extends Component {
     )
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.game && this.props.game) {
-      if (nextProps.game._id !== this.props.game._id) {
-        this.setState({ animateFlip: false, animationDone: false })
-      }
-    }
-  }
-
-  flipCoin(winningSide) {
+  flipCoin(game, winningSide) {
+    const id = (' ' + game._id).slice(1)
     setTimeout(() => {
-      this.setState({ animateFlip: false, animationDone: true })
+      console.log(`setting the game ${id} to flipped in the reducer`)
+      this.props.setCoinFlipped(id)
+      this.forceUpdate()
     }, 6000)
     return (
       <div className="FlipContainer"><div className={`Flip ${winningSide}`}></div></div>
@@ -82,26 +68,40 @@ export default class CoinflipWatchModal extends Component {
 
   getStatus() {
     const { game } = this.props
-    if (this.state.animationDone) {
-      return this.displayWinner(this.didCreatorWin ? game.startingSide : (game.startingSide === 'black' ? 'red' : 'black'), game.winningPercentage)
-    } else if (!game.joiner.id) { /* no one has joined the game */
-      return (<p>Waiting...</p>)
-    } else if (this.state.animateFlip) {
-      this.didCreatorWin = didCreatorWin(game)
-      return this.flipCoin(this.didCreatorWin ? game.startingSide : (game.startingSide === 'black' ? 'red' : 'black'))
-    } else if (game.joiner.id && !game.completed) { /* waiting for the joiner to accept trade (120 second cooldown) */
-      const secondsRemaining = WAITING_COUNTDOWN - this.getSecondsElapsed(game.waitingStartTime)
+    if (game.joiner.id && !game.completed) { /* waiting for the joiner to accept trade (120 second cooldown) */
+      const { dateJoined } = game
+      let secondsSinceJoined = parseInt((new Date().getTime() - new Date(dateJoined).getTime()) / 1000)
+
+      if (secondsSinceJoined > WAITING_COUNTDOWN) {
+        secondsSinceJoined = WAITING_COUNTDOWN //hopefully this never happens ;)
+      }
+
       return <CountDownTimer
-               seconds={secondsRemaining}
-               color="rgba(154, 51, 51, 0.86)"
-             />
+                secondsRemaining={WAITING_COUNTDOWN - secondsSinceJoined}
+                totalSeconds={WAITING_COUNTDOWN}
+                color="rgba(154, 51, 51, 0.86)"
+              />
     } else if (game.completed) { /* game has completed, countdown the timer then flip or just render the winner */
-      const secondsRemaining = COMPLETION_COUNTDOWN - this.getSecondsElapsed(game.completedStartTime)
+      const { dateCompleted } = game
+      const secondsSinceCompleted = parseInt((new Date().getTime() - new Date(dateCompleted).getTime()) / 1000)
+
+      if (secondsSinceCompleted >= COMPLETION_COUNTDOWN) {
+        if (this.props.hasGameFlipped(game)) {
+          return this.displayWinner(didCreatorWin(game) ? game.startingSide : (game.startingSide === 'black' ? 'red' : 'black'), game.winningPercentage)
+        }
+        return this.flipCoin(game, didCreatorWin(game) ? game.startingSide : (game.startingSide === 'black' ? 'red' : 'black'))
+      }
+
       return <CountDownTimer
-               seconds={secondsRemaining}
-               color="rgb(95, 144, 112)"
-               onComplete={() => this.setState({ animateFlip: true })}
-             />
+                 secondsRemaining={COMPLETION_COUNTDOWN - secondsSinceCompleted}
+                 totalSeconds={COMPLETION_COUNTDOWN}
+                 color="rgb(95, 144, 112)"
+                 onComplete={() => {
+                   this.forceUpdate()
+                 }}
+               />
+    } else {
+      return (<p>Waiting...</p>)
     }
   }
 

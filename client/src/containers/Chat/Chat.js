@@ -10,7 +10,14 @@ import { Message } from '../../components'
 import { sendChat, receiveChat, loadChat } from '../../actions/'
 import { api } from '../../../../config'
 import giveaway from '../../static/giveaway.png'
+import logo from '../../static/logo.png'
 import './Chat.css'
+
+const messages = [
+  'If you experience any bugs/problems, contact h1z1brawl@gmail.com for help.',
+  'Add H1Z1Brawl.com to your name and receive 5% less tax.',
+  'Join our giveaway by clicking on the banner above the chat box.'
+]
 
 class Chat extends Component {
 
@@ -23,7 +30,7 @@ class Chat extends Component {
     this.handleKeyPress = this.handleKeyPress.bind(this)
 
     this.state = {
-      open: false
+      open: true
     }
   }
 
@@ -35,10 +42,22 @@ class Chat extends Component {
     if (!this.props.chat.loaded) {
       this.props.loadChat()
     }
+
+    this.botMessageIndex = 0
+
+    this.botInterval = setInterval(() => {
+      this.sendBotMessage(messages[this.botMessageIndex])
+      this.botMessageIndex++
+      if (this.botMessageIndex >= messages.length) {
+        this.botMessageIndex = 0
+      }
+    }, 10 * 60 * 1000)
   }
 
   componentWillUnmount() {
     this.props.secureSocket.off('RECEIVE_CHAT')
+
+    clearInterval(this.botInterval)
   }
 
   handleClick(e) {
@@ -66,6 +85,17 @@ class Chat extends Component {
 
   componentDidUpdate() {
     this.scrollToBottom();
+  }
+
+  sendBotMessage(message) {
+    this.props.receiveChat({
+      user: {
+        level: 999,
+        image: logo,
+        name: 'H1Z1Brawl Bot'
+      },
+      message
+    })
   }
 
   renderMessage() {

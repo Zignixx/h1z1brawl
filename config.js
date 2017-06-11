@@ -26,7 +26,7 @@ const coinflip = {
   minItems: 1,
   maxItems: 15,
   minAmount: 1.00,
-  itemThreshold: 0.10
+  itemThreshold: 0.10,
 }
 
 const inventory = {

@@ -8,8 +8,14 @@ export default function connect(io) {
 
   io.on('connection', (socket) => {
 
+    io.emit('USERS_CONNECTED', Object.keys(io.sockets.sockets).length)
+
     socket.on('GET_USERS_CONNECTED', (data, callback) => {
       callback(Object.keys(io.sockets.sockets).length)
+    })
+
+    socket.on('disconnect', () => {
+      io.emit('USERS_CONNECTED', Object.keys(io.sockets.sockets).length)
     })
 
     chat(socket, io)

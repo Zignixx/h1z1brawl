@@ -7,7 +7,7 @@ export function getCoinflipTotalAndRange(game) {
 
 export function getCoinflipRange(game) {
   const total = parseFloat(getCoinflipTotal(game))
-  return [Number(total * (1 - RANGE_DELIM)).toFixed(2), Number(total * (1 + RANGE_DELIM)).toFixed(2)]
+  return [parseFloat(total * (1 - RANGE_DELIM)), parseFloat(total * (1 + RANGE_DELIM))]
 }
 
 export function didCreatorWin(game) {

@@ -16,7 +16,11 @@ import {
   COINFLIP_RESEND_OFFER_SUCCESS,
   COINFLIP_RESEND_OFFER_FAILURE,
   COINFLIP_UPDATE_GAME,
-  COINFLIP_REMOVE_GAME
+  COINFLIP_REMOVE_GAME,
+  COINFLIP_LOAD_STATS,
+  COINFLIP_LOAD_STATS_SUCCESS,
+  COINFLIP_LOAD_STATS_FAILURE,
+  COINFLIP_SET_FLIPPED
 } from '../constants'
 
 const initialState = {
@@ -24,6 +28,7 @@ const initialState = {
   loaded: false,
   creatingGame: false,
   games: [],
+  flippedGames: [],
   resending: false,
   offers: {
     loaded: false,
@@ -33,13 +38,45 @@ const initialState = {
   stats: {
     loaded: false,
     loading: false,
-    won: {}
+    won: null
   },
   joiningGame: false
 }
 
 export default function reducer(state = initialState, {type, payload}) {
   switch (type) {
+    case COINFLIP_SET_FLIPPED:
+      return {
+        ...state,
+        flippedGames: [...state.flippedGames, payload]
+      }
+    case COINFLIP_LOAD_STATS:
+      return {
+        ...state,
+        stats: {
+          loaded: false,
+          loading: true,
+          won: null
+        }
+      }
+    case COINFLIP_LOAD_STATS_SUCCESS:
+      return {
+        ...state,
+        stats: {
+          loaded: true,
+          loading: false,
+          won: payload
+        }
+      }
+    case COINFLIP_LOAD_STATS_FAILURE:
+      return {
+        ...state,
+        stats: {
+          loaded: false,
+          loading: false,
+          won: payload
+        }
+      }
     case COINFLIP_UPDATE_GAME:
       return {
         ...state,
@@ -48,7 +85,8 @@ export default function reducer(state = initialState, {type, payload}) {
     case COINFLIP_REMOVE_GAME:
       return {
         ...state,
-        games: state.games.filter((game) => game._id !== payload._id)
+        games: state.games.filter((game) => game._id !== payload._id),
+        flippedGames: state.flippedGames.filter((id) => id !== payload._id)
       }
     case COINFLIP_RESEND_OFFER:
       return {

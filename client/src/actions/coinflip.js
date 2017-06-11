@@ -21,8 +21,19 @@ import {
   COINFLIP_JOIN_GAME_SUCCESS,
   COINFLIP_JOIN_GAME_FAILURE,
   COINFLIP_UPDATE_GAME,
-  COINFLIP_REMOVE_GAME
+  COINFLIP_REMOVE_GAME,
+  COINFLIP_LOAD_STATS,
+  COINFLIP_LOAD_STATS_SUCCESS,
+  COINFLIP_LOAD_STATS_FAILURE,
+  COINFLIP_SET_FLIPPED
 } from '../constants'
+
+export function setCoinFlipped(id) {
+  return {
+    type: COINFLIP_SET_FLIPPED,
+    payload: id
+  }
+}
 
 export function updateCoinflipGame(game) {
   return (dispatch) => {
@@ -30,8 +41,15 @@ export function updateCoinflipGame(game) {
     if (game.completed) {
       setTimeout(() => {
         dispatch(removeGame(game)) /* remove the coinflip game from client side if it's completed (after 1 minute) */
-      }, 1 * 60 * 1000)
+      }, 5 * 60 * 1000)
     }
+  }
+}
+
+export function removeCoinflipGame(game) {
+  return {
+    type: COINFLIP_REMOVE_GAME,
+    payload: game
   }
 }
 
@@ -130,9 +148,11 @@ export function receiveCoinflipOffers(offers) {
   }
 }
 
-export function loadCoinflipStats() {
+export function loadCoinflipStats(days) {
   return {
-    x: null
+    type: config.socket.public.param,
+    types: [COINFLIP_LOAD_STATS, COINFLIP_LOAD_STATS_SUCCESS, COINFLIP_LOAD_STATS_FAILURE],
+    promise: (socket) => socket.emit('COINFLIP_LOAD_STATS', days)
   }
 }
 

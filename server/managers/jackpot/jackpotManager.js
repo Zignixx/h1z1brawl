@@ -96,7 +96,7 @@ class JackpotManager {
   }
 
   handleAcceptedDeposit(jackpotOffer) {
-    User.addTotalBet(jackpotOffer.userId, getOfferTotal(jackpotOffer.toObject))
+    User.addTotalBet(jackpotOffer.userId, getOfferTotal(jackpotOffer.toObject()))
     this.currentRound.addDeposit(jackpotOffer).then(round => {
       this.publicIo.emit('JACKPOT_UPDATE_ROUND', round.toCleanObject())
       this.updateCurrentRound(round)

@@ -93,10 +93,12 @@ export default class JackpotRoller extends Component {
   findWinnerX() { //ABOVE INDEX 6 AND BELOW LENGTH - 6
     const { winner } = this.props.round
 
-    let winnerIndex = this.userArray.length - 7 - 6
+    const array = this.userArray.slice(7)
 
-    for (let i = this.userArray.length - 7 - 6; i > 6; i--) {
-      const tile = this.userArray[i]
+    let winnerIndex = array.length - 7 - 6
+
+    for (let i = array.length - 7 - 6; i >= 0; i--) {
+      const tile = array[i]
       if (tile.id === winner.id) {
         winnerIndex = i
         break
@@ -107,7 +109,6 @@ export default class JackpotRoller extends Component {
     const rangeLow = (closestToEdge - 40)
     const rangeHigh = (40 - closestToEdge)
 
-    console.log('winnerIndex', winnerIndex)
     return winnerIndex * (80 + 2 + 2) + this.getRandomInt(rangeLow, rangeHigh)
   }
 

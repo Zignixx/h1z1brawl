@@ -48,3 +48,28 @@ main {
     left: 0;
     right: 0;
     margin: auto; }
+
+/*
+ * react-circular-progressbar styles
+ *
+ * All of the styles in this file are optional and configurable!
+ */
+.CircularProgressbar {
+  height: 300px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto; }
+
+.CircularProgressbar .CircularProgressbar-path {
+  stroke: #a13131;
+  stroke-linecape: butt;
+  transition: stroke-dashoffset 0.5s ease 0s; }
+
+.CircularProgressbar .CircularProgressbar-trail {
+  stroke: rgba(0, 0, 0, 0.2); }
+
+.CircularProgressbar .CircularProgressbar-text {
+  display: none; }

@@ -4,7 +4,7 @@ import { findSocketById } from '../../../util/socket'
 import { generateSecret } from '../../../util/random'
 import { bot as botManager } from '../../'
 import { coinflipOffer as coinflipOfferType } from '../../../constants'
-import { getCoinflipTotal, getCreatorTotal, getTotalWinnings } from '../../../util/coinflip'
+import { getCoinflipTotal, getCreatorTotal, getTotalWinnings, getJoinerTotal } from '../../../util/coinflip'
 
 CoinflipManager.prototype.handleAcceptedTrade = function(tradeOffer) {
   CoinflipOffer.findByTradeOffer(tradeOffer).then(coinflipOffer => {
@@ -35,6 +35,10 @@ CoinflipManager.prototype.handleJoinGameAcceptance = function(coinflipOffer) {
 
     /* send the winnings of the coin flip winner */
     this.sendGameWinnings(game.toObject(), coinflipOffer.toObject())
+
+    setTimeout(() => {
+      this.publicIo.emit('COINFLIP_ADD_HISTORY', game.toObject())
+    }, 30 * 1000) //add game to client-side history after 30 seconds
   }).catch(error => {
     this.log(`error while handling coinflip request: ${error.message}`)
   })
@@ -42,8 +46,11 @@ CoinflipManager.prototype.handleJoinGameAcceptance = function(coinflipOffer) {
 
 CoinflipManager.prototype.sendGameWinnings = function(game, coinflipOffer) { /* calculate tickets, see which side the creator started on, then check his percentage based on winning perctenage */
   /* get the game total and creator total to calculate percentage of creator's chance */
-  const gameTotal = getCoinflipTotal(game), creatorTotal = getCreatorTotal(game)
+  const gameTotal = getCoinflipTotal(game), creatorTotal = getCreatorTotal(game), joinerTotal = getJoinerTotal(game)
   const percentage = ((creatorTotal / gameTotal) * 100)
+
+  User.addTotalBet(game.creator.id, creatorTotal)
+  User.addTotalBet(game.joiner.id, joinerTotal)
 
   /* black is 0-49%, and red is 50%-100% */
   const isBelow50 = (game.startingSide === 'black')
@@ -59,6 +66,9 @@ CoinflipManager.prototype.sendGameWinnings = function(game, coinflipOffer) { /* 
   const socket = findSocketById(this.secureIo, winner.id)
 
   User.findById(winner.id).exec().then(user => {
+    /* add total won of the coinflip game to the winner's account */
+    user.addTotalWon(gameTotal)
+
     const winnings = getTotalWinnings(game, user) /* get the winnings, deducting tax (3% or 8%) */
     new CoinflipOffer({
       _id: generateSecret(),

@@ -51,7 +51,7 @@ Bot.prototype.setSteamCookies = function(cookies) {
 }
 
 Bot.prototype.canTrade = function(userObject) {
-  return userObject.escrowDays == 0 && userObject.probation ? (userObject.probation == 'true') : (true)
+  return userObject.escrowDays === 0 && userObject.probation ? (userObject.probation == 'true') : (true)
 }
 
 Bot.prototype.formatItems = function(items) {
@@ -70,12 +70,16 @@ Bot.prototype.formatItems = function(items) {
 Bot.prototype.offerAccepted = function(offer) {
   if (offer.type === 'coinflip') {
     this.handleCoinflipAccepted(offer)
+  } else if (offer.type === 'jackpot') {
+    this.handleJackpotAccepted(offer)
   }
 }
 
 Bot.prototype.offerFailed = function(offer, reason) {
   if (offer.type === 'coinflip') {
     this.handleCoinflipFailed(offer, reason)
+  } else if (offer.type === 'jackpot') {
+    this.handleJackpotFailed(offer, reason)
   }
 }
 
@@ -87,14 +91,14 @@ Bot.prototype.newOffer = function(offer) {
 Bot.prototype.sentOfferChanged = function(offer, oldState) { //TODO check how CreatedNeedsConfirmation works
   const { state } = offer
   const { type,  tradeId } = this.getTradeOfferData(offer)
-  offer = { ...offer, type, tradeId }
+  const newOffer = { ...offer, type, tradeId }
   if (state === Accepted) {
-    this.offerAccepted(offer)
+    this.offerAccepted(newOffer)
   } else if (state === InEscrow || state === Countered || state === InvalidItems || state === Invalid) {
     offer.cancel()
-    this.offerFailed(offer, state)
+    this.offerFailed(newOffer, state)
   } else if (state === Declined || state === Expired || state === Canceled || state === CanceledBySecondFactor) {
-    this.offerFailed(offer, state)
+    this.offerFailed(newOffer, state)
   }
 }
 
@@ -122,7 +126,11 @@ Bot.prototype.getTradeOfferData = function({ message }) {
   data.tradeId = words[words.length - 1]
 
   /* get type from offer message */
-  data.type = (~message.indexOf('coinflip')) ? 'coinflip' : null
+  if (~message.indexOf('coinflip')) {
+    data.type = 'conflip'
+  } else if (~message.indexOf('jackpot')) {
+    data.type = 'jackpot'
+  }
 
   return data
 }

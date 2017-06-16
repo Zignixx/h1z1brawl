@@ -1,10 +1,12 @@
 import chat from './routes/chat'
 import coinflip from './routes/coinflip'
-import { coinflip as coinflipManager } from '../../managers'
+import jackpot from './routes/jackpot'
+import { coinflip as coinflipManager, jackpot as jackpotManager } from '../../managers'
 
 export default function connect(io) {
 
   coinflipManager.setPublicIo(io)
+  jackpotManager.setPublicIo(io)
 
   io.on('connection', (socket) => {
 
@@ -20,5 +22,6 @@ export default function connect(io) {
 
     chat(socket, io)
     coinflip(socket, io)
+    jackpot(socket, io)
   })
 }

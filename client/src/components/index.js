@@ -11,3 +11,6 @@ export { default as CoinflipWatchModal } from './Modals/CoinflipWatchModal/Coinf
 export { default as CountDownTimer } from './CountDownTimer/CountDownTimer'
 export { default as Giveaway } from './Giveaway/Giveaway'
 export { default as FAQ } from './FAQ/FAQ'
+export { default as JackpotDepositModal } from './Modals/JackpotDepositModal/JackpotDepositModal'
+export { default as CoinflipHistoryModal } from './Modals/CoinflipHistoryModal/CoinflipHistoryModal'
+export { default as CoinflipVerifyModal } from './Modals/CoinflipVerifyModal/CoinflipVerifyModal'

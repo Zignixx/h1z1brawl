@@ -10,7 +10,7 @@ $bgColor: rgba(22, 22, 22, 1.0);
   width: 270px;
   height: calc(100% - 65px);
   box-shadow: rgba(0, 0, 0, 0.298039) -4px 0px 10px 0px;
-  z-index: 2;
+  z-index: 1;
 
   transition: 0.3s ease;
 
@@ -19,9 +19,23 @@ $bgColor: rgba(22, 22, 22, 1.0);
   }
 }
 
+.EmoteDisplay {
+  height: 20px;
+  width: 20px;
+  margin: 5px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.Emote {
+  height: 24px;
+  width: 20px;
+  margin: 0 2px;
+}
+
 .Chat__Toggle {
   span {
-    z-index: 3;
+    z-index: 2;
     position: fixed;
     top: 65px; right: 0;
     padding: 4px;

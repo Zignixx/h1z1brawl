@@ -26,6 +26,10 @@ export default class CountDownTimer extends Component {
   }
 
   tick() {
+    if (this.props.freeze) {
+      return
+    }
+
     const seconds = this.state.seconds - 1
 
     if (seconds <= 0) {
@@ -50,8 +54,8 @@ export default class CountDownTimer extends Component {
       <Circle
         progress={percent}
         options={{duration: 1000, color: this.props.color}}
-        containerStyle={{width: '40px', height: '40px'}}
-        text={seconds + ''}
+        containerStyle={{width: this.props.width ? this.props.width : '40px', height: this.props.height ? this.props.height : '40px'}}
+        text={this.props.noText ? null : seconds + ''}
       />
     )
   }

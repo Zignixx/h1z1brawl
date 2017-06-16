@@ -13,4 +13,8 @@ export default function configure(socket, io) {
     Coinflip.getTotalWonInDays(days).then(callback).catch(err => callback({ error: err.message }))
   })
 
+  socket.on('COINFLIP_LOAD_HISTORY', (data, callback) => {
+    Coinflip.getRecentGames(10).then(callback).catch(err => callback({ error: err.message }))
+  })
+
 }

@@ -1,10 +1,11 @@
 .Landing {
   z-index: 4;
-  position: absolute;
+  position: fixed;
   top: 0;
   right: 0;
   left: 0;
-  min-height: 100%;
+  bottom: 0;
+  overflow-y: scroll;
   text-align: center;
   color: #b5babb;
   background-color: rgba(38, 38, 44, 0.95); }

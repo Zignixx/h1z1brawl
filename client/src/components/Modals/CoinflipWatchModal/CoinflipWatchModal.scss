@@ -23,7 +23,7 @@
 }
 
 .Modal__WatchCoinflip {
-  top: 50px;
+  //top: 50px;
   height: auto;
   width: 600px;
 
@@ -54,8 +54,13 @@
     p {
       font-size: 11px;
       position: absolute;
-      top: 70px;
+      top: 85px;
       left: -28px;
+
+      &.Secret {
+        top: 105px;
+        left: -15px;
+      }
     }
 
     span {

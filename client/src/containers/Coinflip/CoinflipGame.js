@@ -132,13 +132,16 @@ export default class CoinflipGame extends Component {
         <Popup
           inverted
           content={creator.name}
-          trigger={<img src={creator.image} alt="user1" />} />
+          trigger={
+            <a href={`https://steamcommunity.com/profiles/${creator.id}`} target="_blank"><img src={creator.image} alt="user1" /></a>
+          }
+        />
         <span>vs.</span>
         <Popup
           inverted
           content={joiner.name ? joiner.name : ''}
           trigger={joiner.image ? (
-            <img src={joiner.image} alt="user2" />
+            <a href={`https://steamcommunity.com/profiles/${joiner.id}`} target="_blank"><img src={joiner.image} alt="user2" /></a>
           ) : (
             <div className="None"></div>
           )} />

@@ -46,7 +46,7 @@ Bot.prototype.sendCoinflipRequest = function(coinflipOffer) {
       }
 
       /* make sure to track the coinflipOfferId for later usage */
-      steamOffer.coinflipOfferId = coinflipOffer._id
+      steamOffer.offerId = coinflipOffer._id
       resolve(steamOffer) /* resolve the trade offer back to the user */
 
       if (coinflipOffer.botItems.length > 0) {

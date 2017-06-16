@@ -37,7 +37,7 @@ export default class TradeOfferModal extends Component {
         </div>
         <div className="Modal__Content Modal__TradeOffer-Content">
           <p>You have two minutes to accept the trade offer before it is canceled.</p>
-          <p>Security Code: <span>{this.props.tradeOffer ? this.props.tradeOffer.coinflipOfferId : null}</span></p>
+          <p>Security Code: <span>{this.props.tradeOffer ? this.props.tradeOffer.offerId : null}</span></p>
           <hr />
           <a onClick={this.requestClose} href={`https://steamcommunity.com/tradeoffer/${this.props.tradeOffer ? this.props.tradeOffer.id : null}`} target="_blank">Accept Trade</a>
         </div>

@@ -34,7 +34,7 @@
     right: -4px; }
 
 .Navbar {
-  z-index: 1 !important;
+  z-index: 3 !important;
   background: rgba(22, 22, 22, 0.7);
   border-color: rgba(22, 22, 22, 0.7);
   margin-bottom: 0px !important; }

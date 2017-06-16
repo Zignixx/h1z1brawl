@@ -9,7 +9,8 @@
   color: #d4d2d2; }
 
 .Coinflip__Info {
-  border-radius: 10px;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  border-radius: 5px;
   background-color: rgba(22, 22, 22, 0.7);
   width: 100%;
   margin-bottom: 10px;
@@ -25,8 +26,9 @@
       border-radius: 3px; }
 
 .Coinflip__Body {
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
   margin-top: 10px;
-  border-radius: 10px;
+  border-radius: 5px;
   background-color: rgba(22, 22, 22, 0.7); }
   .Coinflip__Body table {
     width: 100%; }
@@ -70,8 +72,9 @@
   margin-bottom: 20px; }
 
 .Coinflip__Header {
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
   min-height: 120px;
-  border-radius: 10px;
+  border-radius: 5px;
   background-color: rgba(22, 22, 22, 0.7); }
   .Coinflip__Header a.history {
     top: 45px; }

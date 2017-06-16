@@ -11,6 +11,28 @@ import { sendChat, receiveChat, loadChat } from '../../actions/'
 import { api } from '../../../../config'
 import giveaway from '../../static/giveaway.png'
 import logo from '../../static/logo.png'
+
+import FourHead from '../../static/emotes/4Head.png'
+import ANELE from '../../static/emotes/ANELE.png'
+import BabyRage from '../../static/emotes/BabyRage.png'
+import BibleThump from '../../static/emotes/BibleThump.png'
+import BrokeBack from '../../static/emotes/BrokeBack.png'
+import cmonBruh from '../../static/emotes/cmonBruh.png'
+import CoolCat from '../../static/emotes/CoolCat.png'
+import CorgiDerp from '../../static/emotes/CorgiDerp.png'
+import EleGiggle from '../../static/emotes/EleGiggle.png'
+import FailFish from '../../static/emotes/FailFish.png'
+import FeelsBadMan from '../../static/emotes/FeelsBadMan.png'
+import FeelsGoodMan from '../../static/emotes/FeelsGoodMan.png'
+import Kappa from '../../static/emotes/Kappa.png'
+import Kreygasm from '../../static/emotes/Kreygasm.png'
+import MrDestructoid from '../../static/emotes/MrDestructoid.png'
+import OSfrog from '../../static/emotes/OSfrog.png'
+import PogChamp from '../../static/emotes/PogChamp.png'
+import SMOrc from '../../static/emotes/SMOrc.png'
+import SwiftRage from '../../static/emotes/SwiftRage.png'
+import WutFace from '../../static/emotes/WutFace.png'
+
 import './Chat.css'
 
 const messages = [
@@ -18,6 +40,10 @@ const messages = [
   'Add H1Z1Brawl.com to your name and receive 5% less tax.',
   'Join our giveaway by clicking on the banner above the chat box.'
 ]
+
+const emotes = {'4Head': FourHead, 'ANELE': ANELE, 'BabyRage': BabyRage, 'BibleThump': BibleThump, 'BrokeBack': BrokeBack, 'cmonBruh': cmonBruh, 'CoolCat': CoolCat, 'CorgiDerp': CorgiDerp,
+                'EleGiggle': EleGiggle, 'FailFish': FailFish, 'FeelsBadMan': FeelsBadMan, 'FeelsGoodMan': FeelsGoodMan, 'Kappa': Kappa, 'Kreygasm': Kreygasm, 'MrDestructoid': MrDestructoid,
+                'OSfrog': OSfrog, 'PogChamp': PogChamp, 'SMOrc': SMOrc, 'SwiftRage': SwiftRage, 'WutFace': WutFace}
 
 class Chat extends Component {
 
@@ -100,8 +126,38 @@ class Chat extends Component {
 
   renderMessage() {
     return this.props.chat.messages.slice(0).reverse().map((message, key) => {
-      return <Message key={key} user={message.user} message={message.message} />
+      const emoteMessage = this.replaceWithEmotes(this.escapeHTML(message.message))
+      return <Message key={key} user={message.user} message={emoteMessage} />
     })
+  }
+
+  replaceWithEmotes(text) {
+    let newText = text
+    for (const emote in emotes) {
+      if (newText.indexOf(emote) >= 0) {
+        newText = newText.split(emote).join(`<img class="Emote" src="${emotes[emote]}">`)
+      }
+    }
+    return newText;
+  }
+
+  addEmoteInChat(emote) {
+    this.refs.messageText.value = (this.refs.messageText.value + '' + emote)
+  }
+
+  escapeHTML(unsafe) {
+    return unsafe.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+  }
+
+  getEmotes() {
+    return Object.keys(emotes).map((emote, key) => (
+      <Popup
+        trigger={<img className="EmoteDisplay" onClick={() => this.addEmoteInChat(emote)} src={emotes[emote]} key={key} alt={emote} />}
+        content={emote}
+        offset={5}
+        key={key}
+      />
+    ))
   }
 
   submitChat() {
@@ -158,7 +214,7 @@ class Chat extends Component {
                   <Popup trigger={
                     <a><i className="fa fa-smile-o" aria-hidden="true"></i></a>
                   } on="click" hideOnScroll inverted offset={10}>
-                    hello hello hello
+                    { this.getEmotes() }
                   </Popup>
                   <button type="submit" onClick={this.submitChat}>SEND</button>
                 </div>

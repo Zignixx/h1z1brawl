@@ -29,9 +29,28 @@ const coinflip = {
   itemThreshold: 0.10,
 }
 
+const jackpot = {
+  minItems: 1,
+  maxItems: 15,
+  minAmount: 0.25,
+  itemThreshold: 0.10,
+  game: {
+    maxItems: 60,
+    depositsToStart: 2
+  },
+  countdowns: {
+    gameCountdown: 90
+  }
+}
+
+const tax = {
+  promo: 0.05,
+  noPromo: 0.10
+}
+
 const inventory = {
   cacheTimeout: 24 * 60 * 60, //1 day
-  reloadCooldown: 2 * 60, //2 minutes
+  reloadCooldown: 30, //2 minutes
   endpoints: {
     default: 'inventory',
     forceReload: 'inventory/force'
@@ -55,8 +74,10 @@ const socket = {
 
 module.exports = { //not transpiled
   auth: auth,
+  jackpot: jackpot,
   prices: prices,
   api: api,
+  tax: tax,
   app: app,
   coinflip: coinflip,
   socket: socket,

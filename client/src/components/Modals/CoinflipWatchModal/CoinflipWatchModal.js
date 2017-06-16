@@ -33,10 +33,10 @@ export default class CoinflipWatchModal extends Component {
     return (
       <Row>
         <Col xs={6}>
-          { this.renderUser(game.creator, game.startingSide === 'black' ? black : red, this.getCreatorPercent(game), game.hasFlipped ? (didCreatorWin(game) ? 'winner' : 'loser') : '') }
+          { this.renderUser(game.creator, game.startingSide === 'black' ? black : red, this.getCreatorPercent(game), this.props.hasGameFlipped(game) ? (didCreatorWin(game) ? 'winner' : 'loser') : '') }
         </Col>
         <Col xs={6}>
-          { this.renderUser(game.joiner, game.startingSide === 'black' ? red : black, this.getJoinerPercent(game), game.hasFlipped ? (didCreatorWin(game) ? 'loser' : 'winner') : '') }
+          { this.renderUser(game.joiner, game.startingSide === 'black' ? red : black, this.getJoinerPercent(game), this.props.hasGameFlipped(game) ? (didCreatorWin(game) ? 'loser' : 'winner') : '') }
         </Col>
         <div className="Status">
           { this.getStatus() }
@@ -48,7 +48,6 @@ export default class CoinflipWatchModal extends Component {
   flipCoin(game, winningSide) {
     const id = (' ' + game._id).slice(1)
     setTimeout(() => {
-      console.log(`setting the game ${id} to flipped in the reducer`)
       this.props.setCoinFlipped(id)
       this.forceUpdate()
     }, 6000)
@@ -57,11 +56,12 @@ export default class CoinflipWatchModal extends Component {
     )
   }
 
-  displayWinner(winningSide, roll) {
+  displayWinner(winningSide, { winningPercentage, secret }) {
     return (
       <div className="Winner">
         <img src={winningSide === 'black' ? black : red} />
-        <p>Roll: <span>{roll}</span></p>
+        <p>Roll: <span>{winningPercentage}</span></p>
+        <p className="Secret">Secret: <span>{secret}</span></p>
       </div>
     )
   }
@@ -87,7 +87,7 @@ export default class CoinflipWatchModal extends Component {
 
       if (secondsSinceCompleted >= COMPLETION_COUNTDOWN) {
         if (this.props.hasGameFlipped(game)) {
-          return this.displayWinner(didCreatorWin(game) ? game.startingSide : (game.startingSide === 'black' ? 'red' : 'black'), game.winningPercentage)
+          return this.displayWinner(didCreatorWin(game) ? game.startingSide : (game.startingSide === 'black' ? 'red' : 'black'), game)
         }
         return this.flipCoin(game, didCreatorWin(game) ? game.startingSide : (game.startingSide === 'black' ? 'red' : 'black'))
       }

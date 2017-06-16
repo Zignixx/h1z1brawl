@@ -1,3 +1,5 @@
+import config from '../../config'
+
 export function getCoinflipTotal(game) {
   const joiner = getJoinerTotal(game), creator = getCreatorTotal(game)
   return joiner + creator
@@ -30,7 +32,7 @@ function sortItemsDesc(items) {
 }
 
 export function getTotalWinnings(game, winner) {
-  const commission = hasBrawlInName(winner) ? 0.03 : 0.08
+  const commission = hasBrawlInName(winner) ? config.tax.promo : config.tax.noPromo
   const total = getCoinflipTotal(game)
   const tax = Number(total * commission).toFixed(2)
 
@@ -87,7 +89,7 @@ export function getCreatorTotal(game) {
   return total
 }
 
-function hasBrawlInName(user) {
+export function hasBrawlInName(user) {
   if (!user || !user.name) {
     return false
   }

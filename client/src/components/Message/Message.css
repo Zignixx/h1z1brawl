@@ -21,6 +21,14 @@
   margin-bottom: 5px;
   overflow: hidden;
   font-size: 12px; }
+  .Message__Header i {
+    color: #b1d632; }
+  .Message__Header.developer {
+    background: rgba(219, 99, 99, 0.53); }
+  .Message__Header.admin {
+    background: rgba(219, 99, 99, 0.53); }
+  .Message__Header.moderator {
+    background: rgba(95, 106, 226, 0.31); }
   .Message__Header .Message__Header--Level {
     margin-left: 3px;
     padding: 1px 3px;

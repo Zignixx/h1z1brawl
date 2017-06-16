@@ -91,6 +91,12 @@ coinflipSchema.statics.findByCoinflipOffer = function({ gameId }) {
   return this.findOne({ _id: gameId }).exec()
 }
 
+coinflipSchema.statics.getRecentlyClosedGames = function() {
+  const target = new Date()
+  target.setMinutes(target.getMinutes() - 3000)
+  return this.find({ completed: true, dateCompleted: { $lt: new Date(), $gt: target } }).exec()
+}
+
 coinflipSchema.statics.getUserHistory = function(userId, limit) {
   return this.find({ completed: true }).or([{ creatorId: userId }, { joinerId: userId }]).sort({ dateCompleted: -1 }).limit(limit).exec()
 }

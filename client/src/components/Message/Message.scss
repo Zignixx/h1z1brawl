@@ -24,6 +24,22 @@
   overflow: hidden;
   font-size: 12px;
 
+  i {
+    color: rgb(177, 214, 50);
+  }
+
+  &.developer {
+    background: rgba(219, 99, 99, 0.53);
+  }
+
+  &.admin {
+    background: rgba(219, 99, 99, 0.53);
+  }
+
+  &.moderator {
+    background: rgba(95, 106, 226, 0.31);
+  }
+
   .Message__Header--Level {
     margin-left: 3px;
     padding: 1px 3px;

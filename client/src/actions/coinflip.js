@@ -25,8 +25,19 @@ import {
   COINFLIP_LOAD_STATS,
   COINFLIP_LOAD_STATS_SUCCESS,
   COINFLIP_LOAD_STATS_FAILURE,
-  COINFLIP_SET_FLIPPED
+  COINFLIP_SET_FLIPPED,
+  COINFLIP_UPDATE_HISTORY,
+  COINFLIP_LOAD_HISTORY,
+  COINFLIP_LOAD_HISTORY_SUCCESS,
+  COINFLIP_LOAD_HISTORY_FAILURE
 } from '../constants'
+
+export function addCoinflipHistoryGame(game) {
+  return {
+    type: COINFLIP_UPDATE_HISTORY,
+    payload: game
+  }
+}
 
 export function setCoinFlipped(id) {
   return {
@@ -41,7 +52,7 @@ export function updateCoinflipGame(game) {
     if (game.completed) {
       setTimeout(() => {
         dispatch(removeGame(game)) /* remove the coinflip game from client side if it's completed (after 1 minute) */
-      }, 5 * 60 * 1000)
+      }, 30 * 1000)
     }
   }
 }
@@ -81,11 +92,29 @@ export function joinCoinflipGame(data) {
 }
 
 export function loadCoinflipGames() {
+  return (dispatch) => {
+    dispatch(loadCurrentGames())
+    dispatch(loadHistoryGames())
+  }
+}
+
+function loadCurrentGames() {
   return {
     type: config.socket.public.param,
     types: [COINFLIP_LOAD_GAMES, COINFLIP_LOAD_GAMES_SUCCESS, COINFLIP_LOAD_GAMES_FAILURE],
     promise: (socket) => socket.emit('COINFLIP_LOAD_GAMES').catch(error => {
       NotificationManager.error(`Error loading coinflip: ${error}`)
+      throw error
+    })
+  }
+}
+
+function loadHistoryGames() {
+  return {
+    type: config.socket.public.param,
+    types: [COINFLIP_LOAD_HISTORY, COINFLIP_LOAD_HISTORY_SUCCESS, COINFLIP_LOAD_HISTORY_FAILURE],
+    promise: (socket) => socket.emit('COINFLIP_LOAD_HISTORY').catch(error => {
+      NotificationManager.error(`Error loading coinflip history: ${error}`)
       throw error
     })
   }

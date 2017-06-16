@@ -31,3 +31,4 @@ export default Bot
 require('./components/client')
 require('./components/tradeOffer')
 require('./components/coinflip')
+require('./components/jackpot')

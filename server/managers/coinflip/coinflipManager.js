@@ -1,9 +1,7 @@
-import { Coinflip, CoinflipOffer, User } from '../../db'
+import { Coinflip, CoinflipOffer } from '../../db'
 import { bot as botManager } from '../'
 import { generateSecret } from '../../util/random'
 import { coinflipOffer as coinflipOfferType } from '../../constants'
-import { getCoinflipTotal, getJoinerTotal, getCreatorTotal, getTotalWinnings } from '../../util/coinflip'
-import { findSocketById } from '../../util/socket'
 
 class CoinflipManager {
 
@@ -103,7 +101,12 @@ class CoinflipManager {
             bot.sendCoinflipRequest(offer).then(tradeOffer => {
               offer.setTradeId(tradeOffer.id)
               resolve(tradeOffer)
-            }).catch(reject)
+            }).catch(error => {
+              game.removeJoiner().then(game => {
+                this.publicIo.emit('COINFLIP_UPDATE_GAME', game.toCleanObject())
+              })
+              reject(error)
+            })
           }).catch(reject)
         }).catch(reject)
       }).catch(reject)

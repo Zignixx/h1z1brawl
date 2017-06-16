@@ -4,49 +4,17 @@ export const AUTH_USER_LOAD_FAILURE     = Symbol('AUTH_USER_LOAD_FAILURE')
 export const AUTH_USER_LOGOUT           = Symbol('AUTH_USER_LOGOUT')
 export const AUTH_USER_RELOAD           = Symbol('AUTH_USER_RELOAD')
 
-export const USERS_CONNECTED_REQUEST    = Symbol('USERS_CONNECTED_REQUEST')
-export const USERS_CONNECTED_FAILURE    = Symbol('USERS_CONNECTED_FAILURE')
-export const USERS_CONNECTED_SUCCESS    = Symbol('USERS_CONNECTED_SUCCESS')
+export * from './coinflip'
+export * from './user'
+export * from './jackpot'
 
-export const SEND_CHAT_REQUEST          = Symbol('SEND_CHAT_REQUEST')
-export const SEND_CHAT_FAILURE          = Symbol('SEND_CHAT_FAILURE')
-export const SEND_CHAT_SUCCESS          = Symbol('SEND_CHAT_SUCCESS')
-export const RECEIVE_CHAT               = Symbol('RECEIVE_CHAT')
-export const LOAD_CHAT_REQUEST          = Symbol('LOAD_CHAT_REQUEST')
-export const LOAD_CHAT_SUCCESS          = Symbol('LOAD_CHAT_SUCCESS')
-export const LOAD_CHAT_FAILURE          = Symbol('LOAD_CHAT_FAILURE')
-
-export const SAVE_TRADE_URL_REQUEST     = Symbol('SAVE_TRADE_URL_REQUEST')
-export const SAVE_TRADE_URL_SUCCESS     = Symbol('SAVE_TRADE_URL_SUCCESS')
-export const SAVE_TRADE_URL_FAILURE     = Symbol('SAVE_TRADE_URL_FAILURE')
-
-export const REQUEST_INVENTORY          = Symbol('REQUEST_INVENTORY')
-export const REQUEST_INVENTORY_SUCCESS    = Symbol('REQUEST_INVENTORY_SUCCESS')
-export const REQUEST_INVENTORY_FAILURE    = Symbol('REQUEST_INVENTORY_FAILURE')
-export const FORCE_REQUEST_INVENTORY      = Symbol('FORCE_REQUEST_INVENTORY')
-
-export const CREATE_COINFLIP_GAME         = Symbol('CREATE_COINFLIP_GAME')
-export const CREATE_COINFLIP_GAME_SUCCESS = Symbol('CREATE_COINFLIP_GAME_SUCCESS')
-export const CREATE_COINFLIP_GAME_FAILURE = Symbol('CREATE_COINFLIP_GAME_FAILURE')
-export const COINFLIP_NEW_GAME            = Symbol('COINFLIP_NEW_GAME')
-export const COINFLIP_REQUEST_OFFERS      = Symbol('COINFLIP_REQUEST_OFFERS')
-export const COINFLIP_REQUEST_OFFERS_SUCCESS  = Symbol('COINFLIP_REQUEST_OFFERS_SUCCESS')
-export const COINFLIP_REQUEST_OFFERS_FAILURE  = Symbol('COINFLIP_REQUEST_OFFERS_FAILURE')
-export const COINFLIP_RESEND_OFFER            = Symbol('COINFLIP_RESEND_OFFER')
-export const COINFLIP_RESEND_OFFER_SUCCESS    = Symbol('COINFLIP_RESEND_OFFER_SUCCESS')
-export const COINFLIP_RESEND_OFFER_FAILURE    = Symbol('COINFLIP_RESEND_OFFER_FAILURE')
-export const COINFLIP_CANCEL_OFFER            = Symbol('COINFLIP_CANCEL_OFFER')
-export const COINFLIP_CANCEL_OFFER_SUCCESS    = Symbol('COINFLIP_CANCEL_OFFER_SUCCESS')
-export const COINFLIP_CANCEL_OFFER_FAILURE    = Symbol('COINFLIP_CANCEL_OFFER_FAILURE')
-export const COINFLIP_LOAD_GAMES              = Symbol('COINFLIP_LOAD_GAMES')
-export const COINFLIP_LOAD_GAMES_SUCCESS      = Symbol('COINFLIP_LOAD_GAMES_SUCCESS')
-export const COINFLIP_LOAD_GAMES_FAILURE      = Symbol('COINFLIP_LOAD_GAMES_FAILURE')
-export const COINFLIP_JOIN_GAME               = Symbol('COINFLIP_JOIN_GAME')
-export const COINFLIP_JOIN_GAME_SUCCESS       = Symbol('COINFLIP_JOIN_GAME_SUCCESS')
-export const COINFLIP_JOIN_GAME_FAILURE       = Symbol('COINFLIP_JOIN_GAME_FAILURE')
-export const COINFLIP_UPDATE_GAME             = Symbol('COINFLIP_UPDATE_GAME')
-export const COINFLIP_REMOVE_GAME             = Symbol('COINFLIP_REMOVE_GAME')
-export const COINFLIP_LOAD_STATS              = Symbol('COINFLIP_LOAD_STATS')
-export const COINFLIP_LOAD_STATS_SUCCESS      = Symbol('COINFLIP_LOAD_STATS_SUCCESS')
-export const COINFLIP_LOAD_STATS_FAILURE      = Symbol('COINFLIP_LOAD_STATS_FAILURE')
-export const COINFLIP_SET_FLIPPED             = Symbol('COINFLIP_SET_FLIPPED')
+export const ranks = {
+  NORMAL: 0,
+  MOD: 1,
+  ADMIN: 2,
+  DEVELOPER: 3,
+  0: 'normal',
+  1: 'mod',
+  2: 'admin',
+  3: 'developer'
+}

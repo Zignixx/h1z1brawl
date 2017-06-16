@@ -50,6 +50,38 @@ class BotManager {
     return false
   }
 
+  getJackpotBot() {
+    if (!this.jackpotBot) {
+      this.jackpotBot = this.getNextBotSync()
+    }
+    return this.jackpotBot
+  }
+
+  getNextBotSync() {
+    if (this.bots.length == 0 || !this.checkBotsAvailability()) {
+      throw new Error('No available bots to trade')
+    }
+
+    const nextBot = () => {
+      if (this.currentBotIndex >= this.bots.length) {
+        this.currentBotIndex = 0;
+      }
+
+      const bot = this.bots[this.currentBotIndex];
+      this.currentBotIndex++;
+
+      if (bot && bot.enabled) {
+        return bot;
+      } else {
+        return nextBot();
+      }
+    }
+
+    const bot = nextBot()
+
+    return bot
+  }
+
   getNextBot() {
     return new Promise((resolve, reject) => {
       if (this.bots.length == 0 || !this.checkBotsAvailability()) {

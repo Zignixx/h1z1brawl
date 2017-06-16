@@ -3,10 +3,11 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Row, Col } from 'react-bootstrap'
 import CoinflipGame from './CoinflipGame'
+import CoinflipHistoryGame from './CoinflipHistoryGame'
 import CountUp from 'react-countup'
 import { NotificationManager } from 'react-notifications'
-import { setCoinFlipped, removeCoinflipGame, updateCoinflipGame, joinCoinflipGame, loadCoinflipGames, receiveCoinflipOffers, requestInventory, forceRefreshInventory, sendNotification, createCoinflipGame, addCoinflipGame, requestCoinflipOffers, cancelCoinflipOffer, resendCoinflipOffer } from '../../actions'
-import { CoinflipWatchModal, CoinflipJoinModal, CoinflipOffersModal, CoinflipCreateModal, TradeOfferModal } from '../../components'
+import { addCoinflipHistoryGame, setCoinFlipped, removeCoinflipGame, updateCoinflipGame, joinCoinflipGame, loadCoinflipGames, receiveCoinflipOffers, requestInventory, forceRefreshInventory, sendNotification, createCoinflipGame, addCoinflipGame, requestCoinflipOffers, cancelCoinflipOffer, resendCoinflipOffer } from '../../actions'
+import { CoinflipVerifyModal, CoinflipHistoryModal, CoinflipWatchModal, CoinflipJoinModal, CoinflipOffersModal, CoinflipCreateModal, TradeOfferModal } from '../../components'
 import './Coinflip.css'
 
 class Coinflip extends Component {
@@ -30,6 +31,14 @@ class Coinflip extends Component {
         game: null
       },
       watching: {
+        open: false,
+        game: null
+      },
+      history: {
+        open: false,
+        game: null
+      },
+      verify: {
         open: false,
         game: null
       }
@@ -60,6 +69,7 @@ class Coinflip extends Component {
     this.props.secureSocket.on('COINFLIP_RECEIVE_OFFERS', this.props.receiveCoinflipOffers)
     this.props.publicSocket.on('COINFLIP_UPDATE_GAME', this.props.updateCoinflipGame)
     this.props.publicSocket.on('COINFLIP_REMOVE_GAME', this.props.removeCoinflipGame)
+    this.props.publicSocket.on('COINFLIP_ADD_HISTORY', this.props.addCoinflipHistoryGame)
   }
 
   componentWillUnmount() {
@@ -69,6 +79,7 @@ class Coinflip extends Component {
     this.props.secureSocket.off('COINFLIP_RECEIVE_OFFERS')
     this.props.publicSocket.off('COINFLIP_UPDATE_GAME')
     this.props.publicSocket.off('COINFLIP_REMOVE_GAME')
+    this.props.publicSocket.off('COINFLIP_ADD_HISTORY')
   }
 
   componentWillReceiveProps(nextProps) {
@@ -107,6 +118,16 @@ class Coinflip extends Component {
         key={key}
         onWatch={() => this.setState({ watching: { open: true, game: game } })}
         onJoin={() => this.setState({ joining: { open: true, game: game } })} />
+    ))
+  }
+
+  renderHistoryGames() {
+    return this.props.coinflip.historyGames.map((game, key) => (
+      <CoinflipHistoryGame
+        game={game}
+        key={key}
+        onVerify={() => this.setState({ verify: { open: true, game: game } })}
+        onView={() => this.setState({ history: { open: true, game: game } })} />
     ))
   }
 
@@ -209,12 +230,22 @@ class Coinflip extends Component {
   render() {
     return (
       <div className="Coinflip">
+        <CoinflipVerifyModal
+          isOpen={this.state.verify.open}
+          onClose={() => this.setState({ verify: { game: null, open: false } })}
+          game={this.state.verify.game}
+        />
         <CoinflipWatchModal
           isOpen={this.state.watching.open}
           onClose={() => this.setState({ watching: { game: null, open: false } })}
           game={this.state.watching.game}
           setCoinFlipped={this.props.setCoinFlipped}
           hasGameFlipped={this.hasGameFlipped}
+        />
+        <CoinflipHistoryModal
+          isOpen={this.state.history.open}
+          onClose={() => this.setState({ history: { game: null, open: false } })}
+          game={this.state.history.game}
         />
         <CoinflipJoinModal
           isOpen={this.state.joining.open}
@@ -309,6 +340,29 @@ class Coinflip extends Component {
             </div>
           }
         </div>
+
+        <div className="Coinflip__Body">
+          <table>
+            <thead>
+              <tr>
+                <th><span>Side</span></th>
+                <th><span>Players</span></th>
+                <th><span>Items</span></th>
+                <th><span>Value</span></th>
+                <th><span>Result</span></th>
+                <th><span>Actions</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              { this.renderHistoryGames() }
+            </tbody>
+          </table>
+          {this.props.coinflip.historyLoading &&
+            <div className="Coinflip--Loading">
+              <i className="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+            </div>
+          }
+        </div>
       </div>
     )
   }
@@ -338,7 +392,8 @@ const mapDispatchToProps = (dispatch) => {
     joinCoinflipGame,
     updateCoinflipGame,
     removeCoinflipGame,
-    setCoinFlipped
+    setCoinFlipped,
+    addCoinflipHistoryGame
   }, dispatch)
 }
 

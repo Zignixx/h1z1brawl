@@ -20,7 +20,11 @@ import {
   COINFLIP_LOAD_STATS,
   COINFLIP_LOAD_STATS_SUCCESS,
   COINFLIP_LOAD_STATS_FAILURE,
-  COINFLIP_SET_FLIPPED
+  COINFLIP_SET_FLIPPED,
+  COINFLIP_UPDATE_HISTORY,
+  COINFLIP_LOAD_HISTORY,
+  COINFLIP_LOAD_HISTORY_SUCCESS,
+  COINFLIP_LOAD_HISTORY_FAILURE
 } from '../constants'
 
 const initialState = {
@@ -28,6 +32,8 @@ const initialState = {
   loaded: false,
   creatingGame: false,
   games: [],
+  historyGames: [],
+  historyLoading: false,
   flippedGames: [],
   resending: false,
   offers: {
@@ -45,6 +51,28 @@ const initialState = {
 
 export default function reducer(state = initialState, {type, payload}) {
   switch (type) {
+    case COINFLIP_LOAD_HISTORY:
+      return {
+        ...state,
+        historyLoading: true
+      }
+    case COINFLIP_LOAD_HISTORY_SUCCESS:
+      return {
+        ...state,
+        historyGames: payload,
+        historyLoading: false
+      }
+    case COINFLIP_LOAD_HISTORY_FAILURE:
+      return {
+        ...state,
+        historyGames: [],
+        historyLoading: false
+      }
+    case COINFLIP_UPDATE_HISTORY:
+      return {
+        ...state,
+        historyGames: [payload, ...state.historyGames.slice(0, 8)]
+      }
     case COINFLIP_SET_FLIPPED:
       return {
         ...state,

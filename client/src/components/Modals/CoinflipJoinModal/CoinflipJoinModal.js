@@ -179,7 +179,7 @@ export default class CoinflipJoinModal extends Component {
         </div>
         <div className={'Modal__Content Modal__CreateCoinflip-Content'}>
           <h4>Add your items to the coin flip</h4>
-          <p>Min bet ${priceLow} - Max items {maxItems}</p>
+          <p>Min bet ${Number(priceLow).toFixed(2)} - Max items {maxItems}</p>
           <a className="noselect" onClick={this.props.forceRefreshInventory}>
             <span>Force Refresh</span>
             <div>

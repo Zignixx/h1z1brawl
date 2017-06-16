@@ -13,4 +13,11 @@ export default function configure(socket, io) {
     }).catch(error => callback({ error: error.message }))
   })
 
+  socket.on('JACKPOT_LOAD_STATS', (days, callback) => {
+    if (!days) {
+      return callback(0.00)
+    }
+    JackpotRound.getTotalWonInDays(days).then(callback).catch(err => callback({ error: err.message }))
+  })
+
 }

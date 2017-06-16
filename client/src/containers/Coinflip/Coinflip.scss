@@ -41,6 +41,7 @@ $transition: all #{$speed} cubic-bezier(0.310, -0.105, 0.430, 1.400);
   margin-top: 10px;
   border-radius: 5px;
   background-color: $background;
+  position: relative;
 
   table {
     width: 100%;
@@ -52,14 +53,29 @@ $transition: all #{$speed} cubic-bezier(0.310, -0.105, 0.430, 1.400);
       font-size: 11px;
       color: #d4d2d2;
       padding-bottom: 5px;
-
-      span {
-        border-bottom: 1px solid rgba(60, 60, 60, 0.75);;
-      }
     }
 
     tbody {
+      opacity: 1.0;
+    }
 
+    tbody.fadee {
+      transition: opacity 1s ease-out;
+      opacity: 0;
+      display: none;
+    }
+
+
+    .Switch {
+      position: absolute;
+      top: 4px; right: 4px;
+      font-size: 13px;
+      color: rgb(181, 181, 181);
+      cursor: pointer;
+
+      &:hover {
+        opacity: 0.8;
+      }
     }
   }
 }

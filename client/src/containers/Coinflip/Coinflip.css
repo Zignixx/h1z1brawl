@@ -29,7 +29,8 @@
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
   margin-top: 10px;
   border-radius: 5px;
-  background-color: rgba(22, 22, 22, 0.7); }
+  background-color: rgba(22, 22, 22, 0.7);
+  position: relative; }
   .Coinflip__Body table {
     width: 100%; }
     .Coinflip__Body table thead th {
@@ -39,8 +40,21 @@
       font-size: 11px;
       color: #d4d2d2;
       padding-bottom: 5px; }
-      .Coinflip__Body table thead th span {
-        border-bottom: 1px solid rgba(60, 60, 60, 0.75); }
+    .Coinflip__Body table tbody {
+      opacity: 1.0; }
+    .Coinflip__Body table tbody.fadee {
+      transition: opacity 1s ease-out;
+      opacity: 0;
+      display: none; }
+    .Coinflip__Body table .Switch {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      font-size: 13px;
+      color: #b5b5b5;
+      cursor: pointer; }
+      .Coinflip__Body table .Switch:hover {
+        opacity: 0.8; }
 
 .Coinflip__Header-Stat {
   text-align: center;

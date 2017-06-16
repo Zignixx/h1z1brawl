@@ -32,6 +32,7 @@ export default class JackpotDeposit extends Component {
           </div>
         }
         inverted
+        key={key}
       />
     ))
   }

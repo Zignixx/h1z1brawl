@@ -6,7 +6,7 @@ import { Row, Col } from 'react-bootstrap'
 import config from '../../../../config'
 
 import logo from '../../static/logo.png'
-import { getConnectedUsers, loadCoinflipStats } from '../../actions'
+import { getConnectedUsers, loadCoinflipStats, loadJackpotStats } from '../../actions'
 import { Stat } from '../../components'
 import './Landing.css'
 
@@ -25,8 +25,17 @@ class Landing extends Component {
   }
 
   componentWillMount() {
-    this.props.getConnectedUsers()
-    this.props.loadCoinflipStats(3)
+    if (!this.props.users.loaded) {
+      this.props.getConnectedUsers()
+    }
+    if (!this.props.jackpotStats.loaded) {
+      this.props.loadJackpotStats(3)
+    }
+    if (!this.props.coinflipStats.loaded) {
+      this.props.loadCoinflipStats(3)
+    }
+
+
   }
 
   componentWillReceiveProps(nextProps) {
@@ -39,6 +48,7 @@ class Landing extends Component {
 
   handleStatClick(days) {
     this.props.loadCoinflipStats(days)
+    this.props.loadJackpotStats(days)
   }
 
   render() {
@@ -96,7 +106,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
     getConnectedUsers,
-    loadCoinflipStats
+    loadCoinflipStats,
+    loadJackpotStats
   }, dispatch)
 }
 

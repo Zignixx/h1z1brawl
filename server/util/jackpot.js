@@ -43,8 +43,8 @@ export function getTotalWinnings(jackpotRound) {
 
 export function findWinningDeposit(game, ticket) {
   let currentTicket = 0
-  for (let i = game.deposits.length - 1; i >= 0; i--) { /* start from the back because those are the first deposits */
-    const deposit = game.deposits[i]
+  for (const index in game.deposits) {
+    const deposit = game.deposits[index]
     const depositTickets = getDepositTotal(deposit) * 100
     currentTicket += depositTickets
     if (ticket <= currentTicket) {

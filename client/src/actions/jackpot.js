@@ -11,8 +11,19 @@ import {
   JACKPOT_LOAD,
   JACKPOT_LOAD_SUCCESS,
   JACKPOT_LOAD_FAILURE,
-  JACKPOT_START_ROLLING
+  JACKPOT_START_ROLLING,
+  JACKPOT_LOAD_STATS,
+  JACKPOT_LOAD_STATS_SUCCESS,
+  JACKPOT_LOAD_STATS_FAILURE
 } from '../constants'
+
+export function loadJackpotStats(days) {
+  return {
+    type: config.socket.public.param,
+    types: [JACKPOT_LOAD_STATS, JACKPOT_LOAD_STATS_SUCCESS, JACKPOT_LOAD_STATS_FAILURE],
+    promise: (socket) => socket.emit('JACKPOT_LOAD_STATS', days)
+  }
+}
 
 export function startJackpotRolling(roundId) {
   return {

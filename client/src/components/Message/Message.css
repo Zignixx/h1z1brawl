@@ -27,7 +27,7 @@
     background: rgba(219, 99, 99, 0.53); }
   .Message__Header.admin {
     background: rgba(219, 99, 99, 0.53); }
-  .Message__Header.moderator {
+  .Message__Header.mod {
     background: rgba(95, 106, 226, 0.31); }
   .Message__Header .Message__Header--Level {
     margin-left: 3px;

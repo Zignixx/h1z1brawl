@@ -127,7 +127,7 @@ Bot.prototype.getTradeOfferData = function({ message }) {
 
   /* get type from offer message */
   if (~message.indexOf('coinflip')) {
-    data.type = 'conflip'
+    data.type = 'coinflip'
   } else if (~message.indexOf('jackpot')) {
     data.type = 'jackpot'
   }

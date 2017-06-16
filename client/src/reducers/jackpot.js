@@ -10,7 +10,10 @@ import {
   JACKPOT_LOAD,
   JACKPOT_LOAD_SUCCESS,
   JACKPOT_LOAD_FAILURE,
-  JACKPOT_START_ROLLING
+  JACKPOT_START_ROLLING,
+  JACKPOT_LOAD_STATS,
+  JACKPOT_LOAD_STATS_SUCCESS,
+  JACKPOT_LOAD_STATS_FAILURE
 } from '../constants'
 
 const initialState = {
@@ -30,6 +33,33 @@ const initialState = {
 
 export default function reducer(state = initialState, {type, payload}) {
   switch (type) {
+    case JACKPOT_LOAD_STATS:
+      return {
+        ...state,
+        stats: {
+          loaded: false,
+          loading: true,
+          won: null
+        }
+      }
+    case JACKPOT_LOAD_STATS_SUCCESS:
+      return {
+        ...state,
+        stats: {
+          loaded: true,
+          loading: false,
+          won: payload
+        }
+      }
+    case JACKPOT_LOAD_STATS_FAILURE:
+      return {
+        ...state,
+        stats: {
+          loaded: false,
+          loading: false,
+          won: payload
+        }
+      }
     case JACKPOT_LOAD:
       return {
         ...state,

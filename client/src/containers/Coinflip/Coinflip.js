@@ -41,7 +41,9 @@ class Coinflip extends Component {
       verify: {
         open: false,
         game: null
-      }
+      },
+      currentGames: true,
+      historyGames: true
     }
 
     this.totalValueOld = 0.00
@@ -322,17 +324,18 @@ class Coinflip extends Component {
           <table>
             <thead>
               <tr>
-                <th><span>Side</span></th>
-                <th><span>Players</span></th>
-                <th><span>Items</span></th>
-                <th><span>Value</span></th>
-                <th><span>Status</span></th>
-                <th><span>Actions</span></th>
+              <th className="SideLabel"><span>Side</span></th>
+              <th className="Players"><span>Players</span></th>
+              <th className="Items"><span>Items</span></th>
+              <th className="Value"><span>Value</span></th>
+              <th className="Status"><span>Status</span></th>
+              <th className="Actions"><span>Actions</span></th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className={`${this.state.currentGames ? '' : 'fadee'}`}>
               { this.renderGames() }
             </tbody>
+            <i className={`Switch fa ${this.state.currentGames ? 'fa-chevron-down' : 'fa-chevron-up'}`} onClick={() => this.setState({ currentGames: !this.state.currentGames })} />
           </table>
           {this.props.coinflip.loading &&
             <div className="Coinflip--Loading">
@@ -345,17 +348,18 @@ class Coinflip extends Component {
           <table>
             <thead>
               <tr>
-                <th><span>Side</span></th>
-                <th><span>Players</span></th>
-                <th><span>Items</span></th>
-                <th><span>Value</span></th>
-                <th><span>Result</span></th>
-                <th><span>Actions</span></th>
+                <th className="SideLabel"><span>Side</span></th>
+                <th className="Players"><span>Players</span></th>
+                <th className="Items"><span>Items</span></th>
+                <th className="Value"><span>Value</span></th>
+                <th className="Result"><span>Result</span></th>
+                <th className="Actions"><span>Actions</span></th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className={`${this.state.historyGames ? '' : 'fadee'}`}>
               { this.renderHistoryGames() }
             </tbody>
+            <i className={`Switch fa ${this.state.historyGames ? 'fa-chevron-down' : 'fa-chevron-up'}`} onClick={() => this.setState({ historyGames: !this.state.historyGames })} />
           </table>
           {this.props.coinflip.historyLoading &&
             <div className="Coinflip--Loading">

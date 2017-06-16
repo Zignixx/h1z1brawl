@@ -102,7 +102,8 @@ jackpotRoundSchema.statics.getTotalWonInDays = function(days) {
       let total = 0.00
       for (const index in games) {
         const game = games[index]
-        total += parseFloat(getJackpotTotal(game))
+        const gameTotal = getJackpotTotal(game.toObject())
+        total += gameTotal
       }
       resolve(total)
     }).catch(reject)

@@ -95,7 +95,7 @@ class Jackpot extends Component {
     }
 
     const { currentRound } = this.props.jackpot
-
+    
     if (this.state.displayWinner) {
       const winnerChance = getWinnerChance(this.state.rollingRound)
       const total = getJackpotTotal(this.state.rollingRound)

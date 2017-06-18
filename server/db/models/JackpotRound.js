@@ -76,8 +76,13 @@ jackpotRoundSchema.methods.calculateWinner = function() {
 
 jackpotRoundSchema.methods.addDeposit = function(jackpotOffer) {
   return new Promise((resolve, reject) => {
+    if (hasDeposit(this.toObject(), jackpotOffer)) {
+      return reject(new Error('Already deposited -- ignore this error'))
+    }
+    
     User.findById(jackpotOffer.userId).exec().then(user => {
       this.deposits.push({
+        depositId: jackpotOffer._id,
         id: user._id,
         name: user.name,
         image: user.image,
@@ -121,6 +126,16 @@ jackpotRoundSchema.pre('save', function(next) {
   }
   next()
 })
+
+function hasDeposit(instance, jackpotOffer) {
+  for (const index in instance.deposits) {
+    const deposit = instance.deposits[index]
+    if (deposit.depositId === jackpotOffer._id) {
+      return true
+    }
+  }
+  return false
+}
 
 autoIncrement.initialize(mongoose.connection) //make sure it is initialized before creating plugin
 

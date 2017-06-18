@@ -3,6 +3,7 @@ import { TimelineMax, Power4 } from 'gsap'
 import { getDepositChance } from '../../util/jackpot'
 
 const TILE_COUNT = 100
+const MIN_INDEX = 6, MAX_INDEX = 6
 
 export default class JackpotRoller extends Component {
 
@@ -30,8 +31,9 @@ export default class JackpotRoller extends Component {
     for (const index in round.deposits) {
       const deposit = round.deposits[index]
       const chance = getDepositChance(round, deposit)
-      const totalTiles = TILE_COUNT * chance
-      for (let i = totalTiles; i > 0; i--) {
+      const totalTiles = parseInt(Math.round(TILE_COUNT * chance))
+
+      for (let i = 0; i < totalTiles; i++) {
         users.push({
           id: deposit.id,
           image: deposit.image
@@ -49,15 +51,13 @@ export default class JackpotRoller extends Component {
 
   checkWinnerLocation(array) {
     const { winner } = this.props.round
-    let index = -1
-    for (let i = array.length - 7 - 1; i > 6; i--) {
+    for (let i = array.length - 1 - MAX_INDEX; i >= MIN_INDEX; i--) {
       const tile = array[i]
       if (tile.id === winner.id) {
-        index = i
-        break
+        return true
       }
     }
-    return index > 0
+    return false
   }
 
   shuffle(array) {
@@ -93,23 +93,21 @@ export default class JackpotRoller extends Component {
   findWinnerX() { //ABOVE INDEX 6 AND BELOW LENGTH - 6
     const { winner } = this.props.round
 
-    const array = this.userArray.slice(5, this.userArray.length - 7)
+    let winnerIndex = this.userArray.length - 1
 
-    let winnerIndex = array.length - 1
-
-    for (let i = array.length - 1; i >= 0; i--) {
-      const tile = array[i]
+    for (let i = this.userArray.length - 1 - MAX_INDEX; i >= MIN_INDEX; i--) {
+      const tile = this.userArray[i]
       if (tile.id === winner.id) {
         winnerIndex = i
         break
       }
     }
 
-    const closestToEdge = 6
-    const rangeLow = (closestToEdge - 40)
-    const rangeHigh = (40 - closestToEdge)
+    const closestToEdge = 3
+    const rangeLow = closestToEdge
+    const rangeHigh = (80 - closestToEdge)
 
-    return (winnerIndex) * (80 + 2 + 2) + this.getRandomInt(rangeLow, rangeHigh)
+    return ((winnerIndex) * (80 + 2 + 2)) + this.getRandomInt(rangeLow, rangeHigh)
   }
 
   getRandomInt(min, max) {

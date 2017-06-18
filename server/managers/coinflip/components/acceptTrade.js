@@ -48,6 +48,7 @@ CoinflipManager.prototype.sendGameWinnings = function(game, coinflipOffer) { /* 
   /* get the game total and creator total to calculate percentage of creator's chance */
   const gameTotal = getCoinflipTotal(game), creatorTotal = getCreatorTotal(game), joinerTotal = getJoinerTotal(game)
   const percentage = ((creatorTotal / gameTotal) * 100)
+  const redPercentage = 100 - percentage
 
   User.addTotalBet(game.creator.id, creatorTotal)
   User.addTotalBet(game.joiner.id, joinerTotal)
@@ -59,7 +60,7 @@ CoinflipManager.prototype.sendGameWinnings = function(game, coinflipOffer) { /* 
 
   if (game.winningPercentage <= percentage && isBelow50) {
     winner = game.creator
-  } else if (game.winningPercentage >= percentage && !isBelow50) {
+  } else if (game.winningPercentage >= redPercentage && !isBelow50) {
     winner = game.creator
   }
 

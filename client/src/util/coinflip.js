@@ -19,10 +19,11 @@ export function didCreatorWin(game) {
   const creatorPercent = (getUserTotal(game.creator) / gameTotal) * 100
   const didStartBlack = (game.startingSide === 'black')
 
-  if (game.winningPercentage <= creatorPercent && didStartBlack) {
-    return true
-  } else if (game.winningPercentage >= creatorPercent && !didStartBlack) {
-    return true
+  if (didStartBlack) {
+    return game.winningPercentage <= creatorPercent
+  } else if (!didStartBlack) {
+    const percentage = 100 - creatorPercent
+    return game.winningPercentage >= percentage
   }
   return false
 }

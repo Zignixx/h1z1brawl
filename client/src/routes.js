@@ -8,7 +8,7 @@ import { FAQ, Giveaway } from './components'
 const Routes = ({ secureSocket, publicSocket }) => (
   <main>
     <Switch>
-      <Route exact path="/" render={props => <Coinflip secureSocket={secureSocket} publicSocket={publicSocket} {...props} />} />
+      <Route exact path="/" render={props => <Jackpot secureSocket={secureSocket} publicSocket={publicSocket} {...props} />} />
       <Route path="/jackpot" render={props => <Jackpot secureSocket={secureSocket} publicSocket={publicSocket} {...props} />} />
       <Route path="/coinflip" render={props => <Coinflip secureSocket={secureSocket} publicSocket={publicSocket} {...props} />} />
       {/*<Route path="/user/:id?" component={User} />*/}

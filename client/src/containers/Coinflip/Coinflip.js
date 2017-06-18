@@ -52,9 +52,7 @@ class Coinflip extends Component {
   }
 
   componentWillMount() {
-    if (!this.props.coinflip.loaded) {
-      this.props.loadCoinflipGames()
-    }
+    this.props.loadCoinflipGames()
 
     this.props.secureSocket.on('COINFLIP_OFFER_ERROR', ({ error }) => {
       NotificationManager.error(`Error creating trade offer: ${error}`)

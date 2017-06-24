@@ -52,6 +52,7 @@ class Coinflip extends Component {
   }
 
   componentWillMount() {
+    document.title = "Coinflip - H1Z1Brawl"
     this.props.loadCoinflipGames()
 
     this.props.secureSocket.on('COINFLIP_OFFER_ERROR', ({ error }) => {

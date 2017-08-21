@@ -1,4 +1,10 @@
-import { AUTH_USER_LOAD_REQUEST, AUTH_USER_LOAD_SUCCESS, AUTH_USER_LOAD_FAILURE, AUTH_USER_LOGOUT, AUTH_USER_RELOAD } from '../constants'
+import {
+  AUTH_USER_LOAD_REQUEST,
+  AUTH_USER_LOAD_SUCCESS,
+  AUTH_USER_LOAD_FAILURE,
+  AUTH_USER_LOGOUT,
+  AUTH_USER_RELOAD
+} from '../constants'
 
 const initialState = {
   loaded: false,

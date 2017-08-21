@@ -67,7 +67,7 @@ export function getJackpotTotal(round) {
       total += parseFloat(item.price)
     }
   }
-  return total
+  return Number(total).toFixed(2)
 }
 
 function getUserDepositedAmount(round, user) {

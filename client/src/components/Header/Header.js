@@ -10,6 +10,11 @@ import './Header.css'
 
 class Header extends Component {
 
+  isAdmin() {
+    const { user } = this.props
+    return user && user.rank >= 2
+  }
+
   render() {
     const { user } = this.props
     return (
@@ -31,6 +36,11 @@ class Header extends Component {
             <LinkContainer activeClassName="" to="/history">
               <NavItem>History</NavItem>
             </LinkContainer>
+            { this.isAdmin() &&
+              <LinkContainer activeClassName="" to="/admin">
+                <NavItem>Admin</NavItem>
+              </LinkContainer>
+            }
             <NavDropdown title="Other" id="nav-dropdown">
               <LinkContainer activeClassName="" to="/giveaway">
                 <MenuItem>

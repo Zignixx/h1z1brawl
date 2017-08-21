@@ -35,18 +35,12 @@ if (process.env.NODE_ENV === "production") {
   }
 } else {
   accounts = {
-    'csgocactus_bot05': {
-      accountName: 'csgocactus_bot05',
-      password: 'cactussnake05',
-      sharedSecret: '9UUOph97QSb4C4ZRBl2QB8Je9Kk=',
-      identitySecret: 'COTyaWv4hPVE2+PQGcfvrt71QgI='
-    }
-    /*'h1z1brawl_testbot001': {
+    'h1z1brawl_testbot001': {
       accountName: 'h1z1brawl_testbot001',
       password: 'Testbot001',
       sharedSecret: 'GQPd41FUEgFz7ZMKTybFKqCDo8M=',
       identitySecret: 'AAOs92MrHDsV7JPoQx9KY+cDphU='
-    }*/
+    }
   }
 }
 

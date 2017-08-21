@@ -7,3 +7,4 @@ export { default as CoinflipInventoryItem } from './Coinflip/CoinflipInventoryIt
 export { default as CoinflipGameItem } from './Coinflip/CoinflipGameItem'
 export { default as Jackpot } from './Jackpot/Jackpot'
 export { default as History } from './History/History'
+export { default as AdminRoute } from './AdminRoute'

@@ -1,6 +1,7 @@
 import chat from './routes/chat'
 import coinflip from './routes/coinflip'
 import jackpot from './routes/jackpot'
+import history from './routes/history'
 import { coinflip as coinflipManager, jackpot as jackpotManager } from '../../managers'
 
 export default function connect(io) {
@@ -23,5 +24,6 @@ export default function connect(io) {
     chat(socket, io)
     coinflip(socket, io)
     jackpot(socket, io)
+    history(socket, io)
   })
 }

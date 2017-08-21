@@ -94,19 +94,19 @@ coinflipSchema.statics.findByCoinflipOffer = function({ gameId }) {
 coinflipSchema.statics.getRecentlyClosedGames = function() {
   const target = new Date()
   target.setMinutes(target.getMinutes() - 3000)
-  return this.find({ completed: true, dateCompleted: { $lt: new Date(), $gt: target } }).exec()
+  return this.find({ completed: true, failed: false, dateCompleted: { $lt: new Date(), $gt: target } }).exec()
 }
 
 coinflipSchema.statics.getUserHistory = function(userId, limit) {
-  return this.find({ completed: true }).or([{ creatorId: userId }, { joinerId: userId }]).sort({ dateCompleted: -1 }).limit(limit).exec()
+  return this.find({ completed: true, failed: false }).or([{ creatorId: userId }, { joinerId: userId }]).sort({ dateCompleted: -1 }).limit(limit).exec()
 }
 
 coinflipSchema.statics.getRecentGames = function(limit) {
-  return this.find({ completed: true }).sort({ dateCompleted: -1} ).limit(limit).exec()
+  return this.find({ completed: true, failed: false }).sort({ dateCompleted: -1} ).limit(limit).exec()
 }
 
 coinflipSchema.statics.getOpenGames = function() {
-  return this.find({ open: true }, { secret: 0, winningPercentage: 0 }).exec()
+  return this.find({ open: true, failed: false }, { secret: 0, winningPercentage: 0 }).exec()
 }
 
 coinflipSchema.statics.getTotalWonInDays = function(days) {

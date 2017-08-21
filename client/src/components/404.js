@@ -1,15 +1,15 @@
 import React, { Component } from 'react'
 
-class Admin extends Component {
+class NotFound extends Component {
 
   render() {
     return (
       <div className="ComingSoon">
-        <p>Admin Panel</p>
+        <p>Page Not Found</p>
       </div>
     )
   }
 
 }
 
-export default Admin
+export default NotFound

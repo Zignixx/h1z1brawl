@@ -7,6 +7,7 @@ export const AUTH_USER_RELOAD           = Symbol('AUTH_USER_RELOAD')
 export * from './coinflip'
 export * from './user'
 export * from './jackpot'
+export * from './history'
 
 export const ranks = {
   NORMAL: 0,

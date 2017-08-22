@@ -9,8 +9,10 @@ import { Popup } from 'semantic-ui-react'
 import { Message } from '../../components'
 import { sendChat, receiveChat, loadChat, deleteMessage, banUser, muteUser, removeChat } from '../../actions/'
 import { api } from '../../../../config'
+import { futureDateFromText, getCommandProperties } from '../../util/chat'
 import giveaway from '../../static/giveaway.png'
 import logo from '../../static/logo.png'
+import moment from 'moment'
 
 import FourHead from '../../static/emotes/4Head.png'
 import ANELE from '../../static/emotes/ANELE.png'
@@ -71,6 +73,19 @@ class Chat extends Component {
       this.props.removeChat(messageId)
     })
 
+    this.props.secureSocket.on('MUTE_USER', ({ user, reason, expiration }) => {
+      const dateExpired = expiration ? new Date(expiration) : null
+      if (dateExpired) {
+        this.sendBotMessage(`User '${user}' has been muted for ${reason} for ${moment(dateExpired).fromNow(true)}`)
+      } else {
+        this.sendBotMessage(`User '${user}' has been permanently muted for ${reason}`)
+      }
+    })
+
+    this.props.secureSocket.on('BAN_USER', ({ user, reason }) => {
+      this.sendBotMessage(`User ${user} has been banned for ${reason}`)
+    })
+
     if (!this.props.chat.loaded) {
       this.props.loadChat()
     }
@@ -89,6 +104,8 @@ class Chat extends Component {
   componentWillUnmount() {
     this.props.secureSocket.off('RECEIVE_CHAT')
     this.props.secureSocket.off('DELETE_MESSAGE')
+    this.props.secureSocket.off('BAN_USER')
+    this.props.secureSocket.off('MUTE_USER')
 
     clearInterval(this.botInterval)
   }
@@ -132,12 +149,12 @@ class Chat extends Component {
   }
 
   setupMuteCommand(userId) {
-    this.refs.messageText.value = `/mute ${userId} '[reason]' [duration]`
+    this.refs.messageText.value = `/mute id:${userId} r:[reason] d:[duration]`
     this.sendBotMessage('Duration is formatted as follows: 1d,2h,3m for 1 day, 2 hours, and 3 minutes')
   }
 
   setupBanCommand(userId) {
-    this.refs.messageText.value = `/ban ${userId} '[reason]' [duration]`
+    this.refs.messageText.value = `/ban id:${userId} r:[reason]`
     this.sendBotMessage('Duration is formatted as follows: 1d,2h,3m for 1 day, 2 hours, and 3 minutes')
   }
 
@@ -188,10 +205,36 @@ class Chat extends Component {
       return NotificationManager.error('You are already sending a message')
     }
 
-    //TODO check if its a command
+    if (message.indexOf('/ban') === 0) {
+      const { reason, userId } = this.getCommandDetails(message)
+      if (!userId || !reason) {
+        return NotificationManager.error('Invalid ban format')
+      }
+      this.clearChat()
+      return this.props.banUser(userId, reason)
+    } else if (message.indexOf('/mute') === 0) {
+      const { duration, reason, userId } = this.getCommandDetails(message)
+      if (!userId || !reason) {
+        return NotificationManager.error('Invalid mute format')
+      }
+      this.clearChat()
+      return this.props.muteUser(userId, reason, duration)
+    }
 
     this.props.sendChat(message)
     this.clearChat()
+  }
+
+  getCommandDetails(message) {
+    const commandQuery = message.substring(1)
+    const args = commandQuery.split(' ')
+
+    const command = getCommandProperties(args)
+    var duration
+    if (command.d) {
+      duration = futureDateFromText(command.d[0]).getTime()
+    }
+    return { userId: command.id ? command.id[0] : null, reason: command.r ? command.r.join(' ') : null, duration }
   }
 
   clearChat() {
@@ -265,7 +308,9 @@ const mapDispatchToProps = (dispatch) => {
     receiveChat,
     loadChat,
     removeChat,
-    deleteMessage
+    deleteMessage,
+    banUser,
+    muteUser
   }, dispatch)
 }
 

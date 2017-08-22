@@ -17,7 +17,9 @@ export function deleteMessage(messageId) {
   return {
     type: config.socket.secure.param,
     types: [DELETE_MESSAGE, DELETE_MESSAGE_SUCCESS, DELETE_MESSAGE_FAILURE],
-    promise: (socket) => socket.emit('DELETE_MESSAGE', messageId).catch(error => {
+    promise: (socket) => socket.emit('DELETE_MESSAGE', messageId).then(data => {
+      NotificationManager.success('Deleted message')
+    }).catch(error => {
       NotificationManager.error(`Error deleting message: ${error}`)
       throw error
     })
@@ -28,7 +30,10 @@ export function sendChat(message) {
   return {
     type: config.socket.secure.param,
     types: [SEND_CHAT_REQUEST, SEND_CHAT_SUCCESS, SEND_CHAT_FAILURE],
-    promise: (socket) => socket.emit('SEND_CHAT', { message: message })
+    promise: (socket) => socket.emit('SEND_CHAT', { message: message }).catch(error => {
+      NotificationManager.error(`Error sending chat: ${error}`)
+      throw error
+    })
   }
 }
 

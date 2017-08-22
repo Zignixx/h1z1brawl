@@ -3,10 +3,51 @@ import { loadInventory, forceRefreshInventory } from '../../../actions'
 
 export default function configure(socket, io) {
 
+  socket.on('MUTE_USER', ({ userId, reason, expiration }, callback) => {
+    User.findById(socket.decoded_token.id).then(user => {
+      if (user.rank < 1) {
+        return callback({ error: 'You do not have permission' })
+      }
+      if (!userId || !reason) {
+        return callback({ error: 'Invalid mute format' })
+      }
+      User.findById(userId).then(muted => {
+        if (!muted) {
+          return callback({ error: `Cannot find user ${userId}` })
+        }
+        const dateObject = expiration ? new Date(expiration) : null
+        muted.setMuted(reason, dateObject)
+        io.emit('MUTE_USER', { user: muted.name, reason, expiration })
+        return callback()
+      })
+    }).catch(error => callback({ error: error.message }))
+  })
+
+  socket.on('BAN_USER', ({ userId, reason }, callback) => {
+    User.findById(socket.decoded_token.id).then(user => {
+      if (user.rank < 2) {
+        return callback({ error: 'You do not have permission' })
+      }
+      if (!userId || !reason) {
+        return callback({ error: 'Invalid ban format' })
+      }
+      User.findById(userId).then(banned => {
+        if (!banned) {
+          return callback({ error: `Cannot find user ${userId}` })
+        } else if (banned.rank >= 2) {
+          return callback({ error: 'You cannot ban an admin' })
+        }
+        banned.setBanned(reason)
+        io.emit('BAN_USER', { user: banned.name, reason })
+        return callback()
+      })
+    }).catch(error => callback({ error: error.message }))
+  })
+
   socket.on('FORCE_REQUEST_INVENTORY', (data, callback) => {
     forceRefreshInventory(socket.decoded_token.id)
       .then(callback)
-      .catch(error => callback({ error }))
+      .catch(error => callback({ error: error.message }))
   })
 
   socket.on('REQUEST_INVENTORY', (data, callback) => {

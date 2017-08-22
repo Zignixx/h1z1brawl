@@ -1,10 +1,17 @@
 import { User, Message } from '../../../db'
+import moment from 'moment'
 
 export default function configure(socket, io) {
 
   socket.on('SEND_CHAT', (data, callback) => {
     User.findById(socket.decoded_token.id)
       .then(user => { //TODO check if user is muted or something
+        if (user.isMuted()) {
+          if (user.mute.expiration) {
+            return callback({ error: `You are muted for ${user.mute.reason} for ${moment(new Date(user.mute.expiration)).fromNow(true)}` })
+          }
+          return callback({ error: `You are muted permanently for ${user.mute.reason}` })
+        }
         const message = new Message({
           senderId: user._id,
           message: data.message

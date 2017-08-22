@@ -16,11 +16,14 @@ import {
   BAN_USER_FAILURE
 } from '../constants'
 
-export function banUser(userId, reason, expiration) {
+export function banUser(userId, reason) {
   return {
     type: config.socket.secure.param,
     types: [BAN_USER, BAN_USER_SUCCESS, BAN_USER_FAILURE],
-    promise: (socket) => socket.emit('BAN_USER', { userId, reason, expiration })
+    promise: (socket) => socket.emit('BAN_USER', { userId, reason }).catch(error => {
+      NotificationManager.error(`Error banning user: ${error}`)
+      throw error
+    })
   }
 }
 
@@ -28,7 +31,10 @@ export function muteUser(userId, reason, expiration) {
   return {
     type: config.socket.secure.param,
     types: [MUTE_USER, MUTE_USER_SUCCESS, MUTE_USER_FAILURE],
-    promise: (socket) => socket.emit('MUTE_USER', { userId, reason, expiration })
+    promise: (socket) => socket.emit('MUTE_USER', { userId, reason, expiration }).catch(error => {
+      NotificationManager.error(`Error banning user: ${error}`)
+      throw error
+    })
   }
 }
 

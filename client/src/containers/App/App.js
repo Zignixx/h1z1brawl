@@ -91,28 +91,34 @@ class App extends Component {
 
   render() {
     const { user, loading } = this.props.auth
+    console.log(user)
+
+    if (user && user.ban && user.ban.isBanned) {
+      return <p>You are banned for {user.ban.reason}.</p>
+    }
+
     return (
       <div className="App">
         { loading ? (
-          <div className="App__Loading">
-            <img src={cube} alt="loading" />
-          </div>
-        ) : (
-          <div>
-            {!user &&
-              <Landing />
-            }
-            <Header user={user} onSettingsClick={() => this.setState({ tradeUrlModal: true })} />
-            <Chat secureSocket={this.props.secureSocket} />
-            <Routes secureSocket={this.props.secureSocket} publicSocket={this.props.publicSocket} />
-            <div className="App__Background noselect">
-              <img src={background} alt="background" />
-              <div className="App__Background-Wrapper"></div>
+            <div className="App__Loading">
+              <img src={cube} alt="loading" />
             </div>
-            <TradeURLModal userState={this.props.userState} onClick={this.saveTradeURL} isOpen={this.state.tradeUrlModal} close={() => this.setState({tradeUrlModal: false})} />
-          </div>
-        ) }
-        <NotificationContainer />
+          ) : (
+            <div>
+              {!user &&
+                <Landing />
+              }
+              <Header user={user} onSettingsClick={() => this.setState({ tradeUrlModal: true })} />
+              <Chat secureSocket={this.props.secureSocket} />
+              <Routes secureSocket={this.props.secureSocket} publicSocket={this.props.publicSocket} />
+              <div className="App__Background noselect">
+                <img src={background} alt="background" />
+                <div className="App__Background-Wrapper"></div>
+              </div>
+              <TradeURLModal userState={this.props.userState} onClick={this.saveTradeURL} isOpen={this.state.tradeUrlModal} close={() => this.setState({tradeUrlModal: false})} />
+            </div>
+          ) }
+          <NotificationContainer />
       </div>
     )
   }

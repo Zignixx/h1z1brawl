@@ -13,21 +13,36 @@ var userSchema = new Schema({
   totalWon: {type: Number, required: true, default: 0.00},
   dateJoined: {type: Date, default: Date.now, required: true},
   ban: {
-    isBanned: {type: Boolean},
+    isBanned: {type: Boolean, required: true, default: false},
     reason: {type: String},
-    expiration: {type: Date}
   },
   mute: {
-    isMuted: {type: Boolean},
+    isMuted: {type: Boolean, required: true, default: false},
     reason: {type: String},
     expiration: {type: Date}
   }
 });
 
-userSchema.methods.setBanned = function(reason, expiration) {
+userSchema.methods.isMuted = function() {
+  if (this.mute.isMuted) {
+    if (this.mute.expiration) {
+      const expireDate = new Date(this.mute.expiration);
+      if (expireDate < new Date()) {
+        this.mute.isMuted = false
+        this.save()
+        return false
+      } else {
+        return true
+      }
+    }
+    return true
+  }
+  return false
+}
+
+userSchema.methods.setBanned = function(reason) {
   this.ban.isBanned = true
   this.ban.reason = reason
-  this.ban.expiration = expiration
   this.save()
 }
 

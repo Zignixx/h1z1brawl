@@ -7,7 +7,7 @@ import { NotificationManager } from 'react-notifications'
 import FontAwesome from 'react-fontawesome'
 import { Popup } from 'semantic-ui-react'
 import { Message } from '../../components'
-import { sendChat, receiveChat, loadChat } from '../../actions/'
+import { sendChat, receiveChat, loadChat, deleteMessage, banUser, muteUser, removeChat } from '../../actions/'
 import { api } from '../../../../config'
 import giveaway from '../../static/giveaway.png'
 import logo from '../../static/logo.png'
@@ -54,6 +54,8 @@ class Chat extends Component {
     this.submitChat = this.submitChat.bind(this)
     this.clearChat = this.clearChat.bind(this)
     this.handleKeyPress = this.handleKeyPress.bind(this)
+    this.setupBanCommand = this.setupBanCommand.bind(this)
+    this.setupMuteCommand = this.setupMuteCommand.bind(this)
 
     this.state = {
       open: true
@@ -63,6 +65,10 @@ class Chat extends Component {
   componentWillMount() {
     this.props.secureSocket.on('RECEIVE_CHAT', (data) => {
       this.props.receiveChat(data)
+    })
+
+    this.props.secureSocket.on('DELETE_MESSAGE', (messageId) => {
+      this.props.removeChat(messageId)
     })
 
     if (!this.props.chat.loaded) {
@@ -82,6 +88,7 @@ class Chat extends Component {
 
   componentWillUnmount() {
     this.props.secureSocket.off('RECEIVE_CHAT')
+    this.props.secureSocket.off('DELETE_MESSAGE')
 
     clearInterval(this.botInterval)
   }
@@ -101,16 +108,16 @@ class Chat extends Component {
   }
 
   scrollToBottom() {
-    const node = ReactDOM.findDOMNode(this.messagesEnd);
-    node.scrollIntoView({behavior: "smooth"});
+    const node = ReactDOM.findDOMNode(this.messagesEnd)
+    node.scrollIntoView({behavior: "smooth"})
   }
 
   componentDidMount() {
-    this.scrollToBottom();
+    this.scrollToBottom()
   }
 
   componentDidUpdate() {
-    this.scrollToBottom();
+    this.scrollToBottom()
   }
 
   sendBotMessage(message) {
@@ -124,10 +131,20 @@ class Chat extends Component {
     })
   }
 
+  setupMuteCommand(userId) {
+    this.refs.messageText.value = `/mute ${userId} '[reason]' [duration]`
+    this.sendBotMessage('Duration is formatted as follows: 1d,2h,3m for 1 day, 2 hours, and 3 minutes')
+  }
+
+  setupBanCommand(userId) {
+    this.refs.messageText.value = `/ban ${userId} '[reason]' [duration]`
+    this.sendBotMessage('Duration is formatted as follows: 1d,2h,3m for 1 day, 2 hours, and 3 minutes')
+  }
+
   renderMessage() {
     return this.props.chat.messages.slice(0).reverse().map((message, key) => {
       const emoteMessage = this.replaceWithEmotes(this.escapeHTML(message.message))
-      return <Message key={key} user={message.user} message={emoteMessage} />
+      return <Message key={key} messageId={message.id} muteUser={this.setupMuteCommand} deleteMessage={this.props.deleteMessage} banUser={this.setupBanCommand} user={message.user} message={emoteMessage} viewer={this.props.user} />
     })
   }
 
@@ -138,7 +155,7 @@ class Chat extends Component {
         newText = newText.split(emote).join(`<img class="Emote" src="${emotes[emote]}">`)
       }
     }
-    return newText;
+    return newText
   }
 
   addEmoteInChat(emote) {
@@ -168,11 +185,13 @@ class Chat extends Component {
     }
 
     if (this.props.chat.sending) {
-      NotificationManager.error('You are already sending a message')
-    } else {
-      this.props.sendChat(message)
-      this.clearChat()
+      return NotificationManager.error('You are already sending a message')
     }
+
+    //TODO check if its a command
+
+    this.props.sendChat(message)
+    this.clearChat()
   }
 
   clearChat() {
@@ -244,7 +263,9 @@ const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
     sendChat,
     receiveChat,
-    loadChat
+    loadChat,
+    removeChat,
+    deleteMessage
   }, dispatch)
 }
 

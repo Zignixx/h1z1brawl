@@ -19,4 +19,16 @@ export default function configure(socket, io) {
       .catch(err => callback({ error: err.message }))
   })
 
+  socket.on('DELETE_MESSAGE', (messageId, callback) => {
+    User.findById(socket.decoded_token.id).then(user => {
+      if (user.rank < 1) {
+        return callback({ error: 'You do not have permission' })
+      }
+      Message.remove({ _id: messageId }).then(data => {
+        io.emit('DELETE_MESSAGE', messageId)
+        callback()
+      }).catch(error => callback({ error: error.message }))
+    }).catch(error => callback({ error: error.message }))
+  })
+
 }

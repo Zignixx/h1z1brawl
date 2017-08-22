@@ -12,7 +12,31 @@ var userSchema = new Schema({
   totalBet: {type: Number, required: true, default: 0.00},
   totalWon: {type: Number, required: true, default: 0.00},
   dateJoined: {type: Date, default: Date.now, required: true},
+  ban: {
+    isBanned: {type: Boolean},
+    reason: {type: String},
+    expiration: {type: Date}
+  },
+  mute: {
+    isMuted: {type: Boolean},
+    reason: {type: String},
+    expiration: {type: Date}
+  }
 });
+
+userSchema.methods.setBanned = function(reason, expiration) {
+  this.ban.isBanned = true
+  this.ban.reason = reason
+  this.ban.expiration = expiration
+  this.save()
+}
+
+userSchema.methods.setMuted = function(reason, expiration) {
+  this.mute.isMuted = true
+  this.mute.reason = reason
+  this.mute.expiration = expiration
+  this.save()
+}
 
 userSchema.methods.hasTradeURL = function() {
   if (this.tradeUrl) {

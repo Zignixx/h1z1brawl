@@ -1,5 +1,28 @@
 import config from '../../../config'
-import { SEND_CHAT_REQUEST, SEND_CHAT_FAILURE, SEND_CHAT_SUCCESS, RECEIVE_CHAT, LOAD_CHAT_REQUEST, LOAD_CHAT_SUCCESS, LOAD_CHAT_FAILURE } from '../constants'
+import { NotificationManager } from 'react-notifications'
+import {
+  SEND_CHAT_REQUEST,
+  SEND_CHAT_FAILURE,
+  SEND_CHAT_SUCCESS,
+  RECEIVE_CHAT,
+  LOAD_CHAT_REQUEST,
+  LOAD_CHAT_SUCCESS,
+  LOAD_CHAT_FAILURE,
+  DELETE_MESSAGE,
+  DELETE_MESSAGE_SUCCESS,
+  DELETE_MESSAGE_FAILURE
+} from '../constants'
+
+export function deleteMessage(messageId) {
+  return {
+    type: config.socket.secure.param,
+    types: [DELETE_MESSAGE, DELETE_MESSAGE_SUCCESS, DELETE_MESSAGE_FAILURE],
+    promise: (socket) => socket.emit('DELETE_MESSAGE', messageId).catch(error => {
+      NotificationManager.error(`Error deleting message: ${error}`)
+      throw error
+    })
+  }
+}
 
 export function sendChat(message) {
   return {
@@ -14,6 +37,13 @@ export function loadChat() {
     type: config.socket.public.param,
     types: [LOAD_CHAT_REQUEST, LOAD_CHAT_SUCCESS, LOAD_CHAT_FAILURE],
     promise: (socket) => socket.emit('LOAD_CHAT')
+  }
+}
+
+export function removeChat(messageId) {
+  return {
+    type: DELETE_MESSAGE,
+    payload: messageId
   }
 }
 

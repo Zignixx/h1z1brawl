@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-
+import { Popup, Divider, Button } from 'semantic-ui-react'
 import { ranks } from '../../constants'
 
 import './Message.css'
@@ -24,9 +24,9 @@ class Message extends Component {
   }
 
   render() {
-    const { user, message } = this.props
+    const { user, message, viewer, messageId } = this.props
 
-    return (
+    const messageObject = (
       <div className="Message">
         <div className={`Message__Header ${this.getHeaderClass()}`}>
           <span className="Message__Header--Level">{ this.getUserLevel() }</span>
@@ -38,6 +38,23 @@ class Message extends Component {
         <div className="Message__Content" dangerouslySetInnerHTML={{__html: message}} />
       </div>
     )
+
+    if (viewer.rank >= 2) {
+      return (
+          <Popup trigger={messageObject} inverted on='click'>
+            <Popup.Header>User Actions</Popup.Header>
+            <Divider />
+            <Popup.Content>
+              <Button.Group vertical>
+                <Button onClick={() => this.props.deleteMessage(messageId)}>Delete Message</Button>
+                <Button onClick={() => this.props.muteUser(user._id)}>Mute User</Button>
+                <Button onClick={() => this.props.banUser(user._id)}>Ban User</Button>
+              </Button.Group>
+            </Popup.Content>
+          </Popup>
+      )
+    }
+    return messageObject
   }
 
 }

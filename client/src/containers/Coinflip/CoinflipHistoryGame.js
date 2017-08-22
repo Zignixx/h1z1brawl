@@ -40,18 +40,18 @@ export default class CoinflipGame extends Component {
     for (const index in this.props.game.creator.items) {
       const item = this.props.game.creator.items[index]
       if (item && item.price) {
-        total += Number(item.price)
+        total += parseFloat(item.price)
       }
     }
     if (this.props.game.joiner && this.props.game.joiner.items) {
       for (const index in this.props.game.joiner.items) {
         const item = this.props.game.joiner.items[index]
         if (item && item.price) {
-          total += Number(item.price)
+          total += parseFloat(item.price)
         }
       }
     }
-    return parseFloat(Number(total).toFixed(2))
+    return Number(total).toFixed(2)
   }
 
   getStartingSide() {

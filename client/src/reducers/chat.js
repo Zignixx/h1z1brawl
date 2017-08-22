@@ -1,4 +1,4 @@
-import { SEND_CHAT_REQUEST, SEND_CHAT_FAILURE, SEND_CHAT_SUCCESS, RECEIVE_CHAT, LOAD_CHAT_REQUEST, LOAD_CHAT_SUCCESS, LOAD_CHAT_FAILURE } from '../constants'
+import { SEND_CHAT_REQUEST, SEND_CHAT_FAILURE, SEND_CHAT_SUCCESS, RECEIVE_CHAT, LOAD_CHAT_REQUEST, LOAD_CHAT_SUCCESS, LOAD_CHAT_FAILURE, DELETE_MESSAGE } from '../constants'
 
 const initialState = {
   messages: [],
@@ -10,6 +10,11 @@ const initialState = {
 
 export default function reducer(state = initialState, { type, payload }) {
   switch (type) {
+    case DELETE_MESSAGE:
+      return {
+        ...state,
+        messages: state.messages.filter((message) => message.id !== payload)
+      }
     case SEND_CHAT_REQUEST:
       return {
         ...state,

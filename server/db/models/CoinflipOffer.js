@@ -64,7 +64,7 @@ coinflipOfferSchema.statics.userHasOpenRequest = function(user) {
 }
 
 coinflipOfferSchema.statics.getAllOffers = function() {
-  return this.find({}).exec()
+  return this.find({ $where: "this.botItems.length > 0" }).exec()
 }
 
 coinflipOfferSchema.statics.findByTradeOffer = function({ tradeId }) {

@@ -54,7 +54,7 @@ jackpotOfferSchema.statics.findUserOffers = function(id, limit) {
 }
 
 jackpotOfferSchema.statics.getAllOffers = function() {
-  return this.find({}).exec()
+  return this.find({ $where: "this.botItems.length > 0" }).exec()
 }
 
 jackpotOfferSchema.statics.findByRound = function({ _id }) {

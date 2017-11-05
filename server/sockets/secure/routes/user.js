@@ -31,6 +31,34 @@ export default function configure(socket, io) {
     })
   })
 
+  socket.on('ADMIN_WITHDRAW_ALL_RAKE', (data, callback) => {
+    User.findById(socket.decoded_token.id).exec().then(user => {
+      if (user.rank < 2) {
+        return callback({ error: 'You do not have permission.' })
+      }
+      RakeItem.getAllUnclaimedRake().then(rakeData => {
+        const botRequests = {}
+        for (const index in rakeData) {
+          const rakeItem = rakeData[index]
+          if (botRequests[rakeItem.botId]) {
+            botRequests[rakeItem.botId].items.push(rakeItem.toObject())
+            rakeItem.setWithdrawn()
+          } else {
+            const bot = botManager.getBot(rakeItem.botId)
+            if (bot && bot.enabled) {
+              botRequests[bot.getSteamID64()] = { bot: bot, items: [rakeItem] }
+            }
+          }
+        }
+        for (const botIndex in botRequests) {
+          const { bot, items } = botRequests[botIndex]
+          bot.sendRakesRequest(user, items)
+        }
+        callback()
+      }).catch(error => callback({ error: error.message }))
+    })
+  })
+
   socket.on('MUTE_USER', ({ userId, reason, expiration }, callback) => {
     User.findById(socket.decoded_token.id).then(user => {
       if (user.rank < 1) {

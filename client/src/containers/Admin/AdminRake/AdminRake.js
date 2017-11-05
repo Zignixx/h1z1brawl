@@ -1,10 +1,14 @@
 import React, { Component } from 'react'
-import { Tab, Input, Header, Icon, Dropdown } from 'semantic-ui-react'
+import { Tab, Input, Header, Icon, Dropdown, Button } from 'semantic-ui-react'
 import AdminRakeTable from './AdminRakeTable'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
-import { loadRakeHistory, withdrawRake } from '../../../actions'
+import {
+  loadRakeHistory,
+  withdrawRake,
+  withdrawAllRake
+} from '../../../actions'
 
 import '../Admin.css'
 
@@ -69,6 +73,7 @@ class AdminRake extends Component {
             className="History__Input"
             onKeyDown={this.updateSearch}
           />
+          <Button text='Withdraw All' floating labeled onClick={this.props.withdrawAllRake}>Withdraw All</Button>
           <Dropdown text='Sort by' icon='filter' floating labeled button className='icon' options={sortOptions} onChange={(event, data) => this.onDropdownChange(data)} />
         </div>
         <AdminRakeTable withdrawRake={withdrawRake} loadRake={loadRakeHistory} rake={rake} search={search} filter={filter} />
@@ -87,7 +92,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return bindActionCreators({
     loadRakeHistory,
-    withdrawRake
+    withdrawRake,
+    withdrawAllRake
   }, dispatch)
 }
 

@@ -21,6 +21,10 @@ rakeItemSchema.statics.getAllRake = function() {
   return this.find({}).exec()
 }
 
+rakeItemSchema.statics.getAllUnclaimedRake = function() {
+  return this.find({ withdrawn: false }).exec()
+}
+
 rakeItemSchema.statics.addRake = function(botId, rake) {
   if (!rake || rake.length === 0) {
     return

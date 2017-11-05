@@ -53,6 +53,10 @@ jackpotOfferSchema.statics.findUserOffers = function(id, limit) {
   })
 }
 
+jackpotOfferSchema.statics.getAllOffers = function() {
+  return this.find({}).exec()
+}
+
 jackpotOfferSchema.statics.findByRound = function({ _id }) {
   return this.findOne({ roundId: _id }).exec()
 }

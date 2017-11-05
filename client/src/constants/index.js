@@ -8,6 +8,7 @@ export * from './coinflip'
 export * from './user'
 export * from './jackpot'
 export * from './history'
+export * from './admin'
 
 export const ranks = {
   NORMAL: 0,

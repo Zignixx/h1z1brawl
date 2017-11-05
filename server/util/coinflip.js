@@ -48,7 +48,7 @@ export function getTotalWinnings(game, winner) {
     }
   }
 
-  return sortedItems.filter((test) => {
+  const winnings = sortedItems.filter((test) => {
     for (const index in itemsForTax) {
       const item = itemsForTax[index]
       if (item.assetid === test.assetid) {
@@ -57,6 +57,7 @@ export function getTotalWinnings(game, winner) {
     }
     return true
   })
+  return { winnings, rake: itemsForTax }
 }
 
 export function getUserTotal(user) {

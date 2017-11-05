@@ -24,7 +24,13 @@ import {
   COINFLIP_UPDATE_HISTORY,
   COINFLIP_LOAD_HISTORY,
   COINFLIP_LOAD_HISTORY_SUCCESS,
-  COINFLIP_LOAD_HISTORY_FAILURE
+  COINFLIP_LOAD_HISTORY_FAILURE,
+  COINFLIP_ADMIN_LOAD_OFFERS,
+  COINFLIP_ADMIN_LOAD_OFFERS_SUCCESS,
+  COINFLIP_ADMIN_LOAD_OFFERS_FAILURE,
+  COINFLIP_ADMIN_RESEND_OFFER,
+  COINFLIP_ADMIN_RESEND_OFFER_SUCCESS,
+  COINFLIP_ADMIN_RESEND_OFFER_FAILURE
 } from '../constants'
 
 const initialState = {
@@ -46,11 +52,90 @@ const initialState = {
     loading: false,
     won: null
   },
-  joiningGame: false
+  joiningGame: false,
+  admin: {
+    offers: {
+      loaded: false,
+      loading: false,
+      data: null,
+      resending: false,
+    }
+  }
 }
 
 export default function reducer(state = initialState, {type, payload}) {
   switch (type) {
+    case COINFLIP_ADMIN_RESEND_OFFER_FAILURE:
+      return {
+        ...state,
+        admin: {
+          ...state.admin,
+          offers: {
+            ...state.admin.offers,
+            resending: false
+          }
+        }
+      }
+    case COINFLIP_ADMIN_RESEND_OFFER_SUCCESS:
+      return {
+        ...state,
+        admin: {
+          ...state.admin,
+          offers: {
+            ...state.admin.offers,
+            resending: false
+          }
+        }
+      }
+    case COINFLIP_ADMIN_RESEND_OFFER:
+      return {
+        ...state,
+        admin: {
+          ...state.admin,
+          offers: {
+            ...state.admin.offers,
+            resending: true
+          }
+        }
+      }
+    case COINFLIP_ADMIN_LOAD_OFFERS:
+      return {
+        ...state,
+        admin: {
+          ...state.admin,
+          offers: {
+            ...state.admin.offers,
+            loaded: false,
+            loading: true
+          }
+        }
+      }
+    case COINFLIP_ADMIN_LOAD_OFFERS_FAILURE:
+      return {
+        ...state,
+        admin: {
+          ...state.admin,
+          offers: {
+            ...state.admin.offers,
+            loaded: false,
+            loading: false,
+            data: null
+          }
+        }
+      }
+    case COINFLIP_ADMIN_LOAD_OFFERS_SUCCESS:
+      return {
+        ...state,
+        admin: {
+          ...state.admin,
+          offers: {
+            ...state.admin.offers,
+            loaded: true,
+            loading: false,
+            data: payload
+          }
+        }
+      }
     case COINFLIP_LOAD_HISTORY:
       return {
         ...state,

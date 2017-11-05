@@ -91,7 +91,6 @@ class App extends Component {
 
   render() {
     const { user, loading } = this.props.auth
-    console.log(user)
 
     if (user && user.ban && user.ban.isBanned) {
       return <p>You are banned for {user.ban.reason}.</p>

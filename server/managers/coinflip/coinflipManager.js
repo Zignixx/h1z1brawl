@@ -72,6 +72,16 @@ class CoinflipManager {
     })
   }
 
+  resendTradeOffer(coinflipOffer) {
+    return new Promise((resolve, reject) => {
+      const bot = botManager.getBot(coinflipOffer.botId)
+      if (!bot || !bot.enabled) {
+        return reject(new Error('The requested bot is not online'))
+      }
+      bot.sendCoinflipRequest(coinflipOffer).then(resolve).catch(reject)
+    })
+  }
+
   createJoinOffer({ user, data: { items, game } }) {
     return new Promise((resolve, reject) => {
       CoinflipOffer.findByGame(game).then(offer => {

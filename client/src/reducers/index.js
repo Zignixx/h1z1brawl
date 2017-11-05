@@ -8,6 +8,7 @@ import users from './users'
 import chat from './chat'
 import user from './user'
 import history from './history'
+import admin from './admin'
 
 export default combineReducers({
   router: routerReducer,
@@ -17,5 +18,6 @@ export default combineReducers({
   coinflip,
   chat,
   user,
-  history
+  history,
+  admin
 })

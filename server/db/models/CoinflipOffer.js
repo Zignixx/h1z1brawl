@@ -24,7 +24,7 @@ var coinflipOfferSchema = new Schema({
   completed: { type: Boolean, default: false },
   failed: { type: Boolean, default: false },
   failureReason: { type: String }
-});
+})
 
 coinflipOfferSchema.methods.setAccepted = function() {
   this.completed = true
@@ -61,6 +61,10 @@ coinflipOfferSchema.statics.userHasOpenRequest = function(user) {
       resolve(user)
     }).catch(reject)
   })
+}
+
+coinflipOfferSchema.statics.getAllOffers = function() {
+  return this.find({}).exec()
 }
 
 coinflipOfferSchema.statics.findByTradeOffer = function({ tradeId }) {

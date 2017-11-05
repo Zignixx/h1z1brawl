@@ -13,7 +13,13 @@ import {
   JACKPOT_START_ROLLING,
   JACKPOT_LOAD_STATS,
   JACKPOT_LOAD_STATS_SUCCESS,
-  JACKPOT_LOAD_STATS_FAILURE
+  JACKPOT_LOAD_STATS_FAILURE,
+  JACKPOT_ADMIN_LOAD_OFFERS,
+  JACKPOT_ADMIN_LOAD_OFFERS_SUCCESS,
+  JACKPOT_ADMIN_LOAD_OFFERS_FAILURE,
+  JACKPOT_ADMIN_RESEND_OFFER,
+  JACKPOT_ADMIN_RESEND_OFFER_SUCCESS,
+  JACKPOT_ADMIN_RESEND_OFFER_FAILURE
 } from '../constants'
 
 const initialState = {
@@ -28,11 +34,87 @@ const initialState = {
   rollingRound: null,
   depositing: false,
   currentRound: null,
-  historyRounds: []
+  historyRounds: [],
+  admin: {
+    offers: {
+      loaded: false,
+      loading: false,
+      data: null,
+      resending: false
+    }
+  }
 }
 
 export default function reducer(state = initialState, {type, payload}) {
   switch (type) {
+    case JACKPOT_ADMIN_RESEND_OFFER_FAILURE:
+      return {
+        ...state,
+        admin: {
+          ...state.admin,
+          offers: {
+            ...state.admin.offers,
+            resending: false
+          }
+        }
+      }
+    case JACKPOT_ADMIN_RESEND_OFFER_SUCCESS:
+      return {
+        ...state,
+        admin: {
+          ...state.admin,
+          offers: {
+            ...state.admin.offers,
+            resending: false
+          }
+        }
+      }
+    case JACKPOT_ADMIN_RESEND_OFFER:
+      return {
+        ...state,
+        admin: {
+          ...state.admin,
+          offers: {
+            ...state.admin.offers,
+            resending: true
+          }
+        }
+      }
+    case JACKPOT_ADMIN_LOAD_OFFERS:
+      return {
+        ...state,
+        admin: {
+          ...state.admin,
+          offers: {
+            loaded: false,
+            loading: true
+          }
+        }
+      }
+    case JACKPOT_ADMIN_LOAD_OFFERS_FAILURE:
+      return {
+        ...state,
+        admin: {
+          ...state.admin,
+          offers: {
+            loaded: false,
+            loading: false,
+            data: null
+          }
+        }
+      }
+    case JACKPOT_ADMIN_LOAD_OFFERS_SUCCESS:
+      return {
+        ...state,
+        admin: {
+          ...state.admin,
+          offers: {
+            loaded: true,
+            loading: false,
+            data: payload
+          }
+        }
+      }
     case JACKPOT_LOAD_STATS:
       return {
         ...state,

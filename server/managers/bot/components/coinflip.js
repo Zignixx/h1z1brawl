@@ -60,9 +60,12 @@ Bot.prototype.sendCoinflipRequest = function(coinflipOffer) {
       }
     }).catch(error => {
       /* set the coinflip offer to failed after a failed steam offer */
-      coinflipOffer.setFailed(6).catch(error => {
-        this.log(`error setting a trade offer to failed: ${error.message}`)
-      })
+      if (coinflipOffer.setFailed) {
+        coinflipOffer.setFailed(6).catch(error => {
+          this.log(`error setting a trade offer to failed: ${error.message}`)
+        })
+      }
+      console.log(error)
       reject(error)
     })
   })

@@ -30,7 +30,7 @@ export function getTotalWinnings(jackpotRound) {
     }
   }
 
-  return sortedItems.filter((test) => {
+  const winnings = sortedItems.filter((test) => {
     for (const index in itemsForTax) {
       const item = itemsForTax[index]
       if (item.assetid === test.assetid) {
@@ -39,6 +39,7 @@ export function getTotalWinnings(jackpotRound) {
     }
     return true
   })
+  return { winnings, rake: itemsForTax }
 }
 
 export function findWinningDeposit(game, ticket) {

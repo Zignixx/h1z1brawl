@@ -29,8 +29,38 @@ import {
   COINFLIP_UPDATE_HISTORY,
   COINFLIP_LOAD_HISTORY,
   COINFLIP_LOAD_HISTORY_SUCCESS,
-  COINFLIP_LOAD_HISTORY_FAILURE
+  COINFLIP_LOAD_HISTORY_FAILURE,
+  COINFLIP_ADMIN_LOAD_OFFERS,
+  COINFLIP_ADMIN_LOAD_OFFERS_SUCCESS,
+  COINFLIP_ADMIN_LOAD_OFFERS_FAILURE,
+  COINFLIP_ADMIN_RESEND_OFFER,
+  COINFLIP_ADMIN_RESEND_OFFER_SUCCESS,
+  COINFLIP_ADMIN_RESEND_OFFER_FAILURE
 } from '../constants'
+
+export function resendCoinflipOffer(offer) {
+  return {
+    type: config.socket.secure.param,
+    types: [COINFLIP_ADMIN_RESEND_OFFER, COINFLIP_ADMIN_RESEND_OFFER_SUCCESS, COINFLIP_ADMIN_RESEND_OFFER_FAILURE],
+    promise: (socket) => socket.emit('COINFLIP_ADMIN_RESEND_OFFER', offer).then(data => {
+      NotificationManager.info('Resent coinflip offer successfully.')
+    }).catch(error => {
+      NotificationManager.error(`Error resending coinflip offer: ${error}`)
+      throw error
+    })
+  }
+}
+
+export function loadCoinflipOffers() {
+  return {
+    type: config.socket.secure.param,
+    types: [COINFLIP_ADMIN_LOAD_OFFERS, COINFLIP_ADMIN_LOAD_OFFERS_SUCCESS, COINFLIP_ADMIN_LOAD_OFFERS_FAILURE],
+    promise: (socket) => socket.emit('COINFLIP_ADMIN_GET_OFFERS').catch(error => {
+      NotificationManager.error(`Error loading coinflip offers: ${error}`)
+      throw error
+    })
+  }
+}
 
 export function addCoinflipHistoryGame(game) {
   return {
@@ -143,17 +173,6 @@ export function cancelCoinflipOffer(offer) {
       NotificationManager.info('Coinflip offer canceled')
     }).catch(error => {
       NotificationManager.error(`Error canceling coinflip offer: ${error}`)
-      throw error
-    })
-  }
-}
-
-export function resendCoinflipOffer(offer) {
-  return {
-    type: config.socket.secure.param,
-    types: [COINFLIP_RESEND_OFFER, COINFLIP_RESEND_OFFER_SUCCESS, COINFLIP_RESEND_OFFER_FAILURE],
-    promise: (socket) => socket.emit('COINFLIP_RESEND_OFFER', offer).catch(error => {
-      NotificationManager.error(`Error while resending offer: ${error}`)
       throw error
     })
   }

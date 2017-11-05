@@ -37,9 +37,14 @@ class Header extends Component {
               <NavItem>History</NavItem>
             </LinkContainer>
             { this.isAdmin() &&
-              <LinkContainer activeClassName="" to="/admin">
-                <NavItem>Admin</NavItem>
-              </LinkContainer>
+              <NavDropdown title="Admin" id="nav-dropdown">
+                <LinkContainer activeClassName="" to="/admin/trades">
+                  <MenuItem>Trade Offers</MenuItem>
+                </LinkContainer>
+                <LinkContainer activeClassName="" to="/admin/rake">
+                  <MenuItem>Rake</MenuItem>
+                </LinkContainer>
+              </NavDropdown>
             }
             <NavDropdown title="Other" id="nav-dropdown">
               <LinkContainer activeClassName="" to="/giveaway">

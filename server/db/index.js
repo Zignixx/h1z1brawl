@@ -25,6 +25,7 @@ export const connect = (mongoose) => {
 export { client }
 
 export User from './models/User'
+export RakeItem from './models/RakeItem'
 export Price from './models/Price'
 export Message from './models/Message'
 export Coinflip from './models/Coinflip'

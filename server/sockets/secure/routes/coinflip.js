@@ -49,10 +49,22 @@ export default function configure(socket, io) {
     }).catch(error => callback({ error: error.message }))
   })
 
-  /*socket.on('COINFLIP_RESEND_OFFER', (tradeOffer, callback) => {
-    coinflip.resendCoinflipRequest(tradeOffer).then(offer => {
-      socket.emit('COINFLIP_OFFER', offer)
-    }).catch(error => callback({ error: error.message }))
-  })*/
+  socket.on('COINFLIP_ADMIN_GET_OFFERS', (data, callback) => {
+    User.findById(socket.decoded_token.id).exec().then(user => {
+      if (user.rank < 2) {
+        return callback({ error: 'You do not have permission.' })
+      }
+      CoinflipOffer.getAllOffers().then(callback).catch(error => callback({ error: error.message }))
+    })
+  })
+
+  socket.on('COINFLIP_ADMIN_RESEND_OFFER', (tradeOffer, callback) => {
+    User.findById(socket.decoded_token.id).exec().then(user => {
+      if (user.rank < 2) {
+        return callback({ error: 'You do not have permission. How did you even figure this out?' })
+      }
+      coinflip.resendTradeOffer(tradeOffer).then(callback).catch(error => callback({ error: error.message }))
+    })
+  })
 
 }

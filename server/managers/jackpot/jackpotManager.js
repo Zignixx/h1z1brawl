@@ -1,4 +1,4 @@
-import { JackpotRound, JackpotOffer, User } from '../../db'
+import { JackpotRound, JackpotOffer, User, RakeItem } from '../../db'
 import { bot as botManager } from '../'
 import { generateSecret } from '../../util/random'
 import { getOfferTotal, getTotalWinnings } from '../../util/jackpot'
@@ -133,6 +133,16 @@ class JackpotManager {
     })
   }
 
+  resendTradeOffer(jackpotOffer) {
+    return new Promise((resolve, reject) => {
+      const bot = botManager.getBot(jackpotOffer.botId)
+      if (!bot || !bot.enabled) {
+        return reject(new Error('The requested bot is not online'))
+      }
+      bot.sendJackpotRequest(jackpotOffer).then(resolve).catch(reject)
+    })
+  }
+
   sendGameWinnings(jackpotRound) {
     this.log(`sending game winnings to: ${jackpotRound.winner.name}`)
 
@@ -141,8 +151,9 @@ class JackpotManager {
     const socket = findSocketById(this.secureIo, winner.id)
 
     User.findById(winner.id).exec().then(user => {
-      const winnings = getTotalWinnings(jackpotRound, user) /* get the winnings, deducting tax (5% or 10%) */
+      const { winnings, rake } = getTotalWinnings(jackpotRound, user) /* get the winnings, deducting tax (5% or 10%) */
       const bot = botManager.getJackpotBot()
+      RakeItem.addRake(bot.getSteamID64(), rake)
 
       new JackpotOffer({
         _id: generateSecret(),

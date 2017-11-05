@@ -1,5 +1,5 @@
 import { default as CoinflipManager } from '../coinflipManager'
-import { CoinflipOffer, Coinflip, User } from '../../../db'
+import { CoinflipOffer, Coinflip, User, RakeItem } from '../../../db'
 import { findSocketById } from '../../../util/socket'
 import { generateSecret } from '../../../util/random'
 import { bot as botManager } from '../../'
@@ -70,7 +70,8 @@ CoinflipManager.prototype.sendGameWinnings = function(game, coinflipOffer) { /* 
     /* add total won of the coinflip game to the winner's account */
     user.addTotalWon(gameTotal)
 
-    const winnings = getTotalWinnings(game, user) /* get the winnings, deducting tax (3% or 8%) */
+    const { winnings, rake } = getTotalWinnings(game, user) /* get the winnings, deducting tax (3% or 8%) */
+    RakeItem.addRake(botId, rake)
     new CoinflipOffer({
       _id: generateSecret(),
       userId: user._id,

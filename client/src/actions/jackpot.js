@@ -14,8 +14,38 @@ import {
   JACKPOT_START_ROLLING,
   JACKPOT_LOAD_STATS,
   JACKPOT_LOAD_STATS_SUCCESS,
-  JACKPOT_LOAD_STATS_FAILURE
+  JACKPOT_LOAD_STATS_FAILURE,
+  JACKPOT_ADMIN_LOAD_OFFERS,
+  JACKPOT_ADMIN_LOAD_OFFERS_SUCCESS,
+  JACKPOT_ADMIN_LOAD_OFFERS_FAILURE,
+  JACKPOT_ADMIN_RESEND_OFFER,
+  JACKPOT_ADMIN_RESEND_OFFER_SUCCESS,
+  JACKPOT_ADMIN_RESEND_OFFER_FAILURE
 } from '../constants'
+
+export function resendJackpotOffer(offer) {
+  return {
+    type: config.socket.secure.param,
+    types: [JACKPOT_ADMIN_RESEND_OFFER, JACKPOT_ADMIN_RESEND_OFFER_SUCCESS, JACKPOT_ADMIN_RESEND_OFFER_FAILURE],
+    promise: (socket) => socket.emit('JACKPOT_ADMIN_RESEND_OFFER', offer).then(data => {
+      NotificationManager.info('Resent jackpot offer successfully.')
+    }).catch(error => {
+      NotificationManager.error(`Error resending jackpot offer: ${error}`)
+      throw error
+    })
+  }
+}
+
+export function loadJackpotOffers() {
+  return {
+    type: config.socket.secure.param,
+    types: [JACKPOT_ADMIN_LOAD_OFFERS, JACKPOT_ADMIN_LOAD_OFFERS_SUCCESS, JACKPOT_ADMIN_LOAD_OFFERS_FAILURE],
+    promise: (socket) => socket.emit('JACKPOT_ADMIN_GET_OFFERS').catch(error => {
+      NotificationManager.error(`Error loading jackpot offers: ${error}`)
+      throw error
+    })
+  }
+}
 
 export function loadJackpotStats(days) {
   return {

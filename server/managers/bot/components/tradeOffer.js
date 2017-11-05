@@ -57,7 +57,12 @@ Bot.prototype.canTrade = function(userObject) {
 Bot.prototype.formatItems = function(items) {
   const array = []
   for (let i = 0; i < items.length; i++) {
-    const item = items[i].toObject()
+    let item
+    if (items[i].toObject) {
+      item = items[i].toObject()
+    } else {
+      item = items[i]
+    }
     array.push({
       ...item,
       appid: APP_ID,

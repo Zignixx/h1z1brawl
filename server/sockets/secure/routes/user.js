@@ -1,7 +1,35 @@
-import { User } from '../../../db'
+import { User, RakeItem } from '../../../db'
 import { loadInventory, forceRefreshInventory } from '../../../actions'
+import { bot as botManager } from '../../../managers'
 
 export default function configure(socket, io) {
+
+  socket.on('ADMIN_LOAD_RAKE', (data, callback) => {
+    User.findById(socket.decoded_token.id).exec().then(user => {
+      if (user.rank < 2) {
+        return callback({ error: 'You do not have permission.' })
+      }
+      RakeItem.getAllRake().then(callback).catch(error => callback({ error: error.message }))
+    }).catch(error => callback({ error: error.message }))
+  })
+
+  socket.on('ADMIN_WITHDRAW_RAKE', (rakeItem, callback) => {
+    User.findById(socket.decoded_token.id).exec().then(user => {
+      if (user.rank < 2) {
+        return callback({ error: 'You do not have permission.' })
+      }
+      RakeItem.findById(rakeItem._id).then(item => {
+        const bot = botManager.getBot(item.botId)
+        if (!bot || !bot.enabled) {
+          return callback({ error: 'Bot with the items is currently offline. Consult a developer.' })
+        }
+        bot.sendRakeRequest(user, rakeItem).then(data => {
+          item.setWithdrawn()
+          callback()
+        }).catch(error => callback({ error: error.message }))
+      }).catch(error => callback({ error: error.message }))
+    })
+  })
 
   socket.on('MUTE_USER', ({ userId, reason, expiration }, callback) => {
     User.findById(socket.decoded_token.id).then(user => {

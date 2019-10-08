@@ -123,7 +123,7 @@ export function logout() {
         dispatch(logoutSuccess())
       })
       .catch(err => {
-        //idk what to do here my nigga
+        // ignore error
       })
   }
 }

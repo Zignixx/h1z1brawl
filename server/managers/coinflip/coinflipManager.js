@@ -20,7 +20,7 @@ class CoinflipManager {
   isGameOpen(data, user) {
     return new Promise((resolve, reject) => {
       Coinflip.findById(data.game._id).exec().then(game => {
-        if (game.creator.id === user._id && process.env.NODE_ENV === 'production') { /* I keep forgetting to uncomment this when i push it into production, so now its like this fuck u */
+        if (game.creator.id === user._id && process.env.NODE_ENV === 'production') { /* I keep forgetting to uncomment this when i push it into production, so now its like this */
           return reject(new Error('You cannot join your own game'))
         }
         if (game.open && !game.joiner.id) {

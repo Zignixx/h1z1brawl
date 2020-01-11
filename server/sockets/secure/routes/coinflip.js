@@ -6,7 +6,7 @@ const OFFERS_LIMIT = 40
 
 export default function configure(socket, io) {
 
-  socket.on('CREATE_COINFLIP_GAME', (data, callback) => { //WHAT THE FUCK IS BELOW THIS?
+  socket.on('CREATE_COINFLIP_GAME', (data, callback) => {
     User.findById(socket.decoded_token.id).exec().then(user => {
       user.hasTradeURL() /* check if user has set a trade URL, throws an error to be caught if not */
       checkCoinflipGame(data) /* check to see if valid data was sent for the coinflip game */
